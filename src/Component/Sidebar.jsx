@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import AppLogo from "../assets/VEDANZOApplogo.png"
-// import AppLogo from "../assets/AppLogo.png"
+// import AppLogo from "../assets/VEDANZOApplogo.png"
+
 import { FiHome } from "react-icons/fi";
 import { FaBoxOpen } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
@@ -11,6 +11,7 @@ import { GoBell } from "react-icons/go";
 import { RiMailSendLine } from "react-icons/ri";
 import { BiLogOut } from "react-icons/bi";
 import img from "../assets/user.jpg"
+import Untitleddesign from "../assets/Untitleddesign.png"
 
 
 const manuItems =[
@@ -29,7 +30,7 @@ const manuItems =[
         label:"Product Management",
     },
     {
-        id:"other-management",
+        id:"order-management",
         icon:FaUserGroup,
         label:"Other Management",
     },
@@ -78,11 +79,12 @@ const Sidebar = () => {
         
       });
   return (
-    <div className="sidebar w-70 rounded-2xl p-5 ">
-      
-      <img src={AppLogo} alt="logo" className="h-15 w-40  " />
+ <div className="sidebar w-60 rounded-2xl flex flex-col h-full p-3 ">
 
- 
+      
+      <img src={Untitleddesign} alt="logo" className="h-10 w-25  " />
+
+  <div className='mt-7'>
     
 
       {manuItems.map((item, index) => {
@@ -93,13 +95,13 @@ const Sidebar = () => {
           <div key={index} className=''>
             
             {!item.icon ? (
-              <p className="text-(--text-second) font-semibold mt-10 ">
+              <p className="text-(--text-third) text-xs  mt-3 ml-4 font-semibold ">
                 
                 {item.label}
               </p>
             ) : (
-              <div className="flex items-center font-semibold gap-3 p-3 cursor-pointer  text-(--icon-color) rounded-lg hover:text-(--text-hover) hover:bg-(--btn-hover)">
-                <Icon className="text-lg " />
+              <div className="flex items-center text-xs font-medium gap-3 p-2 m-2 cursor-pointer  text-(--icon-color) rounded-lg hover:text-(--text-hover) hover:bg-(--btn-hover)">
+                <Icon className="text-sm " />
                 <span>{item.label}</span>
               </div>
             )}
@@ -107,13 +109,16 @@ const Sidebar = () => {
         );
       })}
 
- <div className="flex items-center gap-3 mt-35">
+      </div>
+
+<div className="flex items-center gap-3 mt-auto pt-5">
+
           <img
             src={img}
             alt="user"
-            className="w-10 h-10 rounded-xl object-cover"
+            className="w-8 h-8 rounded-xl object-cover"
           />
-          <div className="text-sm leading-tight">
+          <div className="text-xs leading-tight">
             <p className="font-semibold text-(--text-main)">{user.name}</p>
             <p className="text-(--text-second)">{user.email}</p>
           </div>

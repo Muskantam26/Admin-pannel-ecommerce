@@ -17,18 +17,18 @@ const Header = () => {
   
 
   return (
-    <div className="flex gap-10  justify-end-safe  ">
+    <div className="flex gap-10  justify-end-safe ">
     
       {/* Search */}
-      <div className="flex">
+      <div className="flex items-center gap-2">
    
         
-       
+         <FaSearch size={15} className="text-(--text-third) cursor-pointer"/>
            <input
          
           type="text"
           placeholder="Search by client or ID"
-          className="w-full  font-semibold rounded-lg text-sm focus:outline-none text-(--text-third)"
+          className="w-full  rounded-lg text-[13px] focus:outline-none text-(--text-second)"
         />
       </div>
 
@@ -36,21 +36,22 @@ const Header = () => {
       <div className="flex items-center gap-5">
     
         <button>
-          <FaBell className="text-xl bg-(--bg-btn) rounded-2xl" />
+          <FaBell className="text-sm bg-(--bg-btn) rounded-2xl" />
         </button>
 
         <button >
-          <IoSettings className="text-xl bg-(--bg-btn) rounded-2xl" />
+          <IoSettings className="text-sm bg-(--bg-btn) rounded-2xl" />
         </button>
 
         {/* User */}
         <div className="flex items-center gap-3">
+         
           <img
             src={img}
             alt="user"
-            className="w-10 h-10 rounded-xl object-cover"
+            className="w-8 h-8 rounded-xl object-cover"
           />
-          <div className="text-sm leading-tight">
+          <div className="text-xs leading-tight">
             <p className="font-semibold text-(--text-main)">{user.name}</p>
             <p className="text-(--text-second)">{user.role}</p>
           </div>

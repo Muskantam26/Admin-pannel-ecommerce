@@ -1,20 +1,23 @@
 
 @import "tailwindcss";
 
+
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
 body{
   margin: 0;
   padding: 0;
   
   background-color: var(--bg-main);
-  
-
   font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
- 
-  font-style: normal;
-
-
+  
+  font-style: medium;
 }
+
+
+
+
 
 :root{
   --bg-main:rgba(242, 247, 250, 1);
@@ -26,8 +29,19 @@ body{
   --text-hover:rgba(255, 255, 255, 1);
   --bg-btn:rgba(255, 255, 255, 1);
   --text-third:rgba(156, 163, 175, 1);
-  --bg-box:white
-
+  --bg-box:white;
+  --bg-green:rgba(86, 158, 72, 1);
+  --text-white:rgba(255, 255, 255, 1);
+  --input-border:rgba(176, 181, 195, 1);
+  --input-checkbox:rgba(226, 230, 241, 1);
+  --icon-btn-text:rgba(84, 109, 254, 1);
+  --icon-btn:rgba(84, 109, 254, 0.15);
+  --icon-btn-second:rgba(215, 124, 247, 0.15);
+  --icon-text-second:rgba(215, 124, 247, 1);
+  
+  --bs-gray:rgb(101, 99, 99);
+  
+  
 
   
 
@@ -56,4 +70,32 @@ body{
       #f0ddff
     );
  
+}
+
+
+.card-box2{
+  
+  background: linear-gradient(
+    60deg,
+    #cae6fa 0%,
+    #acdff7 45%,
+    #dcfbfb 70%,
+    #fcfafc 100%
+  );
+}
+
+
+
+.grediant-img{
+  background-image: url("./grediantimg1.jpg");
+  background-position: center;
+  background-size: cover;
+}
+
+.grediant-img2{
+  background-image: url("./grediantimg2.jpg");
+  background-position:center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top;
 }
