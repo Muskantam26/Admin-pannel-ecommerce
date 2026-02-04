@@ -38,8 +38,10 @@ body{
   --icon-btn:rgba(84, 109, 254, 0.15);
   --icon-btn-second:rgba(215, 124, 247, 0.15);
   --icon-text-second:rgba(215, 124, 247, 1);
-  
+  --bs-btn:rgba(30, 27, 57, 1);
   --bs-gray:rgb(101, 99, 99);
+  --bs-action:rgba(231, 236, 238, 1);
+  --bs-action-icon:rgba(30, 61, 115, 1);
   
   
 

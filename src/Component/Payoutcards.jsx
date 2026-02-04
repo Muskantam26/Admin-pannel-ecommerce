@@ -63,7 +63,7 @@ const data = {
 
   return (
     <div
-      className="rounded-3xl p-3 px-6 space-y-4 w-full"
+      className="rounded-3xl p-3 px-4 space-y-4 w-full"
       style={{ backgroundColor: bgColor }} 
     >
       {/* Top Row */}

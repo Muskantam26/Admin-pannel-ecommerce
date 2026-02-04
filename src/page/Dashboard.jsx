@@ -7,13 +7,14 @@ import { FaAngleDown, FaRegCheckCircle } from "react-icons/fa";
 
 import { Activity, DollarSign, Space, Wallet } from "lucide-react";
 
-import DataTable from "react-data-table-component";
+
 import { Eye, Pencil } from "lucide-react";
 import OrderActivityCard from "../Component/OrderActivityCard";
 import Chart from "react-apexcharts";
+import  {Heading, MainHeading } from "../Component/Heading";
+import CommonDataTable from "../Component/CommonDataTable";
 
-
-const Home = () => {
+const Dashboard = () => {
   const apiChartData = {
     categories: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     series: [
@@ -33,67 +34,67 @@ const Home = () => {
   };
 
   const chartOptions = {
-  chart: {
-    type: "bar",
-    stacked: true,
-    toolbar: { show: false },
-  },
-
-  colors: [
-    function ({ seriesIndex }) {
-      const colors = [
-        "rgba(128, 203, 222, 1)", // Orders
-        "rgba(251, 201, 76, 1)",  // Payments
-        "rgba(204, 195, 248, 1)", // Pending
-      ];
-      return colors[seriesIndex];
+    chart: {
+      type: "bar",
+      stacked: true,
+      toolbar: { show: false },
     },
-  ],
 
-  plotOptions: {
-    bar: {
-      columnWidth: "80%",
-   
-      borderRadius: 2,
-      borderRadiusApplication: "end",
-    },
-  },
+    colors: [
+      function ({ seriesIndex }) {
+        const colors = [
+          "rgba(128, 203, 222, 1)", // Orders
+          "rgba(251, 201, 76, 1)", // Payments
+          "rgba(204, 195, 248, 1)", // Pending
+        ];
+        return colors[seriesIndex];
+      },
+    ],
 
-  dataLabels: {
-    enabled: false,
-  },
+    plotOptions: {
+      bar: {
+        columnWidth: "80%",
 
-  stroke: {
-    width:0
-  },
-
-  grid: {
-    show: false,
-  },
-
-  xaxis: {
-    categories: apiChartData.categories,
-    labels: {
-      style: {
-        colors: "#94A3B8",
-        fontSize: "12px",
+        borderRadius: 2,
+        borderRadiusApplication: "end",
       },
     },
-    axisBorder: { show: false },
-    axisTicks: { show: false },
-  },
 
-  yaxis: {
-    show: false,
-  },
+    dataLabels: {
+      enabled: false,
+    },
 
-  legend: {
-    show: false,
-  },
+    stroke: {
+      width: 0,
+    },
 
-  tooltip: {
-    custom: function ({ series, dataPointIndex }) {
-      return `
+    grid: {
+      show: false,
+    },
+
+    xaxis: {
+      categories: apiChartData.categories,
+      labels: {
+        style: {
+          colors: "#94A3B8",
+          fontSize: "12px",
+        },
+      },
+      axisBorder: { show: false },
+      axisTicks: { show: false },
+    },
+
+    yaxis: {
+      show: false,
+    },
+
+    legend: {
+      show: false,
+    },
+
+    tooltip: {
+      custom: function ({ series, dataPointIndex }) {
+        return `
         <div class="h-20 w-40 rounded-xl shadow-md text-xs grediant-img2 ">
         
           <div>Orders: ${series[0][dataPointIndex]}</div>
@@ -101,9 +102,9 @@ const Home = () => {
           <div>Pending: ${series[2][dataPointIndex]}</div>
         </div>
       `;
+      },
     },
-  },
-};
+  };
 
   const orderActivityData = {
     title: "Order Activity",
@@ -170,12 +171,23 @@ const Home = () => {
     { id: 4, value: "0", label: "REWARDS", icon: DollarSign },
     { id: 5, value: "0", label: "Today total ", icon: Wallet },
     { id: 6, value: "0", label: "SPOT INCOME", icon: Activity },
-   
   ];
 
   const critical = [
-    { id: 1, value: "0", label: "FUND REQUESTS", icon: DollarSign ,rightIcon:IoAlertCircleOutline },
-    { id: 2, value: "0", label: "SUPPORT TICKETS", icon: Wallet,rightIcon:Activity},
+    {
+      id: 1,
+      value: "0",
+      label: "FUND REQUESTS",
+      icon: DollarSign,
+      rightIcon: IoAlertCircleOutline,
+    },
+    {
+      id: 2,
+      value: "0",
+      label: "SUPPORT TICKETS",
+      icon: Wallet,
+      rightIcon: Activity,
+    },
   ];
 
   const orderList = [
@@ -325,14 +337,19 @@ const Home = () => {
   ];
 
   return (
-    <div className="mt-5">
+    <div className="md:mt-5 overflow-x-hidden">
       <div>
-        <h1 className="text-6xl font-bold text-(--text-main)">
+        {/* <h1 className="text-3xl md:text-6xl  font-bold text-(--text-main)">
           All Store Activity
         </h1>
         <p className="text-(--text-third) text-xs font-medium mt-2">
           Real-time overview of orders, payments, customers & operations
-        </p>
+        </p> */}
+
+        <MainHeading
+        title={"All Store Activity"}
+        subtitle={"Real-time overview of orders, payments, customers & operations"}
+        />
 
         {/* first section */}
 
@@ -341,34 +358,31 @@ const Home = () => {
             <Card key={index} {...card} />
           ))}
         </div>
-{/* second section */}
-        <div className="flex gap-3 mt-3 w-full items-center p-1 ">
-          <div className="bg-(--bg-box) flex p-3    rounded-xl w-[calc(100%-30%)]">
-            <div className="w-[60%]">
+        {/* second section */}
+        <div className="flex flex-col lg:flex-row gap-3 mt-3 w-full items-start p-1">
+          {/* Left Container */}
+          <div className="bg-(--bg-box) flex flex-col lg:flex-row p-3 rounded-4xl w-full lg:w-[calc(100%-30%)]">
+            <div className="w-full lg:w-[60%] mb-3 lg:mb-0">
               <OrderActivityCard data={orderActivityData} />
             </div>
             <div className="w-full">
               <Chart
                 options={chartOptions}
                 series={apiChartData.series}
-
                 type="bar"
                 height={220}
-                
               />
             </div>
           </div>
 
-          <div className="bg-(--bg-box) rounded-xl p-6 w-[30%] ">
-            <h1 className="text-xl  text-(--text-main) m-3font-medium ">
-              Critical Actions
-            
-            <p className="text-xs text-(--text-third)">
-              Immediate attention required
-            </p>
-            </h1>
+          {/* Right Container */}
+          <div className="bg-(--bg-box) rounded-4xl p-5 w-full lg:w-[30%]">
+            <Heading
+              title="Critical Actions"
+              subtitle="Immediate attention required"
+            />
 
-            <div className="grid grid-cols-1 space-y-2  p-1">
+            <div className="grid grid-cols-1 gap-7 ">
               {critical.map((item, index) => (
                 <Payoutcards
                   key={index}
@@ -386,15 +400,12 @@ const Home = () => {
 
         {/* Third section */}
 
-        <div className="bg-(--bg-box) w-full mt-3 rounded-2xl p-5" >
-          <h1 className="text-(--text-main) font-medium text-xl p-3">
-            Payout Distribution
-         
-          <p className="text-(--text-third) text-xs font-medium ">
-            Detailed breakdown of income streams
-          </p>
-           </h1>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 justify-between gap-7 mt-5">
+        <div className="bg-(--bg-box) w-full mt-3 rounded-4xl p-5">
+          <Heading
+            title="Payout Distribution"
+            subtitle=" Detailed breakdown of income streams"
+          />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 justify-between gap-7 mt-5 ">
             {payoutData.map((item, index) => (
               <Payoutcards
                 key={index}
@@ -403,8 +414,6 @@ const Home = () => {
                 bgColor="rgba(242, 247, 250, 1)"
                 font="semibold"
                 label={item.label}
-                
-                
               />
             ))}
           </div>
@@ -412,93 +421,65 @@ const Home = () => {
 
         {/* Fourth Section */}
 
-        <div className="bg-(--bg-box) w-full mt-5 rounded-2xl p-3 flex-col items-center justify-between">
-          <h1 className="text-(--text-main) font-medium text-xl p-3">
-            Today's Payout
-        
-          <p className="text-(--text-third) text-[11px]  font-medium ">
-            Today's income breakdown
-          </p>
-  </h1>
-          <div className="flex gap-7 justify-between mt-5">
+        <div className="bg-(--bg-box) w-full mt-3 rounded-4xl p-5 ">
+          
+          <Heading title="Today's Payout" subtitle="Today's income breakdown" />
 
-          <div className="grid grid-cols-3 gap-7 justify-between  ">
-            {todayspayout.map((item, index) => (
+          <div className="grid grid-cols-12 gap-7 mt-5  items-center justify-center">
+            <div className="col-span-12 lg:col-span-6 items-center  ">
+              <div className=" grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-7 ">
+                {todayspayout.map((item, index) => (
+                  <Payoutcards
+                    key={index}
+                    icon={item.icon}
+                    value={item.value}
+                    label={item.label}
+                    font="semibold"
+                    bgColor="rgba(242, 247, 250, 1)"
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="col-span-12 lg:col-span-3 items-center ">
               <Payoutcards
-                key={index}
-                icon={item.icon}
-                value={item.value}
-                label={item.label}
-                font="semibold"
+                icon={Wallet}
+                value={0}
+                label="REWARDS"
                 bgColor="rgba(242, 247, 250, 1)"
+                showTarget={true}
               />
-            ))}
-            
-             {/* <Payoutcards
-             key={4}
-             icon={DollarSign}
-             value={0}
-             label={"REWARDS"}
-             showTarget={true}
+            </div>
 
-             />
-              */}
-
-            {/* {todayspayout.slice(4,todayspayout.length).map((item, index) => (
+            <div className="col-span-12 lg:col-span-3 flex flex-col gap-7 ">
               <Payoutcards
-                key={index}
-                icon={item.icon}
-                value={item.value}
-                label={item.label}
+                icon={DollarSign}
+                value={0}
+                label="TODAY TOTAL DISTRIBUTED"
+                bgColor="rgba(204, 195, 248, 1)"
+                color="White"
+                font="medium"
               />
-            ))} */}
-          </div>
-          <div className="w-65 ">
-          <Payoutcards
-          key={8}
-          icon={Wallet}
-          value={0}
-          label={"REWARDS"}
-         bgColor="rgba(242, 247, 250, 1)"
-          showTarget={true}
-          />
-          </div>
-
-          <div className=" flex-col space-y-4">
-            <Payoutcards
-            key={9}
-            icon={DollarSign}
-            value={0}
-            label={"TODAY TOTAL DISTRIBUTED"}
-            bgColor="rgba(204, 195, 248, 1)"
-            color="White"
-            font="medium"
-            
-            />
-
-            <Payoutcards
-            key={10}
-            icon={DollarSign}
-            value={0}
-            label={"OVERALL TOTAL DISTRIBUTED"}
-            bgColor="rgba(251, 201, 76, 1)"
-            color="white"
-            font="medium"
-            />
-
-          </div>
+                     
+              <Payoutcards
+                icon={DollarSign}
+                value={0}
+                label="OVERALL TOTAL DISTRIBUTED"
+                bgColor="rgba(251, 201, 76, 1)"
+                color="white"
+                font="medium"
+              />
+            </div>
           </div>
         </div>
 
         {/* Order list */}
 
-        <div className="bg-(--bg-box) rounded-2xl p-3 mt-5">
-          <div className="flex justify-between items-center mb-4">
-            <h1 className="text-(--text-main) font-medium text-xl">
-              Order Lists
-            </h1>
+        <div className="bg-(--bg-box) rounded-4xl p-5 mt-5">
+          <div className="flex justify-between items-center">
+            <Heading title="Order List" />
 
-            <div className="flex gap-2">
+            <div className="flex gap-2 items-center">
               <input
                 type="text"
                 placeholder="Search Here"
@@ -510,54 +491,17 @@ const Home = () => {
             </div>
           </div>
 
-          <DataTable
-            columns={columns}
-            data={paginatedData}
-            pagination={false}
-            selectableRows
-            responsive
-          />
-
-          <div className="flex justify-between items-center mt-4">
-            <p className="text-xs text-(--text-third)">Showing 6 Entries</p>
-
-            <div className="flex gap-2">
-              <button
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage((prev) => prev - 1)}
-                className="px-3 py-1 text-xs rounded bg-(--bg-main) disabled:opacity-50"
-              >
-                Prev
-              </button>
-
-              {[...Array(totalPages)].map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentPage(index + 1)}
-                  className={`px-3 py-1 text-xs rounded
-          ${
-            currentPage === index + 1
-              ? "bg-(--bg-green) text-(--text-white)"
-              : "bg-(--bg-main)"
-          }`}
-                >
-                  {index + 1}
-                </button>
-              ))}
-
-              <button
-                disabled={currentPage === totalPages}
-                onClick={() => setCurrentPage((prev) => prev + 1)}
-                className="px-3 py-1 text-xs rounded bg-(--bg-main) disabled:opacity-50"
-              >
-                Next
-              </button>
-            </div>
-          </div>
-        </div>
+         <CommonDataTable
+  columns={columns}
+  data={paginatedData}
+  currentPage={currentPage}
+  totalPages={totalPages}
+  onPageChange={setCurrentPage}
+/>
+    </div>
       </div>
     </div>
   );
 };
 
-export default Home;
+export default Dashboard;

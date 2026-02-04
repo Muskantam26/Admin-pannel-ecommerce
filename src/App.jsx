@@ -1,13 +1,16 @@
+import { BrowserRouter } from "react-router-dom";
 import "./App.css";
-import Layout from "./Component/Layout";
-import Home from "./page/Home";
+
+
+import AppRoutes from "./Routes/AppRoutes";
+
 
 
 function App() {
   return (
-    <Layout>
-      <Home />
-    </Layout>
+    <BrowserRouter>
+    <AppRoutes/>
+    </BrowserRouter>
   );
 }
 
