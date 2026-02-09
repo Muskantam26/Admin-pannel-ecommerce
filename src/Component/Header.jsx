@@ -29,7 +29,7 @@ const Header = ({onMenuClick}) => {
         <input
           type="text"
           placeholder="Search by client or ID"
-          className="w-full rounded-lg text-[13px] focus:outline-none text-(--text-second)"
+          className="w-full rounded-lg text-[12px] focus:outline-none text-(--text-second)"
         />
       </div>
 

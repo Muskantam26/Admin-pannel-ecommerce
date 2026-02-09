@@ -1,9 +1,20 @@
-import React from 'react'
+import React from "react";
 
-export const Btn = ({title}) => {
+const Button = ({
+  title,
+  bg = "bg-(--bs-btn)",
+  text = "text-(--text-white)",
+  className = "",
+}) => {
   return (
-    <div>
-        <button className='bg-(--bs-btn) text-(--text-white) rounded-sm cursor-pointer p-1.5 px-4 text-[11px]'>{title}</button>
-    </div>
-  )
-;}
+    <button
+   
+      className={`
+        ${bg}   ${text} cursor-pointer ${className}`}
+    >
+      {title}
+    </button>
+  );
+};
+
+export default Button;

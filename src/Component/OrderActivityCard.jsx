@@ -8,7 +8,7 @@ const OrderActivityCard = ({ data }) => {
       <div className="flex items-start justify-between mb-6">
         <div>
           <h3 className="text-xs font text-(--text-main) flex items-center gap-1 ">
-           <LuRefreshCcw className=" text-black " /> {data.title}
+           <LuRefreshCcw className=" text-(--bs-black) " /> {data.title}
           </h3>
           <p className="text-[10px] text-(--text-third)">
             {data.subtitle}

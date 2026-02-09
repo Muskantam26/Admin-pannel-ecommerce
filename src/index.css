@@ -42,7 +42,14 @@ body{
   --bs-gray:rgb(101, 99, 99);
   --bs-action:rgba(231, 236, 238, 1);
   --bs-action-icon:rgba(30, 61, 115, 1);
-  
+  --bs-btn-second:rgba(244, 88, 88, 0.9);
+  --bs-upload-inp:rgba(34, 24, 51, 1);
+  --bs-border:rgba(239, 240, 242, 1);
+  --bs-btn-third:rgba(50, 201, 141, 0.84);
+  --bs-btn-forth:rgba(44, 106, 229, 0.9);
+  --bs-black:black;
+  --bs-purple:rgba(112, 47, 138, 1);
+    
   
 
   

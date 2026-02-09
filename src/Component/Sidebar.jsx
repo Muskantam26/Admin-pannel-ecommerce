@@ -144,7 +144,7 @@ const Sidebar = ({ open, setOpen }) => {
               <div className="flex items-center text-xs font-medium gap-3 p-2 m-2 cursor-pointer  text-(--icon-color) rounded-lg hover:text-(--text-hover) hover:bg-(--btn-hover)"
                  onClick={() => {
     navigate(`/${item.id}`);
-    setOpen(false); // mobile pe auto close
+    setOpen(false);
   }}
   >
                 <Icon className="text-sm " />
