@@ -21,7 +21,6 @@ body{
 
 :root{
   --bg-main:rgba(242, 247, 250, 1);
-
   --text-main:rgba(33, 29, 47, 1);
   --text-second:rgba(92, 94, 100, 1);
   --icon-color:rgba(82, 97, 107, 1);
@@ -30,9 +29,11 @@ body{
   --bg-btn:rgba(255, 255, 255, 1);
   --text-third:rgba(156, 163, 175, 1);
   --bg-box:white;
+
   --bg-green:rgba(86, 158, 72, 1);
   --text-white:rgba(255, 255, 255, 1);
-  --input-border:rgba(176, 181, 195, 1);
+  --input-border:rgb(236, 238, 243);
+  --input-bg:rgb(238, 238, 238);
   --input-checkbox:rgba(226, 230, 241, 1);
   --icon-btn-text:rgba(84, 109, 254, 1);
   --icon-btn:rgba(84, 109, 254, 0.15);

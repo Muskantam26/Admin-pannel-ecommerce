@@ -32,10 +32,15 @@ const manuItems =[
         icon:FaBoxOpen,
         label:"Product Management",
     },
+    //  {
+    //     id:"product-add-management",
+    //     icon:FaBoxOpen,
+    //     label:"Product Add Management",
+    // },
     {
         id:"order-management",
         icon:FaUserGroup,
-        label:"Other Management",
+        label:"Order Management",
     },
     {
         id:"user-management",

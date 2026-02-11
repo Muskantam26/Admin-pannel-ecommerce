@@ -1,7 +1,9 @@
+import { Plus } from "lucide-react";
 import React from "react";
 
 const Button = ({
   title,
+  
   bg = "bg-(--bs-btn)",
   text = "text-(--text-white)",
   className = "",

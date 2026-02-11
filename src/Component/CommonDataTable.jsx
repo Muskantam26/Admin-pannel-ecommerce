@@ -8,6 +8,8 @@ const CommonDataTable = ({
   onPageChange,
   rowsPerPage = 6,
 }) => {
+
+  
   return (
     <>
       <DataTable
@@ -16,6 +18,7 @@ const CommonDataTable = ({
         pagination={false}
         selectableRows
         responsive
+       
       />
 
       {/* Pagination */}
