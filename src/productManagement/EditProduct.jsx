@@ -1,31 +1,52 @@
 
+import { RxCrossCircled } from 'react-icons/rx';
 import Button from '../Component/Btn';
-import { Heading, MainHeading } from '../Component/Heading'
-import InputBox, { InputField } from '../Component/InputBox'
+import { Heading } from '../Component/Heading'
+import  { InputField } from '../Component/InputBox'
 import BannerImg from "../assets/Bannerone.png";
-
-const EditProduct = () => {
-const images = [
-  { src: BannerImg },
-  { src: BannerImg },
-  { src: BannerImg },
-  { src: BannerImg },
-];
+import { useState } from 'react';
 
 
 
-  return (
+
+
+
+
+const EditProduct = ({ onClose, product, onSaveClick }) => {
+const [images, setImages] = useState([
+  { id: 1, src: BannerImg },
+  { id: 2, src: BannerImg },
+  { id: 3, src: BannerImg },
+  { id: 4, src: BannerImg },
+]);
+
+const removeImage = (id) => {
+  setImages(prev => prev.filter(img => img.id !== id));
+};
+return (
+
     <div>
+            <div className='rounded-xl shadow-2xl mt-5 bg-(--bg-box) p-5 space-y-5'>
 
-
-
-       
-
-        <div className='rounded-xl shadow-2xl mt-5 bg-(--bg-box) p-5 space-y-5'>
+           <div className='flex justify-between'>
           <Heading
           title={"Edit Products"}/>
 
-            <div className='grid grid-cols-4 gap-4 mt-5'>
+
+          
+                 <button
+                className="  text-(--bs-btn-second)"
+                onClick={onClose}
+              >
+                <RxCrossCircled
+                  className="bg-(--bs-btn-second) text-(--text-white) rounded-2xl"
+                  size={20}
+                />
+              </button>
+               
+                </div>
+
+                 <div className='grid grid-cols-4 gap-4 mt-5'>
                 <InputField 
                 label={"Select Product Category"}
                 defaultValue='Asthmetic'
@@ -143,40 +164,51 @@ const images = [
             title={"Product Images"}
             titleSize='text-xs'/>
 
-            <div className='grid grid-cols-4 gap-5'>
+           <div className='grid grid-cols-4 gap-5'>
+  {images.map((item) => (
+    <div key={item.id} className="relative">
+      
+      <img
+        src={item.src}
+        alt="product"
+        className="rounded-2xl w-full h-full object-cover"
+      />
 
-{images.map((item, index) => {
-  return (
-    <img
-      key={index}
-      src={item.src}
-      alt={`banner-${index}`}
-      className='rounded-2xl '
-    />
-  );
-})}
+      {/* Cross icon */}
+      <RxCrossCircled
+        size={20}
+        onClick={() => removeImage(item.id)}
+        className="absolute top-2 right-2 cursor-pointer 
+        bg-(--bs-btn-second) text-(--text-white) rounded-full"
+      />
 
+    </div>
+  ))}
 </div>
-
-
 
 
 <div className='flex  gap-3 items-center justify-center mt-10'>
 <Button
 title={"Cancle"}
 className='p-2 text-xs rounded-sm shadow-2xl px-5'
+onClick={onClose}
 />
+
 
 <Button
 title={"Save Product"}
 className='p-2 text-xs rounded-sm shadow-2xl bg-(--bs-btn-third) px-5'
+onClick={() => {
+  console.log("modify")
+   onSaveClick(product);
+}}
+
 />
 </div>
+</div>
+</div>
+  
 
-
-        </div>
-        
-    </div>
   )
 }
 

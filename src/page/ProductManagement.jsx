@@ -1,30 +1,45 @@
 import React, { useState } from 'react'
 import { Heading, MainHeading } from '../Component/Heading'
 import SelectOption from '../Component/Selectoption';
-import Button from '../Component/Btn';
+import Button, { ActionButton } from '../Component/Btn';
 import CommonDataTable from '../Component/CommonDataTable';
 import { useNavigate } from "react-router-dom";
-
-import { Eye, Pencil, Plus } from 'lucide-react';
+import { LuCodesandbox } from "react-icons/lu";
+import { BsGridFill } from "react-icons/bs";
+import { IoLayersSharp } from "react-icons/io5";
+import { Edit, Eye,  Pencil } from 'lucide-react';
 import { RiDeleteBin6Line } from "react-icons/ri";
+import EditProduct from '../productManagement/EditProduct';
+import Modal from '../Model/Modal';
+import Delete from '../alerts/Delete';
+import AddCategoryModal from '../Details/AddCategoryModal';
+import AddProductType from '../Details/AddProductType';
+import AddProductBrand from '../Details/AddProductBrand';
+import AddProductName from '../Details/AddProductName';
+import { GiBrandyBottle } from 'react-icons/gi';
+import { TbBrandAmongUs } from "react-icons/tb";
 
 
 const ProductManagement = () => {
 
+
+  
+  const [activeModal, setActiveModal] = useState(null);
+  const handleSave = (data) => { console.log("Backend payload:", data); };
+  
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+ 
+
+const [selectedProduct, setSelectedProduct] = useState(null);
+
+
+
+const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+
+
      const navigate = useNavigate();
 
-
-    const [values, setValues] = useState({
-  category: "",
-  type: "",
-  brand: "",
-  name: "",
-});
-
- const category = ["Electronics", "Fashion", "Furniture"];
- const type=["Mobile","TV","Laptop"];
- const brand=["Samsung","apple","Realme"];
- const name=["Galaxy s24 Ultra", "iPhone 17","Xiaomi hypercharge"]
 
 
  const productList=[
@@ -226,16 +241,27 @@ const ProductManagement = () => {
     },
     {
       name: "Action",
-      cell: () => (
+      cell: (row) => (
         <div className="flex gap-2">
           <button className="p-2 rounded-lg bg-(--icon-btn) text-(--icon-btn-text)"   onClick={() => navigate(`/product/view`)}>
             <Eye size={10} />
 
           </button>
-          <button className="p-2 rounded-lg bg-(--icon-btn-second) text-(--icon-text-second)" onClick={()=>navigate(`/product/edit`)}>
+          <button className="p-2 rounded-lg bg-(--icon-btn-second) text-(--icon-text-second)" 
+           onClick={() => {
+          setSelectedProduct(row);
+          setIsModalOpen(true);
+        }}
+          >
             <Pencil size={10} />
           </button>
-          <button className="p-2 rounded-lg bg-(--bs-btn-second) text-(--text-white) ">
+          <button className="p-2 rounded-lg bg-(--bs-btn-second) text-(--text-white) "
+           onClick={() => {
+  setSelectedProduct(row);
+  setIsDeleteOpen(true);
+}}
+
+          >
             <RiDeleteBin6Line size={10} />
           </button>
         </div>
@@ -250,63 +276,88 @@ const ProductManagement = () => {
     <div>
 
         <div className='flex  items-center justify-between '>
-            <div>
-             <MainHeading
-        title={"Product Management"}
-        subtitle={"Real-time overview of orders, payments, customers & operations"}
-        />
-        </div>
+           <div className="flex justify-between items-start w-full">
+  
+  {/* Left Side - Heading */}
+  <div>
+    <MainHeading
+      title={"Product Management"}
+      subtitle={"Real-time overview of orders, payments, customers & operations"}
+    />
+  </div>
 
-{/* 
-        <div className= ' flex gap-5'>
-            <Button
-            title={"Edit Products"} 
-            bg='bg-(--bg-btn)'
-            text='text-(--text-main)'
-            className='p-1 px-5 rounded-sm text-xs'
-            />
+  {/* Right Side - Buttons */}
+ 
+ <div className=" grid grid-cols-2 gap-5">
+ <ActionButton
+    title='Add Product'
+    icon={<LuCodesandbox />}
+    className='flex-col justify-items-center px-3'
+    onClick={() => setActiveModal("name")}/>
 
-            <Button
-            title={"Add Type"}
-             bg='bg-(--bg-btn)'
-            text='text-(--text-main)'
-            className='p-1 px-5 rounded-sm text-xs'
-            />
+ 
+    <ActionButton
+    title='Add Category'
+    icon={<BsGridFill/>}
+    onClick={() => setActiveModal("category")}
+    className='flex-col justify-items-center px-2'
+    />
+    
+   <ActionButton
+    title='Add Type'
+    icon={<IoLayersSharp/>}
+    className='flex-col justify-items-center px-6'
+    onClick={() => setActiveModal("type")}/>
 
-            <Button
-            title={"Add Product"}
-             bg='bg-(--bg-btn)'
-            text='text-(--text-main)'
-            className='p-1 px-5 rounded-sm text-xs'
-            />
+    <ActionButton
+    title='Add Brand'
+    icon={<TbBrandAmongUs/>}
+    className='flex-col justify-items-center px-5'
+    onClick={() => setActiveModal("brand")}/>
 
-            <Button
-            title={"Add Category"}
-             bg='bg-(--bg-btn)'
-            text='text-(--text-main)'
-            className='p-1 px-5 rounded-sm text-xs'
-            />
+   
+  </div>
 
-            <Button
-            title={"Add Brand"}
-             bg='bg-(--bg-btn)'
-            text='text-(--text-main)'
-            className='p-1 px-5 rounded-sm text-xs'
-            />
-        </div> */}
+</div>
+{/* Modals */}
+<AddCategoryModal
+  isOpen={activeModal === "category"}
+  onClose={() => setActiveModal(null)}
+  onSave={handleSave}
+/>
+
+<AddProductType
+  isOpen={activeModal === "type"}
+  onClose={() => setActiveModal(null)}
+  onSave={handleSave}
+/>
+
+<AddProductBrand
+  isOpen={activeModal === "brand"}
+  onClose={() => setActiveModal(null)}
+  onSave={handleSave}
+/>
+
+<AddProductName
+  isOpen={activeModal === "name"}
+  onClose={() => setActiveModal(null)}
+  onSave={handleSave}
+/>
+
+        {/* </div> */}
         </div>
        
 
-        <div className='bg-(--bg-box) rounded-xl shadow-xl p-4 mt-5'>
-       <Heading
+        {/* <div className='bg-(--bg-box) rounded-xl shadow-xl p-4 mt-5'> */}
+       {/* <Heading
        title={"Create Products - Category / Type / Brand / Name"}
     
-       />
+       /> */}
 
       
 
 
-      <div className='grid grid-cols-4 gap-3 mt-5'> 
+      {/* <div className='grid grid-cols-4 gap-3 mt-5'> 
         <SelectOption
   label="Product Category"
   options={category}
@@ -344,37 +395,38 @@ const ProductManagement = () => {
 />
 
 
-      </div>
+      </div> */}
      
         <div className='flex justify-end-safe mt-5'>
  <Button
  title={" + Add Product"}
-
-
  className='p-2 text-xs rounded-sm'
- />
+onClick={()=>navigate(`/add-product`)}
+/>
+ 
+ 
  </div>
  
+        {/* <div className='flex items-center justify-center gap-3 mt-5'> */}
 
-        <div className='flex items-center justify-center gap-3 mt-5'>
 
-
-            <div>
+            {/* <div>
 <Button
 title={"Reset"}
 className='text-xs p-2 px-7 rounded-sm'
 />
-</div>
+</div> */}
 
-
+{/* 
 <div>
 <Button
 title={"Save Product"}
 className='text-xs bg-(--bs-btn-third) p-2 px-5 rounded-sm'
+
 />
-</div>
-</div>
-        </div>
+</div> */}
+{/* </div> */}
+        {/* </div> */}
       
 <div className="bg-(--bg-box) shadow-2xl rounded-xl p-5 mt-5">
 <CommonDataTable
@@ -386,6 +438,28 @@ onPageChange={setCurrentPage}
 
 />
 </div>
+
+<Modal isOpen={isModalOpen}>
+  <EditProduct
+    productData={selectedProduct}
+    onClose={() => setIsModalOpen(false)}
+    
+  />
+</Modal>
+
+
+<Modal isOpen={isDeleteOpen}>
+  <Delete
+    product={selectedProduct}
+    onClose={() => setIsDeleteOpen(false)}
+    onConfirm={(product) => {
+      console.log("Delete:", product.id);
+      setIsDeleteOpen(false);
+    }}
+  />
+</Modal>
+
+
 
 
  

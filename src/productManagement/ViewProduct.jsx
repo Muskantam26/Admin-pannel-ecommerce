@@ -12,9 +12,7 @@ const images = [
   { src: BannerImg },
 ];
 
-
-
-  return (
+return (
     <div>
 
 
@@ -140,12 +138,11 @@ className='p-2 text-xs rounded-sm shadow-2xl px-3'
 <Button
 title={"Edit Product"}
 className='p-2 text-xs rounded-sm shadow-2xl bg-(--bs-btn-third) px-5'
+
 />
 </div>
-
-
-        </div>
-    </div>
+ </div>
+ </div>  
   )
 }
 

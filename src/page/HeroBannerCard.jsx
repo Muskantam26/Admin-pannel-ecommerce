@@ -28,13 +28,13 @@ const HeroBannerCard = ({ bannerDetails = {}, onClose }) => {
   };
 
  return (
-  <div className="bg-(--bg-box) rounded-2xl p-2 flex flex-col lg:flex-row gap-4 relative mt-10">
+  <div className="bg-(--bg-box) rounded-2xl p-2 flex flex-col lg:flex-row gap-4 relative ">
 
     {/* Close button */}
    
 
     {/* Slider */}
-    <div className="w-full lg:w-[72%] rounded-2xl mt-2 h-56 sm:h-64 lg:h-80">
+    <div className="w-full lg:w-[72%] rounded-2xl  h-56 sm:h-64 lg:h-80">
       <Slider {...sliderSettings}>
         {images?.length &&
           images.map((img, index) => (

@@ -9,6 +9,11 @@ import ProductAddManagement from "../page/ProductAddManagement";
 import ProductManagement from "../page/ProductManagement";
 import ViewProduct from "../productManagement/ViewProduct";
 import EditProduct from "../productManagement/EditProduct";
+import UserManagement from "../page/UserManagement";
+import ViewOrdersDetails from "../ordermanagement/ViewOrdersDetails";
+import AddMember from "../page/AddMember";
+import AddCategoryModal from "../Details/AddCategoryModal";
+import AddProduct from "../productManagement/AddProduct";
 
 const AppRoutes = () => {
   return (
@@ -23,6 +28,11 @@ const AppRoutes = () => {
         <Route path="/product/view" element={<ViewProduct/>}/>
         <Route path="/product/edit" element={<EditProduct/>}/>
         <Route path="/order-management" element={<OrderManagement/>}/>
+        <Route path="/viewordersdetails" element={<ViewOrdersDetails/>}/>
+        <Route path="/user-management" element={<UserManagement/>}/>
+        <Route path="/add-memeber" element={<AddMember/>}/>
+        <Route path="/add-product" element={<AddProduct/>}/>
+
 
       
       </Route>

@@ -1,8 +1,8 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
 @import "tailwindcss";
 
-
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 
 body{
   margin: 0;
@@ -17,6 +17,39 @@ body{
 
 
 
+/* sliderrr */
+@keyframes slideDown {
+  from {
+    transform: translateY(-80px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-open {
+  animation: slideDown 0.8s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(80px);
+    opacity: 0;
+  }
+}
+
+
+.modal-close {
+  animation: slideUp 0.8s ease forwards;
+}
+
+
 
 
 :root{
@@ -29,7 +62,7 @@ body{
   --bg-btn:rgba(255, 255, 255, 1);
   --text-third:rgba(156, 163, 175, 1);
   --bg-box:white;
-
+   --card-box:rgba(250, 248, 248, 1);
   --bg-green:rgba(86, 158, 72, 1);
   --text-white:rgba(255, 255, 255, 1);
   --input-border:rgb(236, 238, 243);
@@ -48,9 +81,17 @@ body{
   --bs-border:rgba(239, 240, 242, 1);
   --bs-btn-third:rgba(50, 201, 141, 0.84);
   --bs-btn-forth:rgba(44, 106, 229, 0.9);
+  --bs-btn-mod:rgba(44, 106, 229, 0.2);
   --bs-black:black;
   --bs-purple:rgba(112, 47, 138, 1);
-    
+  --bs-red:rgba(119, 21, 5, 1);
+  --bs-warn:rgba(188, 76, 46, 1);
+  --bs-del:rgb(247, 200, 200);
+  --bs-line:rgba(250, 112, 63, 1);
+  --bs-icon:rgba(0, 187, 167, 1);
+  --bs-icon-sec:rgba(97, 95, 255, 1);
+  --bs-icon-third:rgba(142, 81, 255, 1);
+  --bs-icon-four:rgba(255, 105, 0, 1);
   
 
   
@@ -108,4 +149,25 @@ body{
   background-size: cover;
   background-repeat: no-repeat;
   background-position: top;
+}
+
+/* width */
+.custom-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* track */
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* thumb */
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+/* hover */
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

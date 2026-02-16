@@ -34,6 +34,7 @@ export const InputField = ({
   className = "",
   onChange,
   value,
+  type="text",
   label,
 }) => {
   return (
@@ -46,7 +47,7 @@ export const InputField = ({
 
       <div className={`px-3 py-2 rounded-md ${border} ${className}`}>
         <input
-          type="text"
+          type={type}
           value={value}
           onChange={onChange}
           placeholder={placeholder}

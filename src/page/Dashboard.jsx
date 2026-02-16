@@ -339,12 +339,7 @@ const Dashboard = () => {
   return (
     <div className="md:mt-5 overflow-x-hidden">
       <div>
-        {/* <h1 className="text-3xl md:text-6xl  font-bold text-(--text-main)">
-          All Store Activity
-        </h1>
-        <p className="text-(--text-third) text-xs font-medium mt-2">
-          Real-time overview of orders, payments, customers & operations
-        </p> */}
+       
 
         <MainHeading
         title={"All Store Activity"}
