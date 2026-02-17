@@ -2,9 +2,8 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '../redux/slice/authSlice';
 import { hideLoader, showLoader } from '../redux/slice/loadingSlice';
-// import AppLogo from "../assets/VEDANZOApplogo.png"
 
-import { FiHome, FiX } from "react-icons/fi";
+import { FiHome, FiX, FiChevronDown, FiChevronRight } from "react-icons/fi";
 import { FaBoxOpen } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
 import { TbBrandOffice } from "react-icons/tb";
@@ -14,7 +13,7 @@ import { GoBell } from "react-icons/go";
 import { RiMailSendLine } from "react-icons/ri";
 import { BiCategory, BiLogOut } from "react-icons/bi";
 import img from "../assets/user.jpg"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { MainContent } from '../constant/MainContent';
 import { PathRoutes } from '../constant/Path';
 
@@ -38,6 +37,7 @@ const manuItems = [
     id: PathRoutes.PRODUCT_MANAGEMENT,
     icon: FaBoxOpen,
     label: "Product Management",
+    
 
   },
   {
@@ -98,12 +98,41 @@ const Sidebar = ({ open, setOpen }) => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
+
+  const [expandedMenu, setExpandedMenu] = useState({});
+
+  const toggleSubMenu = (label) => {
+      setExpandedMenu(prev => ({
+          ...prev,
+          [label]: !prev[label]
+      }));
+  };
 
   const [user] = useState({
     name: "Mr. Rajat Pradhan",
     email: "rajatpradhan@gmail.com"
 
   });
+
+  const handleNavigation = (id) => {
+      if (id === "logout") {
+        dispatch(showLoader());
+        setTimeout(() => {
+          dispatch(logoutUser());
+          dispatch(hideLoader());
+        }, 2000);
+      } else {
+        dispatch(showLoader());
+        setTimeout(() => {
+          const path = id.startsWith("/") ? id : `/${id}`;
+          navigate(path.replace('//', '/'));
+          dispatch(hideLoader());
+        }, 500);
+      }
+      setOpen(false); // Close mobile menu if open
+  };
+
   return (
 
     <>
@@ -146,6 +175,8 @@ const Sidebar = ({ open, setOpen }) => {
             {manuItems.map((item, index) => {
 
               const Icon = item.icon;
+              const hasSubItems = item.subItems && item.subItems.length > 0;
+              const isExpanded = expandedMenu[item.label];
 
               return (
                 <div key={index} className=''>
@@ -156,29 +187,51 @@ const Sidebar = ({ open, setOpen }) => {
                       {item.label}
                     </p>
                   ) : (
-                    <div className="flex items-center text-xs font-medium gap-3 p-2 m-2 cursor-pointer  text-(--icon-color) rounded-lg hover:text-(--text-hover) hover:bg-(--btn-hover)"
-                      onClick={() => {
-                        if (item.id === "logout") {
-                          dispatch(showLoader());
-                          setTimeout(() => {
-                            dispatch(logoutUser());
-                            dispatch(hideLoader());
-                          }, 2000);
-                        } else {
-                          dispatch(showLoader());
-                          setTimeout(() => {
-                            // Helper to handle both absolute paths (starting with /) and route constants
-                            const path = item.id.startsWith("/") ? item.id : `/${item.id}`;
-                            // Remove double slashes if any (e.g. //dashboard)
-                            navigate(path.replace('//', '/'));
-                            dispatch(hideLoader());
-                          }, 500);
-                        }
-                        setOpen(false);
-                      }}
-                    >
-                      <Icon className="text-sm " />
-                      <span>{item.label}</span>
+                    <div>
+                        <div className={`flex items-center justify-between text-xs font-medium p-2 m-2 cursor-pointer rounded-lg hover:text-(--text-hover) hover:bg-(--btn-hover) transition-colors
+                            ${location.pathname === item.id ? 'bg-(--btn-hover) text-(--text-hover)' : 'text-(--icon-color)'}
+                        `}
+                            onClick={() => {
+                                // Always toggle text/accordion on click
+                                toggleSubMenu(item.label);
+                                // If it has no subitems, we might still want to navigate if it has an ID, 
+                                // but user asked for "baad me submenus aay to kaam aay", implying these should act as folders.
+                                // For now, if it has an ID and NO subitems, we navigate. If it has subitems, we just toggle.
+                                if (!hasSubItems && item.id) {
+                                    handleNavigation(item.id);
+                                }
+                            }}
+                        >
+                            <div className="flex items-center gap-3">
+                                <Icon className="text-sm " />
+                                <span>{item.label}</span>
+                            </div>
+                            {/* Always show chevron if it's a main menu item to allow future submenus or just consistent UI */}
+                             {isExpanded ? <FiChevronDown /> : <FiChevronRight />}
+                        </div>
+
+                        {/* Render Submenu with Smooth Transition */}
+                         <div
+                            className={`ml-6 overflow-hidden transition-[max-height] duration-300 ease-in-out
+                                ${isExpanded ? "max-h-96" : "max-h-0"}
+                            `}
+                        >
+                            {hasSubItems && item.subItems.map((subItem, subIndex) => (
+                                <div 
+                                    key={subIndex}
+                                    className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer text-xs text-(--text-second) hover:text-(--text-hover) hover:bg-(--btn-hover)
+                                        ${location.pathname === subItem.id ? 'text-(--text-hover) font-medium' : ''}
+                                    `}
+                                    onClick={() => handleNavigation(subItem.id)}
+                                >
+                                     {subItem.icon && <subItem.icon className="text-sm" />}
+                                    <span>{subItem.label}</span>
+                                </div>
+                            ))}
+                             {!hasSubItems && (
+                                <div className="p-2 text-xs text-gray-400 italic">No submenus yet</div>
+                             )}
+                        </div>
                     </div>
                   )}
                 </div>

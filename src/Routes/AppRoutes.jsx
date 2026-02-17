@@ -57,6 +57,7 @@ const AppRoutes = () => {
             <Route path={PathRoutes.MESSAGE} element={<Message />} />
             <Route path="/add-banner" element={<AddBanner />} />
             <Route path={PathRoutes.EDIT_BANNER} element={<EditBanner />} />
+            <Route path={PathRoutes.USER_MANAGEMENT} element={<UserManagement/>}/>
           </Route>{" "}
         </>
       ) : (
