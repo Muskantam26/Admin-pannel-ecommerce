@@ -17,8 +17,8 @@ export const MainContent = {
 };
 
 export const backendConfig = {
-  base: "http://192.168.1.4:3000/api/",
-  origin: "http://192.168.1.4:3000/",
+  base: import.meta.env.VITE_API_BASE_URL,
+  origin: import.meta.env.VITE_API_ORIGIN,
 };
 
 // https://cnfp6kct-1960.inc1.devtunnels.ms/

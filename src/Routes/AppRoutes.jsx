@@ -14,6 +14,8 @@ import ViewOrdersDetails from "../page/ordermanagement/ViewOrdersDetails";
 import AddMember from "../page/AddMember";
 // import AddCategoryModal from "../Details/AddCategoryModal";
 import AddProduct from "../page/productManagement/AddProduct";
+import CategoryPage from "../page/productManagement/CategoryPage";
+import CategoryForm from "../page/productManagement/CategoryForm";
 import Login from "../Component/Login";
 import { useSelector } from "react-redux";
 
@@ -37,6 +39,9 @@ const AppRoutes = () => {
             <Route path="/user-management" element={<UserManagement />} />
             <Route path="/add-memeber" element={<AddMember />} />
             <Route path="/add-product" element={<AddProduct />} />
+            <Route path="/add-category" element={<CategoryPage />} />
+            <Route path="/category/create" element={<CategoryForm />} />
+            <Route path="/category/edit/:id" element={<CategoryForm />} />
           </Route>{" "}
         </>
       ) : (
