@@ -16,6 +16,8 @@ import AddMember from "../page/AddMember";
 import AddProduct from "../page/productManagement/AddProduct";
 import CategoryPage from "../page/productManagement/CategoryPage";
 import CategoryForm from "../page/productManagement/CategoryForm";
+import CompanyPage from "../page/company/CompanyPage";
+import CompanyForm from "../page/company/CompanyForm";
 import Login from "../Component/Login";
 import { useSelector } from "react-redux";
 
@@ -42,6 +44,8 @@ const AppRoutes = () => {
             <Route path="/add-category" element={<CategoryPage />} />
             <Route path="/category/create" element={<CategoryForm />} />
             <Route path="/category/edit/:id" element={<CategoryForm />} />
+            <Route path="/company-settings" element={<CompanyPage />} />
+            <Route path="/company-form" element={<CompanyForm />} />
           </Route>{" "}
         </>
       ) : (

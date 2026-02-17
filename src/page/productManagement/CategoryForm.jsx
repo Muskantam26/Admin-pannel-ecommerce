@@ -6,6 +6,7 @@ import { Axios } from "../../constant/MainContent";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import { RxCrossCircled } from "react-icons/rx";
+import ImageUpload from "../../Component/Inputs/ImageUpload";
 
 const CategoryForm = () => {
     const { id } = useParams();
@@ -54,29 +55,16 @@ const CategoryForm = () => {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleImageUpload = async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
 
-        // Local Preview
-        setImagePreview(URL.createObjectURL(file));
 
-        // Upload
-        const formDataImg = new FormData();
-        formDataImg.append("file", file);
 
-        try {
-            const res = await Axios.post("/upload/auth/upload-image", formDataImg, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
-            if (res.data.success) {
-                setFormData((prev) => ({ ...prev, image: res.data.url }));
-                toast.success("Image uploaded successfully");
-            }
-        } catch (error) {
-            console.error("Image upload failed", error);
-            toast.error("Image upload failed");
-        }
+    // ... inside component
+
+    // Base64 conversion imported from utils
+
+    const handleUploadComplete = (url) => {
+        setFormData((prev) => ({ ...prev, image: url }));
+        setImagePreview(url);
     };
 
     const removeImage = () => {
@@ -150,39 +138,25 @@ const CategoryForm = () => {
                 placeholder="Detailed Description"
             />
 
-            {/* Image Upload */}
-            <Heading title={"Category Image"} titleSize="text-xs" />
-            <input type="file" onChange={handleImageUpload} className="text-xs" />
-
-            <div className="grid grid-cols-4 gap-5 mt-3">
-                {imagePreview && (
-                    <div className="relative w-32 h-32">
-                        <img
-                            src={imagePreview}
-                            alt="Category"
-                            className="rounded-2xl w-full h-full object-cover shadow-sm border"
-                        />
-                        <RxCrossCircled
-                            size={20}
-                            onClick={removeImage}
-                            className="absolute -top-2 -right-2 cursor-pointer bg-red-500 text-white rounded-full hover:bg-red-600 transition"
-                        />
-                    </div>
-                )}
-            </div>
+            <ImageUpload
+                label="Category Image"
+                onUploadComplete={handleUploadComplete}
+                previewUrl={imagePreview}
+                onRemove={removeImage}
+                folder="category"
+            />
 
             {/* Buttons */}
             <div className="flex gap-3 items-center justify-center mt-10">
                 <Button
                     title={"Cancel"}
                     onClick={() => navigate("/add-category")}
-                    className="bg-gray-400 hover:bg-gray-500"
+                    className="bg-gray-400 hover:bg-gray-500 px-6 rounded-sm text-xs py-2"
                 />
                 <Button
-                    title={loading ? "Saving..." : id ? "Update Category" : "Add Category"}
-                    className="bg-(--bs-btn-third) hover:opacity-90"
+                    title={id ? "Update Category" : "Add Category"}
+                    className="bg-(--bs-btn-third) hover:opacity-90 px-6 rounded-sm text-xs py-2"
                     onClick={handleSubmit}
-                    disabled={loading}
                 />
             </div>
         </div>
