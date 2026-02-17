@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '../redux/slice/authSlice';
+import { hideLoader, showLoader } from '../redux/slice/loadingSlice';
 // import AppLogo from "../assets/VEDANZOApplogo.png"
 
 import { FiHome, FiX } from "react-icons/fi";
@@ -6,7 +9,7 @@ import { FaBoxOpen } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
 import { TbBrandOffice } from "react-icons/tb";
 import { MdEmail } from "react-icons/md";
-import { FaMailBulk } from "react-icons/fa";
+import { FaMailBulk, FaLayerGroup } from "react-icons/fa";
 import { GoBell } from "react-icons/go";
 import { RiMailSendLine } from "react-icons/ri";
 import { BiCategory, BiLogOut } from "react-icons/bi";
@@ -27,18 +30,18 @@ const manuItems =[
     {
         label:"MAIN"
     },
-     {
-        id:PathRoutes.ADMIN_LOGIN,
-        icon:CgProfile,
-        label:"Login",
-    
-    },
+     
    
     {
         id:PathRoutes.ADMIN_DASHBOARD,
         icon:FiHome,
         label:"Dashboard",
     
+    },
+    {
+        id:PathRoutes.PACKAGES,
+        icon:FaLayerGroup,
+        label:"Packages",
     },
     {
         id:PathRoutes.PRODUCT_MANAGEMENT,
@@ -71,12 +74,9 @@ const manuItems =[
        
     },
     {
-        id:"rewards",
+        id:PathRoutes.REWARDS,
         icon:MdEmail,
         label:"Rewards",
-    
-      
-
     },
     {
         id:PathRoutes.SITE_MANAGER,
@@ -89,12 +89,12 @@ const manuItems =[
         },
    
     {
-        id:"notification",
+        id:PathRoutes.NOTIFICATION,
         icon:GoBell,
         label:"Notification",
     },
     {
-        id:"message",
+        id:PathRoutes.MESSAGE,
         icon:RiMailSendLine,
         label:"Message",
     },
@@ -108,6 +108,7 @@ const Sidebar = ({ open, setOpen }) => {
 
 
     const navigate = useNavigate(); 
+    const dispatch = useDispatch(); 
 
 
   //  const [open, setOpen] = useState(false);
@@ -176,7 +177,19 @@ const Sidebar = ({ open, setOpen }) => {
             ) : (
               <div className="flex items-center text-xs font-medium gap-3 p-2 m-2 cursor-pointer  text-(--icon-color) rounded-lg hover:text-(--text-hover) hover:bg-(--btn-hover)"
                  onClick={() => {
-    navigate(`/${item.id}`);
+                    if (item.id === "logout") {
+                        dispatch(showLoader());
+                         setTimeout(() => {
+                           dispatch(logoutUser());
+                           dispatch(hideLoader());
+                         }, 2000); 
+                    } else {
+                      dispatch(showLoader());
+                      setTimeout(() => {
+                        navigate(item.id.startsWith("/") ? item.id : `/${item.id}`);
+                        dispatch(hideLoader());
+                      }, 500); 
+                    }
     setOpen(false);
   }}
   >

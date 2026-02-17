@@ -1,8 +1,9 @@
 import { Navigate, Route, Routes } from "react-router-dom";
+import { PathRoutes } from "../constant/Path";
 import Dashboard from "../page/Dashboard";
 import Layout from "../Component/Layout";
 import SiteManager from "../page/SiteManager";
-import EditBanner from "../page/EditBanner";
+
 
 import OrderManagement from "../page/OrderManagement";
 // import ProductAddManagement from "../page/ProductAddManagement";
@@ -17,6 +18,12 @@ import AddProduct from "../page/productManagement/AddProduct";
 import CategoryPage from "../page/productManagement/CategoryPage";
 import CategoryForm from "../page/productManagement/CategoryForm";
 import Login from "../Component/Login";
+import Rewards from "../page/Rewards";
+import Packages from "../page/Packages";
+import Notification from "../page/Notification";
+import Message from "../page/Message";
+import AddBanner from "../page/AddBanner";
+import EditBanner from "../page/EditBanner";
 import { useSelector } from "react-redux";
 
 const AppRoutes = () => {
@@ -29,7 +36,6 @@ const AppRoutes = () => {
             <Route index element={<Dashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/site-manager" element={<SiteManager />} />
-            <Route path="/edit-banner" element={<EditBanner />} />
             {/* <Route path="/product-add-management" element={<ProductAddManagement/>}/> */}
             <Route path="/product-management" element={<ProductManagement />} />
             <Route path="/product/view" element={<ViewProduct />} />
@@ -42,6 +48,12 @@ const AppRoutes = () => {
             <Route path="/add-category" element={<CategoryPage />} />
             <Route path="/category/create" element={<CategoryForm />} />
             <Route path="/category/edit/:id" element={<CategoryForm />} />
+            <Route path={PathRoutes.REWARDS} element={<Rewards />} />
+            <Route path={PathRoutes.PACKAGES} element={<Packages />} />
+            <Route path={PathRoutes.NOTIFICATION} element={<Notification />} />
+            <Route path={PathRoutes.MESSAGE} element={<Message />} />
+            <Route path="/add-banner" element={<AddBanner />} />
+            <Route path={PathRoutes.EDIT_BANNER} element={<EditBanner />} />
           </Route>{" "}
         </>
       ) : (

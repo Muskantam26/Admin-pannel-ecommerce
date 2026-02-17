@@ -73,8 +73,8 @@ const SiteManager = () => {
       });
       setIsModalOpen(true);
     },
-    edit: () => {
-      navigate(PathRoutes.EDIT_BANNER);
+    edit: (row) => {
+      navigate(`/edit-banner/${row.id}`);
     },
     delete: (row) => {
       console.log("Delete", row);
@@ -158,6 +158,7 @@ const SiteManager = () => {
           <Button
           title={"Add Banner"}
           className="rounded-sm text-xs px-3 h-7 shadow-2xl"
+          onClick={() => navigate("/add-banner")}
           />
         </div>
 
