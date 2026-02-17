@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '../redux/slice/authSlice';
+import { hideLoader, showLoader } from '../redux/slice/loadingSlice';
 // import AppLogo from "../assets/VEDANZOApplogo.png"
 
 import { FiHome, FiX } from "react-icons/fi";
@@ -6,21 +9,14 @@ import { FaBoxOpen } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
 import { TbBrandOffice } from "react-icons/tb";
 import { MdEmail } from "react-icons/md";
-import { FaMailBulk } from "react-icons/fa";
+import { FaMailBulk, FaLayerGroup } from "react-icons/fa";
 import { GoBell } from "react-icons/go";
 import { RiMailSendLine } from "react-icons/ri";
 import { BiCategory, BiLogOut } from "react-icons/bi";
 import img from "../assets/user.jpg"
-// import Untitleddesign from "../assets/Untitleddesign.png"
 import { useNavigate } from "react-router-dom";
-
-import { IoMdMenu } from "react-icons/io";
 import { MainContent } from '../constant/MainContent';
 import { PathRoutes } from '../constant/Path';
-import { CgProfile } from 'react-icons/cg';
-
-import { CategoryScale } from 'chart.js';
-// import { path } from 'framer-motion/client';
 
 
 const manuItems = [
@@ -28,17 +24,15 @@ const manuItems = [
     label: "MAIN"
   },
   {
-    id: PathRoutes.ADMIN_LOGIN,
-    icon: CgProfile,
-    label: "Login",
-
-  },
-
-  {
     id: PathRoutes.ADMIN_DASHBOARD,
     icon: FiHome,
     label: "Dashboard",
 
+  },
+  {
+    id: PathRoutes.PACKAGES,
+    icon: FaLayerGroup,
+    label: "Packages",
   },
   {
     id: PathRoutes.PRODUCT_MANAGEMENT,
@@ -56,11 +50,6 @@ const manuItems = [
     icon: BiCategory,
     id: PathRoutes.ADD_CATEGORY,
   },
-  //  {
-  //     id:"product-add-management",
-  //     icon:FaBoxOpen,
-  //     label:"Product Add Management",
-  // },
   {
     id: PathRoutes.ORDER_MANAGEMENT,
     icon: FaUserGroup,
@@ -75,12 +64,9 @@ const manuItems = [
 
   },
   {
-    id: "rewards",
+    id: PathRoutes.REWARDS,
     icon: MdEmail,
     label: "Rewards",
-
-
-
   },
   {
     id: PathRoutes.SITE_MANAGER,
@@ -93,12 +79,12 @@ const manuItems = [
   },
 
   {
-    id: "notification",
+    id: PathRoutes.NOTIFICATION,
     icon: GoBell,
     label: "Notification",
   },
   {
-    id: "message",
+    id: PathRoutes.MESSAGE,
     icon: RiMailSendLine,
     label: "Message",
   },
@@ -110,12 +96,8 @@ const manuItems = [
 ]
 const Sidebar = ({ open, setOpen }) => {
 
-
   const navigate = useNavigate();
-
-
-  //  const [open, setOpen] = useState(false);
-
+  const dispatch = useDispatch();
 
   const [user] = useState({
     name: "Mr. Rajat Pradhan",
@@ -125,8 +107,6 @@ const Sidebar = ({ open, setOpen }) => {
   return (
 
     <>
-
-
       {open && (
         <div
           className="fixed inset-0 bg-black/40 z-40 md:hidden "
@@ -155,14 +135,12 @@ const Sidebar = ({ open, setOpen }) => {
         </div>
 
 
-
-
         <div className="sidebar w-60 rounded-xs md:rounded-2xl flex flex-col h-full p-3  ">
 
 
           <img src={MainContent.appLogo} alt="logo" className="h-10 w-25  " />
 
-          <div className='mt-7'>
+          <div className='mt-7 overflow-y-auto custom-scroll'>
 
 
             {manuItems.map((item, index) => {
@@ -180,7 +158,22 @@ const Sidebar = ({ open, setOpen }) => {
                   ) : (
                     <div className="flex items-center text-xs font-medium gap-3 p-2 m-2 cursor-pointer  text-(--icon-color) rounded-lg hover:text-(--text-hover) hover:bg-(--btn-hover)"
                       onClick={() => {
-                        navigate(`/${item.id}`);
+                        if (item.id === "logout") {
+                          dispatch(showLoader());
+                          setTimeout(() => {
+                            dispatch(logoutUser());
+                            dispatch(hideLoader());
+                          }, 2000);
+                        } else {
+                          dispatch(showLoader());
+                          setTimeout(() => {
+                            // Helper to handle both absolute paths (starting with /) and route constants
+                            const path = item.id.startsWith("/") ? item.id : `/${item.id}`;
+                            // Remove double slashes if any (e.g. //dashboard)
+                            navigate(path.replace('//', '/'));
+                            dispatch(hideLoader());
+                          }, 500);
+                        }
                         setOpen(false);
                       }}
                     >
@@ -191,7 +184,6 @@ const Sidebar = ({ open, setOpen }) => {
                 </div>
               );
             })}
-
           </div>
 
           <div className="flex items-center gap-3 mt-auto pt-5 ">

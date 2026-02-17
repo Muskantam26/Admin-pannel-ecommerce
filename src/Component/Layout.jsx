@@ -2,12 +2,16 @@ import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
+import PageLoader from "./PageLoader";
 
 const Layout = () => {
   const [open, setOpen] = useState(false);
+  const { isLoading } = useSelector((state) => state.loading);
 
   return (
     <div className="bg-(--bg-main) min-h-screen relative">
+      {isLoading && <PageLoader />}
 
       {/* Desktop Sidebar */}
       <div className="hidden md:block fixed left-0 top-0 h-screen w-60 p-4 z-30">

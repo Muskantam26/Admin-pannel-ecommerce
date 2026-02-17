@@ -8,9 +8,9 @@ const safeGetStorageItem = (key, defaultValue = null) => {
   }
 };
 
-export const saveToken = (userId, token, role) => {
+export const saveToken = (userId, token, role, name, email) => {
   try {
-    const data = { userId, token, role };
+    const data = { userId, token, role, name, email };
     sessionStorage.setItem("authData", JSON.stringify(data));
   } catch (e) {
     console.error("Error saving token:", e);

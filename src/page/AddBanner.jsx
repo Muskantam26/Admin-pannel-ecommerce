@@ -1,36 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Heading, MainHeading } from '../Component/Heading';
 import { InputField } from '../Component/InputBox';
 import Button from '../Component/Btn';
 import { FiSave, FiUploadCloud, FiTrash2 } from 'react-icons/fi';
 import { RxCrossCircled } from 'react-icons/rx';
-import { useNavigate, useParams } from 'react-router-dom';
-import BannerImg from "../assets/Bannerone.png"
+import { useNavigate } from 'react-router-dom';
 
-const EditBanner = () => {
+const AddBanner = () => {
     const navigate = useNavigate();
-    const { id } = useParams();
-
-    // Mock Data - In a real app, you would fetch this based on the ID
     const [bannerData, setBannerData] = useState({
-        name: 'Summer Sale 2026',
+        name: '',
         type: 'Slider Banner',
         page: 'Home Page',
-        link: '/products/summer-sale',
+        link: '',
         position: '1',
-        startDate: '2026-06-01',
-        endDate: '2026-06-30',
+        startDate: '',
+        endDate: '',
         device: 'All Devices',
         status: 'Active',
-        altText: 'Summer Sale Banner 50% Off',
-        discount: '50% OFF',
-        promoCode: 'SUMMER50',
-        description: 'Exclusive summer sale on all electronics and fashion items. Limited time offer.',
-        remarks: 'Priority placement requested by marketing team.',
-        images: [
-            { id: 1, src: BannerImg },
-            { id: 2, src: BannerImg } // Mock existing images
-        ]
+        altText: '',
+        discount: '',
+        promoCode: '',
+        description: '',
+        remarks: '',
+        images: []
     });
 
     const handleChange = (e) => {
@@ -59,22 +52,22 @@ const EditBanner = () => {
     };
 
     const handleSubmit = () => {
-        console.log("Banner Updated:", bannerData);
-        // Add Update API call here
+        console.log("Banner Data Saved:", bannerData);
+        // Add API call here
         navigate('/site-manager');
     };
 
     return (
         <div>
              <MainHeading
-                title={"Edit Banner"}
-                subtitle={"Update banner details and configuration"}
+                title={"Add New Banner"}
+                subtitle={"Create and manage website banners"}
             />
 
             <div className='rounded-xl shadow-2xl mt-5 bg-(--bg-box) p-5 space-y-5 animate-fade-in-up'>
                 
                 <div className='flex justify-between items-center'>
-                    <Heading title={`Edit Banner #${id}`} />
+                    <Heading title={"Banner Details"} />
                     <button
                         className="text-(--bs-btn-second)"
                         onClick={() => navigate('/site-manager')}
@@ -243,7 +236,7 @@ const EditBanner = () => {
                     />
 
                     <Button
-                        title={"Update Banner"}
+                        title={"Save Banner"}
                         className='p-2 text-xs rounded-sm shadow-2xl bg-(--bs-btn-third) px-5 text-white'
                         onClick={handleSubmit}
                     />
@@ -253,4 +246,4 @@ const EditBanner = () => {
     );
 };
 
-export default EditBanner;
+export default AddBanner;
