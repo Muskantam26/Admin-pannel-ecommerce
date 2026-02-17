@@ -18,7 +18,7 @@ import { IoMdMenu } from "react-icons/io";
 import { MainContent } from '../constant/MainContent';
 import { PathRoutes } from '../constant/Path';
 import { CgProfile } from 'react-icons/cg';
-import { icons } from 'lucide-react';
+
 import { CategoryScale } from 'chart.js';
 // import { path } from 'framer-motion/client';
 
