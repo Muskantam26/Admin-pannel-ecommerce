@@ -26,16 +26,15 @@ const InputBox = ({
 };
 
 export default InputBox;
-
 export const InputField = ({
   placeholder = "Search here",
-  defaultValue="here",
   border = "border border-(--input-border)",
   className = "",
   onChange,
   value,
-  type="text",
+  type = "text",
   label,
+  name,        
 }) => {
   return (
     <div className="flex flex-col gap-1 w-full">
@@ -48,11 +47,11 @@ export const InputField = ({
       <div className={`px-3 py-2 rounded-md ${border} ${className}`}>
         <input
           type={type}
+          name={name}          
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          defaultValue={defaultValue}
-          className="w-full outline-none text-xs"
+          className="w-full outline-none text-xs bg-transparent"
         />
       </div>
     </div>

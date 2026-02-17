@@ -5,8 +5,9 @@ import { FiEye, FiEdit, FiTrash } from "react-icons/fi";
 // import Banner from "../Component/Banner";
 import CommonDataTable from "../Component/CommonDataTable";
 import { useNavigate } from "react-router-dom";
-import Modal from "../Model/Modal";
+import Modal from "../Component/Model/Modal";
 import HeroBannerCard from "./HeroBannerCard";
+import { PathRoutes } from "../constant/Path";
 
 const SiteManager = () => {
   const navigate = useNavigate();
@@ -73,7 +74,7 @@ const SiteManager = () => {
       setIsModalOpen(true);
     },
     edit: () => {
-      navigate("/edit-banner");
+      navigate(PathRoutes.EDIT_BANNER);
     },
     delete: (row) => {
       console.log("Delete", row);

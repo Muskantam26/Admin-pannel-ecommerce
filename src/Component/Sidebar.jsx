@@ -9,28 +9,48 @@ import { MdEmail } from "react-icons/md";
 import { FaMailBulk } from "react-icons/fa";
 import { GoBell } from "react-icons/go";
 import { RiMailSendLine } from "react-icons/ri";
-import { BiLogOut } from "react-icons/bi";
+import { BiCategory, BiLogOut } from "react-icons/bi";
 import img from "../assets/user.jpg"
-import Untitleddesign from "../assets/Untitleddesign.png"
+// import Untitleddesign from "../assets/Untitleddesign.png"
 import { useNavigate } from "react-router-dom";
 
 import { IoMdMenu } from "react-icons/io";
+import { MainContent } from '../constant/MainContent';
+import { PathRoutes } from '../constant/Path';
+import { CgProfile } from 'react-icons/cg';
+import { icons } from 'lucide-react';
+import { CategoryScale } from 'chart.js';
+// import { path } from 'framer-motion/client';
 
 
 const manuItems =[
     {
         label:"MAIN"
     },
+     {
+        id:PathRoutes.ADMIN_LOGIN,
+        icon:CgProfile,
+        label:"Login",
+    
+    },
    
     {
-        id:"dashboard",
+        id:PathRoutes.ADMIN_DASHBOARD,
         icon:FiHome,
         label:"Dashboard",
+    
     },
     {
-        id:"product-management",
+        id:PathRoutes.PRODUCT_MANAGEMENT,
         icon:FaBoxOpen,
         label:"Product Management",
+       
+    },
+
+    {
+       label:"Categories",
+       icon:BiCategory,
+       id:PathRoutes.ADD_CATEGORY,
     },
     //  {
     //     id:"product-add-management",
@@ -38,25 +58,31 @@ const manuItems =[
     //     label:"Product Add Management",
     // },
     {
-        id:"order-management",
+        id:PathRoutes.ORDER_MANAGEMENT,
         icon:FaUserGroup,
         label:"Order Management",
+        
     },
+
     {
-        id:"user-management",
+        id:PathRoutes.USER_MANAGEMENT,
         icon:TbBrandOffice,
         label:"User Management",
+       
     },
     {
         id:"rewards",
         icon:MdEmail,
         label:"Rewards",
+    
+      
 
     },
     {
-        id:"site-manager",
+        id:PathRoutes.SITE_MANAGER,
         icon:FaMailBulk,
         label:"Site Manager",
+      
     },
         {
             label:"OTHRES"
@@ -124,11 +150,13 @@ const Sidebar = ({ open, setOpen }) => {
           />
         </div>
 
+       
+
 
  <div className="sidebar w-60 rounded-xs md:rounded-2xl flex flex-col h-full p-3  ">
 
       
-      <img src={Untitleddesign} alt="logo" className="h-10 w-25  " />
+      <img src={MainContent.appLogo} alt="logo" className="h-10 w-25  " />
 
   <div className='mt-7'>
     

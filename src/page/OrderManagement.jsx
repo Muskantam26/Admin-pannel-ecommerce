@@ -5,9 +5,10 @@ import UserCards from '../Component/UserCards';
 
 import { CgProfile } from 'react-icons/cg';
 import CommonDataTable from '../Component/CommonDataTable';
-import OrderChart from '../chart/Orderchart';
+import OrderChart from '../Component/chart/Orderchart';
 import AlertCard from '../Component/AlertCard';
 import { useNavigate } from 'react-router-dom';
+import { PathRoutes } from '../constant/Path';
 
 const OrderManagement = () => {
  const navigate=useNavigate();
@@ -160,7 +161,7 @@ const chartData = [
       name: "Action",
       cell: () => (
         <div className="flex gap-2">
-          <button className="p-2 rounded-lg bg-(--icon-btn) text-(--icon-btn-text)"  onClick={()=>navigate(`/viewordersdetails`)} >
+          <button className="p-2 rounded-lg bg-(--icon-btn) text-(--icon-btn-text)"  onClick={()=>navigate(PathRoutes.ORDERS_DETAILS)} >
             <Eye size={10} />
 
           </button>

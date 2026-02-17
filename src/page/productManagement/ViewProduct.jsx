@@ -1,8 +1,9 @@
 
-import Button from '../Component/Btn';
-import { Heading, MainHeading } from '../Component/Heading'
-import InputBox, { InputField } from '../Component/InputBox'
-import BannerImg from "../assets/Bannerone.png";
+import Button from '../../Component/Btn';
+import { Heading, MainHeading } from '../../Component/Heading';
+
+import BannerImg from "../../assets/Bannerone.png"
+import { InputField } from '../../Component/InputBox';
 
 const ViewProduct = () => {
 const images = [
@@ -31,7 +32,7 @@ return (
                 defaultValue='Asthmetic'
 
                 />
-                <InputField 
+                <InputField
                 label={"Product Type"}
                 defaultValue='Pills'
 

@@ -1,8 +1,10 @@
 import { RxCrossCircled } from "react-icons/rx";
-import Button from "../Component/Btn";
-import { Heading } from "../Component/Heading";
-import { InputField } from "../Component/InputBox";
+
+
 import { useState } from "react";
+import Button from "../../Component/Btn";
+import { Heading } from "../../Component/Heading";
+import { InputField } from "../../Component/InputBox";
 
 const AddProduct = ({ onClose, onSaveClick }) => {
 

@@ -1,10 +1,11 @@
 
 import { RxCrossCircled } from 'react-icons/rx';
-import Button from '../Component/Btn';
-import { Heading } from '../Component/Heading'
-import  { InputField } from '../Component/InputBox'
-import BannerImg from "../assets/Bannerone.png";
+
+import BannerImg from "../../assets/Bannerone.png"
 import { useState } from 'react';
+import Button from '../../Component/Btn';
+import { Heading } from '../../Component/Heading';
+import { InputField } from '../../Component/InputBox';
 
 
 
@@ -52,7 +53,7 @@ return (
                 defaultValue='Asthmetic'
 
                 />
-                <InputField 
+                <InputField
                 label={"Select Product Type"}
                 defaultValue='Pills'
 

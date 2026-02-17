@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Heading, MainHeading } from '../Component/Heading'
 import SelectOption from '../Component/Selectoption';
-import Button, { ActionButton } from '../Component/Btn';
+
 import CommonDataTable from '../Component/CommonDataTable';
 import { useNavigate } from "react-router-dom";
 import { LuCodesandbox } from "react-icons/lu";
@@ -9,23 +9,25 @@ import { BsGridFill } from "react-icons/bs";
 import { IoLayersSharp } from "react-icons/io5";
 import { Edit, Eye,  Pencil } from 'lucide-react';
 import { RiDeleteBin6Line } from "react-icons/ri";
-import EditProduct from '../productManagement/EditProduct';
-import Modal from '../Model/Modal';
+import EditProduct from './productManagement/EditProduct';
+import Modal from '../Component/Model/Modal';
 import Delete from '../alerts/Delete';
-import AddCategoryModal from '../Details/AddCategoryModal';
-import AddProductType from '../Details/AddProductType';
-import AddProductBrand from '../Details/AddProductBrand';
-import AddProductName from '../Details/AddProductName';
-import { GiBrandyBottle } from 'react-icons/gi';
-import { TbBrandAmongUs } from "react-icons/tb";
+// import AddCategoryModal from '../Details/AddCategoryModal';
+// import AddProductType from '../Details/AddProductType';
+// import AddProductBrand from '../Details/AddProductBrand';
+// import AddProductName from '../Details/AddProductName';
+// import { GiBrandyBottle } from 'react-icons/gi';
+// import { TbBrandAmongUs } from "react-icons/tb";
+import { PathRoutes } from '../constant/Path';
+import Button from '../Component/Btn';
 
 
 const ProductManagement = () => {
 
 
   
-  const [activeModal, setActiveModal] = useState(null);
-  const handleSave = (data) => { console.log("Backend payload:", data); };
+  // const [activeModal, setActiveModal] = useState(null);
+  // const handleSave = (data) => { console.log("Backend payload:", data); };
   
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -243,7 +245,7 @@ const [isDeleteOpen, setIsDeleteOpen] = useState(false);
       name: "Action",
       cell: (row) => (
         <div className="flex gap-2">
-          <button className="p-2 rounded-lg bg-(--icon-btn) text-(--icon-btn-text)"   onClick={() => navigate(`/product/view`)}>
+          <button className="p-2 rounded-lg bg-(--icon-btn) text-(--icon-btn-text)"   onClick={() => navigate(PathRoutes.PRODUCT_VIEW)}>
             <Eye size={10} />
 
           </button>
@@ -284,10 +286,23 @@ const [isDeleteOpen, setIsDeleteOpen] = useState(false);
       title={"Product Management"}
       subtitle={"Real-time overview of orders, payments, customers & operations"}
     />
+
+
   </div>
 
-  {/* Right Side - Buttons */}
+     <div className='flex justify-end-safe mt-5'>
+ <Button
+ title={" + Add Product"}
+ className='p-2 text-xs rounded-sm'
+onClick={()=>navigate(`/add-product`)}
+/>
  
+ 
+ </div>
+ 
+
+  {/* Right Side - Buttons */}
+{/*  
  <div className=" grid grid-cols-2 gap-5">
  <ActionButton
     title='Add Product'
@@ -316,11 +331,11 @@ const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     onClick={() => setActiveModal("brand")}/>
 
    
-  </div>
+  </div> */}
 
 </div>
 {/* Modals */}
-<AddCategoryModal
+{/* <AddCategoryModal
   isOpen={activeModal === "category"}
   onClose={() => setActiveModal(null)}
   onSave={handleSave}
@@ -342,7 +357,7 @@ const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   isOpen={activeModal === "name"}
   onClose={() => setActiveModal(null)}
   onSave={handleSave}
-/>
+/> */}
 
         {/* </div> */}
         </div>
@@ -397,7 +412,7 @@ const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
       </div> */}
      
-        <div className='flex justify-end-safe mt-5'>
+        {/* <div className='flex justify-end-safe mt-5'>
  <Button
  title={" + Add Product"}
  className='p-2 text-xs rounded-sm'
@@ -405,7 +420,7 @@ onClick={()=>navigate(`/add-product`)}
 />
  
  
- </div>
+ </div> */}
  
         {/* <div className='flex items-center justify-center gap-3 mt-5'> */}
 

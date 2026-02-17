@@ -6,7 +6,7 @@ import CommonDataTable from '../Component/CommonDataTable'
 import { Eye, Pencil, User } from 'lucide-react'
 import { RiDeleteBin6Line, RiProfileFill } from 'react-icons/ri'
 import Button, { ActionButton } from '../Component/Btn'
-import Modal from '../Model/Modal'
+import Modal from '../Component/Model/Modal'
 import AddMember from './AddMember'
 
 

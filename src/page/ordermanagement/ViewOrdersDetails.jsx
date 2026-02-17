@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { Heading, MainHeading } from '../Component/Heading'
-import { InputField } from '../Component/InputBox'
-import CommonDataTable from '../Component/CommonDataTable'
-import OrderProgressBar from '../Component/OrderProgressBar'
-import Button from '../Component/Btn'
+import { Heading, MainHeading } from '../../Component/Heading'
+import { InputField } from '../../Component/InputBox'
+import CommonDataTable from '../../Component/CommonDataTable'
+import OrderProgressBar from '../../Component/OrderProgressBar'
+import Button from '../../Component/Btn'
 
 const ViewOrdersDetails = () => {
 
