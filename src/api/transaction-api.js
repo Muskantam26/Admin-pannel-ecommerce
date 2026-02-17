@@ -1,0 +1,21 @@
+import { Axios } from "../constant/MainContent";
+
+// Get All Deposits
+export const getAllDepositsApi = async (payload) => {
+    try {
+        const response = await Axios.get("/admin/all-deposits",{params:payload});
+        return response.data;
+    } catch (error) {
+        return error.response?.data || { success: false, message: "Server Error" };
+    }
+};
+
+// Process Deposit (Confirm or Cancel)
+export const processDepositApi = async (data) => {
+    try {
+        const response = await Axios.put("/transaction/confirm-deposit", data);
+        return response.data;
+    } catch (error) {
+        return error.response?.data || { success: false, message: "Server Error" };
+    }
+};

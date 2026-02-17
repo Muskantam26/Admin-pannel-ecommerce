@@ -19,6 +19,7 @@ import CategoryPage from "../page/productManagement/CategoryPage";
 import CategoryForm from "../page/productManagement/CategoryForm";
 import CompanyPage from "../page/company/CompanyPage";
 import CompanyForm from "../page/company/CompanyForm";
+import DepositPage from "../page/DepositPage";
 import Login from "../Component/Login";
 import Rewards from "../page/Rewards";
 import Packages from "../page/Packages";
@@ -57,6 +58,7 @@ const AppRoutes = () => {
             <Route path={PathRoutes.MESSAGE} element={<Message />} />
             <Route path="/add-banner" element={<AddBanner />} />
             <Route path={PathRoutes.EDIT_BANNER} element={<EditBanner />} />
+            <Route path={PathRoutes.DEPOSITS} element={<DepositPage />} />
           </Route>{" "}
         </>
       ) : (

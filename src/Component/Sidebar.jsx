@@ -56,6 +56,11 @@ const manuItems = [
     label: "Order Management",
 
   },
+  {
+    id: PathRoutes.DEPOSITS,
+    icon: FaBoxOpen,
+    label: "Deposit Requests",
+  },
 
   {
     id: PathRoutes.USER_MANAGEMENT,
