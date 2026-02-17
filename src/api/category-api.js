@@ -26,3 +26,21 @@ export const getCategoryApi = async (id) => {
         return { success: false, message: error.response?.data?.message || "Failed to fetch category" };
     }
 };
+
+export const getAllCategoryApi = async () => {
+    try {
+        const res = await Axios.get("/category/get-all");
+        return res.data;
+    } catch (error) {
+        return { success: false, message: error.response?.data?.message || "Failed to fetch categories" };
+    }
+};
+
+export const deleteCategoryApi = async (id) => {
+    try {
+        const res = await Axios.delete(`/category/delete/${id}`);
+        return res.data;
+    } catch (error) {
+        return { success: false, message: error.response?.data?.message || "Failed to delete category" };
+    }
+};

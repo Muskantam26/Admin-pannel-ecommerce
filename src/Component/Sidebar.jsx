@@ -37,7 +37,18 @@ const manuItems = [
     id: PathRoutes.PRODUCT_MANAGEMENT,
     icon: FaBoxOpen,
     label: "Product Management",
-    
+    subItems: [
+      {
+        id: PathRoutes.PRODUCT_MANAGEMENT,
+        label: "All Products",
+        icon: FaBoxOpen
+      },
+      // {
+      //   id: PathRoutes.ADD_PRODUCT,
+      //   label: "Add Product",
+      //   icon: FaBoxOpen
+      // }
+    ]
 
   },
   {
@@ -54,7 +65,6 @@ const manuItems = [
     id: PathRoutes.ORDER_MANAGEMENT,
     icon: FaUserGroup,
     label: "Order Management",
-
   },
   {
     id: PathRoutes.DEPOSITS,
@@ -108,10 +118,10 @@ const Sidebar = ({ open, setOpen }) => {
   const [expandedMenu, setExpandedMenu] = useState({});
 
   const toggleSubMenu = (label) => {
-      setExpandedMenu(prev => ({
-          ...prev,
-          [label]: !prev[label]
-      }));
+    setExpandedMenu(prev => ({
+      ...prev,
+      [label]: !prev[label]
+    }));
   };
 
   const [user] = useState({
@@ -121,21 +131,21 @@ const Sidebar = ({ open, setOpen }) => {
   });
 
   const handleNavigation = (id) => {
-      if (id === "logout") {
-        dispatch(showLoader());
-        setTimeout(() => {
-          dispatch(logoutUser());
-          dispatch(hideLoader());
-        }, 2000);
-      } else {
-        dispatch(showLoader());
-        setTimeout(() => {
-          const path = id.startsWith("/") ? id : `/${id}`;
-          navigate(path.replace('//', '/'));
-          dispatch(hideLoader());
-        }, 500);
-      }
-      setOpen(false); // Close mobile menu if open
+    if (id === "logout") {
+      dispatch(showLoader());
+      setTimeout(() => {
+        dispatch(logoutUser());
+        dispatch(hideLoader());
+      }, 2000);
+    } else {
+      dispatch(showLoader());
+      setTimeout(() => {
+        const path = id.startsWith("/") ? id : `/${id}`;
+        navigate(path.replace('//', '/'));
+        dispatch(hideLoader());
+      }, 500);
+    }
+    setOpen(false); // Close mobile menu if open
   };
 
   return (
@@ -193,50 +203,47 @@ const Sidebar = ({ open, setOpen }) => {
                     </p>
                   ) : (
                     <div>
-                        <div className={`flex items-center justify-between text-xs font-medium p-2 m-2 cursor-pointer rounded-lg hover:text-(--text-hover) hover:bg-(--btn-hover) transition-colors
+                      <div className={`flex items-center justify-between text-xs font-medium p-2 m-2 cursor-pointer rounded-lg hover:text-(--text-hover) hover:bg-(--btn-hover) transition-colors
                             ${location.pathname === item.id ? 'bg-(--btn-hover) text-(--text-hover)' : 'text-(--icon-color)'}
                         `}
-                            onClick={() => {
-                                // Always toggle text/accordion on click
-                                toggleSubMenu(item.label);
-                                // If it has no subitems, we might still want to navigate if it has an ID, 
-                                // but user asked for "baad me submenus aay to kaam aay", implying these should act as folders.
-                                // For now, if it has an ID and NO subitems, we navigate. If it has subitems, we just toggle.
-                                if (!hasSubItems && item.id) {
-                                    handleNavigation(item.id);
-                                }
-                            }}
-                        >
-                            <div className="flex items-center gap-3">
-                                <Icon className="text-sm " />
-                                <span>{item.label}</span>
-                            </div>
-                            {/* Always show chevron if it's a main menu item to allow future submenus or just consistent UI */}
-                             {isExpanded ? <FiChevronDown /> : <FiChevronRight />}
+                        onClick={() => {
+                          if (hasSubItems) {
+                            toggleSubMenu(item.label);
+                          } else {
+                            if (item.id) handleNavigation(item.id);
+                          }
+                        }}
+                      >
+                        <div className="flex items-center gap-3">
+                          <Icon className="text-sm " />
+                          <span>{item.label}</span>
                         </div>
+                        {/* Only show chevron if there are subitems */}
+                        {hasSubItems && (isExpanded ? <FiChevronDown /> : <FiChevronRight />)}
+                      </div>
 
-                        {/* Render Submenu with Smooth Transition */}
-                         <div
-                            className={`ml-6 overflow-hidden transition-[max-height] duration-300 ease-in-out
+                      {/* Render Submenu with Smooth Transition */}
+                      <div
+                        className={`ml-6 overflow-hidden transition-[max-height] duration-300 ease-in-out
                                 ${isExpanded ? "max-h-96" : "max-h-0"}
                             `}
-                        >
-                            {hasSubItems && item.subItems.map((subItem, subIndex) => (
-                                <div 
-                                    key={subIndex}
-                                    className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer text-xs text-(--text-second) hover:text-(--text-hover) hover:bg-(--btn-hover)
+                      >
+                        {hasSubItems && item.subItems.map((subItem, subIndex) => (
+                          <div
+                            key={subIndex}
+                            className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer text-xs text-(--text-second) hover:text-(--text-hover) hover:bg-(--btn-hover)
                                         ${location.pathname === subItem.id ? 'text-(--text-hover) font-medium' : ''}
                                     `}
-                                    onClick={() => handleNavigation(subItem.id)}
-                                >
-                                     {subItem.icon && <subItem.icon className="text-sm" />}
-                                    <span>{subItem.label}</span>
-                                </div>
-                            ))}
-                             {!hasSubItems && (
-                                <div className="p-2 text-xs text-gray-400 italic">No submenus yet</div>
-                             )}
-                        </div>
+                            onClick={() => handleNavigation(subItem.id)}
+                          >
+                            {subItem.icon && <subItem.icon className="text-sm" />}
+                            <span>{subItem.label}</span>
+                          </div>
+                        ))}
+                        {!hasSubItems && (
+                          <div className="p-2 text-xs text-gray-400 italic">No submenus yet</div>
+                        )}
+                      </div>
                     </div>
                   )}
                 </div>

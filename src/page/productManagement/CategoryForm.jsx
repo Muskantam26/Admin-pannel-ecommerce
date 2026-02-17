@@ -7,6 +7,9 @@ import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import { RxCrossCircled } from "react-icons/rx";
 import ImageUpload from "../../Component/Inputs/ImageUpload";
+import { useDispatch } from "react-redux";
+import { hideLoader, showLoader } from "../../redux/slice/loadingSlice";
+import { createCategoryApi, updateCategoryApi, getCategoryApi, getAllCategoryApi } from "../../api/category-api";
 
 const CategoryForm = () => {
     const { id } = useParams();
@@ -17,29 +20,54 @@ const CategoryForm = () => {
         slug: "",
         image: "",
         description: "",
+        parentId: "",
     });
+    const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
     const [imagePreview, setImagePreview] = useState(null);
 
     useEffect(() => {
+        fetchAllCategories();
         if (id) {
             fetchCategoryData(id);
         }
     }, [id]);
 
+    const fetchAllCategories = async () => {
+        try {
+            const res = await getAllCategoryApi();
+            if (res.success) {
+                // Check structure: res is { success, data: { count, categories } }
+                // So res.data.categories
+                setCategories(res.data?.categories || []);
+            }
+        } catch (error) {
+            console.error("Error fetching categories:", error);
+        }
+    };
+
     const fetchCategoryData = async (categoryId) => {
         setLoading(true);
         try {
-            const res = await Axios.get(`/category/get/${categoryId}`);
-            if (res.data.success) {
-                const data = res.data.data;
+            const res = await getCategoryApi(categoryId);
+
+            console.log(res);
+            if (res.success) {
+                const data = res.data;
                 setFormData({
                     name: data.name || "",
                     slug: data.slug || "",
                     image: data.image || "",
                     description: data.description || "",
+                    parentId: data.parentId?._id || data.parentId || "",
                 });
                 setImagePreview(data.image);
+            } else {
+                // ... logic
+                if (res.success === false) {
+                    toast.error(res.message || "Failed to load category data");
+                    navigate("/add-category");
+                }
             }
         } catch (error) {
             console.error("Error fetching category:", error);
@@ -50,17 +78,14 @@ const CategoryForm = () => {
         }
     };
 
+    // ...
+
+    const dispatch = useDispatch();
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
-
-
-
-
-    // ... inside component
-
-    // Base64 conversion imported from utils
 
     const handleUploadComplete = (url) => {
         setFormData((prev) => ({ ...prev, image: url }));
@@ -76,24 +101,29 @@ const CategoryForm = () => {
         if (!formData.name) {
             return toast.error("Category name is required");
         }
-        setLoading(true);
+        dispatch(showLoader())
         try {
             let res;
             if (id) {
-                res = await Axios.put(`/category/update/${id}`, formData);
+                res = await updateCategoryApi(id, formData);
             } else {
-                res = await Axios.post("/category/create", formData);
+                res = await createCategoryApi(formData);
             }
 
-            if (res.data.success) {
-                toast.success(res.data.message);
+            if (res.success) {
+                toast.success(res.message);
+                dispatch(hideLoader())
                 navigate("/add-category");
+            } else {
+                toast.error(res.message || "Something went wrong");
+                dispatch(hideLoader())
             }
         } catch (error) {
             console.error("Error saving category:", error);
-            toast.error(error.response?.data?.message || "Something went wrong");
+            toast.error("Something went wrong");
+            dispatch(hideLoader())
         } finally {
-            setLoading(false);
+            dispatch(hideLoader())
         }
     };
 
@@ -125,6 +155,25 @@ const CategoryForm = () => {
                     onChange={handleChange}
                     placeholder="Category Slug"
                 />
+                {/* Parent Category Select */}
+                <div className="flex flex-col gap-1 col-span-2 md:col-span-1">
+                    <label className="text-xs font-semibold text-gray-600">Parent Category</label>
+                    <select
+                        name="parentId"
+                        value={formData.parentId}
+                        onChange={handleChange}
+                        className="w-full border rounded-md p-2 text-xs bg-transparent outline-none focus:ring-1 focus:ring-(--bs-btn-third)"
+                    >
+                        <option value="">None (Top Level)</option>
+                        {categories
+                            .filter(cat => cat._id !== id) // Exclude self
+                            .map((cat) => (
+                                <option key={cat._id} value={cat._id}>
+                                    {cat.name}
+                                </option>
+                            ))}
+                    </select>
+                </div>
             </div>
 
             {/* Description */}

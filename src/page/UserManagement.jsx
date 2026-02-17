@@ -1,240 +1,209 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Heading, MainHeading } from '../Component/Heading'
 import UserCards from '../Component/UserCards'
 import { CgProfile } from 'react-icons/cg'
 import CommonDataTable from '../Component/CommonDataTable'
-import { Eye, Pencil, User } from 'lucide-react'
+import { Eye, Pencil, User, Lock, Unlock } from 'lucide-react'
 import { RiDeleteBin6Line, RiProfileFill } from 'react-icons/ri'
 import Button, { ActionButton } from '../Component/Btn'
 import Modal from '../Component/Model/Modal'
 import AddMember from './AddMember'
-
-
-
-
+import { getAllUsersApi, toggleUserBlockApi } from "../api/user-api";
+import { toast } from "react-toastify";
+import { useNavigate } from 'react-router-dom';
 
 const UserManagement = () => {
+  const navigate = useNavigate();
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [isAddUserOpen, setIsAddUserOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 10;
 
-// const [activeModal, setActiveModal] = useState(null);
-// const handleSave = (data) => { console.log("Backend payload:", data); };
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
-const [isAddUserOpen, setIsAddUserOpen] = useState(false);
+  const fetchUsers = async () => {
+    setLoading(true);
+    const res = await getAllUsersApi();
+    if (res.success) {
+      setUsers(res.data || []);
+    } else {
+      toast.error(res.message);
+    }
+    setLoading(false);
+  };
 
+  const handleToggleBlock = async (id) => {
+    if (!window.confirm("Are you sure you want to change block status?")) return;
+    const res = await toggleUserBlockApi(id);
+    if (res.success) {
+      toast.success(res.message);
+      fetchUsers();
+    } else {
+      toast.error(res.message);
+    }
+  }
 
-    const bannerList =[
-        {
-            id:1,
-            name:"John Smith",
-            email:"john.smith@example.com",
-            type:"user",
-            role:"Editor",
-            status:"active",
-            join_date:"12/15/2024",
-            last_active:"3 Images",
-        },
-        {
-            id:2,
-            name:"John Smith",
-            email:"john.smith@example.com",
-            type:"user",
-            role:"Editor",
-            status:"pending",
-            join_date:"12/15/2024",
-            last_active:"3 Images",
-        },
-        {
-            id:3,
-            name:"John Smith",
-            email:"john.smith@example.com",
-            type:"user",
-            role:"Editor",
-            status:"inactive",
-            join_date:"12/15/2024",
-            last_active:"3 Images",
-        },
-        {
-            id:4,
-            name:"John Smith",
-            email:"john.smith@example.com",
-            type:"user",
-            role:"Editor",
-            status:"active",
-            join_date:"12/15/2024",
-            last_active:"3 Images",
-        },
-        {
-            id:5,
-            name:"John Smith",
-            email:"john.smith@example.com",
-            type:"user",
-            role:"Editor",
-            status:"active",
-            join_date:"12/15/2024",
-            last_active:"3 Images",
-        },
-        {
-            id:6,
-            name:"John Smith",
-            email:"john.smith@example.com",
-            type:"user",
-            role:"Editor",
-            status:"active",
-            join_date:"12/15/2024",
-            last_active:"3 Images",
-        },
-        {
-            id:7,
-            name:"John Smith",
-            email:"john.smith@example.com",
-            type:"user",
-            role:"Editor",
-            status:"active",
-            join_date:"12/15/2024",
-            last_active:"3 Images",
-        },
-        
-    ]
-
-
-    
-   const columns = [
+  const columns = [
     {
       name: "Name",
-      selector: (row) => row.name,
+      selector: (row) => row.fullName || row.username,
       sortable: true,
-      
     },
-   
-
+    {
+      name: "Sponsor",
+      selector: (row) => row.sponsor?.username || "N/A",
+      sortable: true,
+    },
+    {
+      name: "Parent",
+      selector: (row) => row.binaryParent?.username || "N/A",
+      sortable: true,
+    },
     {
       name: "Email",
       selector: (row) => row.email,
-      
+      sortable: true,
     },
     {
-      name: "Type",
-      selector: (row) => row.type,
+      name: "Mobile",
+      selector: (row) => row.mobile || "N/A",
     },
     {
       name: "Role",
-      selector: (row) => row.role,
+      selector: (row) => row.role || "USER",
+      sortable: true,
     },
     {
       name: "Status",
-      selector: (row) => row.status,
+      cell: (row) => (
+        <div className="flex gap-1">
+          {row.active?.isBlocked ? (
+            <span className="px-2 py-1 rounded-full text-xs bg-red-100 text-red-600 font-medium">Blocked</span>
+          ) : (
+            <span className="px-2 py-1 rounded-full text-xs bg-green-100 text-green-600 font-medium">Active</span>
+          )}
+          {!row.active?.isVerified && (
+            <span className="px-2 py-1 rounded-full text-xs bg-yellow-100 text-yellow-600 font-medium">Unverified</span>
+          )}
+        </div>
+      ),
     },
     {
       name: "Join Date",
-      cell: (row) => row.join_date,
+      selector: (row) => new Date(row.createdAt).toLocaleDateString(),
+      sortable: true,
     },
     {
-      name: "Last Active",
-      selector: (row) => row.last_active,
+      name: "Total Directs",
+      selector: (row) => row.totalDirectUsers || 0,
+      sortable: true,
+      center: true
     },
-    
     {
       name: "Action",
-      cell: () => (
+      cell: (row) => (
         <div className="flex gap-2">
-          <button className="p-2 rounded-lg bg-(--icon-btn) text-(--icon-btn-text)" >
-            <Eye size={10} />
-
+          <button
+            onClick={() => navigate(`/user-profile/${row._id || row.id}`)}
+            className="p-2 rounded-lg bg-blue-100 text-blue-600"
+            title="View Details">
+            <Eye size={14} />
           </button>
-          <button className="p-2 rounded-lg bg-(--icon-btn-second) text-(--icon-text-second)" >
-            <Pencil size={10} />
-          </button>
-          <button className="p-2 rounded-lg bg-(--bs-btn-second) text-(--text-white) ">
-            <RiDeleteBin6Line size={10} />
+          <button
+            onClick={() => handleToggleBlock(row._id || row.id)}
+            className={`p-2 rounded-lg ${row.active?.isBlocked ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}
+            title={row.active?.isBlocked ? "Unblock User" : "Block User"}
+          >
+            {row.active?.isBlocked ? <Unlock size={14} /> : <Lock size={14} />}
           </button>
         </div>
       ),
     },
   ];
 
+  const totalPages = Math.ceil(users.length / rowsPerPage);
+  const paginatedData = users.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage,
+  )
 
+  // Calculate Summary Stats
+  const totalUsers = users.length;
+  const activeUsers = users.filter(u => u.active?.isActive).length;
+  const blockedUsers = users.filter(u => u.active?.isBlocked).length;
+  const unverifiedUsers = users.filter(u => !u.active?.isVerified).length;
 
-
-    
-      const [currentPage, setCurrentPage] = useState(1);
-         const rowsPerPage = 6;
-       
-         const totalPages = Math.ceil(bannerList.length / rowsPerPage);
-       
-         const paginatedData =bannerList.slice(
-           (currentPage - 1) * rowsPerPage,
-           currentPage * rowsPerPage,
-         )
   return (
     <div>
-
-      <div className='flex justify-between'>
+      <div className='flex justify-between items-center mb-6'>
         <MainHeading
-        title={"User Management"}
-        subtitle={"Real-time overview of orders, payments, customers & operations"}/>
-  
+          title={"User Management"}
+          subtitle={"Real-time overview of users & operations"}
+        />
 
- <ActionButton
-title='Add User'
-icon={<User size={15}/>}
-className='flex h-8 text-(--text-second) px-4'
-onClick={() => setIsAddUserOpen(true)}
-/>
+        <ActionButton
+          title='Add User'
+          icon={<User size={15} />}
+          className='flex h-8 text-(--text-second) px-4 items-center gap-2'
+          onClick={() => setIsAddUserOpen(true)}
+        />
 
+        <Modal isOpen={isAddUserOpen}>
+          <AddMember onClose={() => setIsAddUserOpen(false)} onSuccess={() => {
+            setIsAddUserOpen(false);
+            fetchUsers();
+          }} />
+        </Modal>
+      </div>
 
-<Modal isOpen={isAddUserOpen}>
-  <AddMember onClose={() => setIsAddUserOpen(false)} />
-</Modal>
-
-
-      
-      
-</div>
-        <div className="justify-between  bg-(--bg-box)  rounded-2xl p-5 mt-5 shadow-2xl">
-           <div className='flex-col'> <Heading
-            title={"User & Role Management"}/></div>
-            <div className='flex mt-5 gap-10 items-center p-5'>
-                <UserCards
-                icon={<CgProfile/>}
-                totalorders={"Total Orders"}
-                iconBg='bg-(--bs-icon)'
-                amount={500}
-                />
-
-                 <UserCards
-                icon={<CgProfile/>}
-                totalorders={"Total Orders"}
-                iconBg='bg-(--bs-icon)'
-                amount={1504}
-                />
-
-                 <UserCards
-                icon={<CgProfile/>}
-                totalorders={"Total Orders"}
-                iconBg='bg-(--bs-icon)'
-                amount={300}
-                />
-
-                 <UserCards
-                icon={<CgProfile/>}
-                totalorders={"Total Orders"}
-                iconBg='bg-(--bs-icon)'
-                amount={35485}
-                />
-            </div>
+      <div className="bg-(--bg-box) rounded-2xl p-5 shadow-sm border border-gray-100">
+        <Heading title={"User Statistics"} />
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-5'>
+          <UserCards
+            icon={<CgProfile className="text-blue-600" size={24} />}
+            totalorders={"Total Users"}
+            iconBg='bg-blue-100'
+            amount={totalUsers}
+          />
+          <UserCards
+            icon={<CgProfile className="text-green-600" size={24} />}
+            totalorders={"Active Members"}
+            iconBg='bg-green-100'
+            amount={activeUsers}
+          />
+          <UserCards
+            icon={<CgProfile className="text-red-600" size={24} />}
+            totalorders={"Blocked Users"}
+            iconBg='bg-red-100'
+            amount={blockedUsers}
+          />
+          <UserCards
+            icon={<CgProfile className="text-yellow-600" size={24} />}
+            totalorders={"Unverified Users"}
+            iconBg='bg-yellow-100'
+            amount={unverifiedUsers}
+          />
         </div>
+      </div>
 
-        <div className=' justify-between  bg-(--bg-box)  rounded-2xl p-5 mt-5 shadow-2xl'>
-            <Heading
-            title={"User Panel Banner List"}/>
- <CommonDataTable
- columns={columns}
-data={paginatedData}
-currentPage={currentPage}
-totalPages={totalPages}
-onPageChange={setCurrentPage}
-  />
-
-        </div>
+      <div className='bg-(--bg-box) rounded-2xl p-5 mt-5 shadow-sm border border-gray-100'>
+        <Heading title={"User List"} />
+        {loading ? (
+          <div className="p-10 text-center">Loading users...</div>
+        ) : (
+          <CommonDataTable
+            columns={columns}
+            data={paginatedData}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+            rowsPerPage={rowsPerPage}
+          />
+        )}
+      </div>
     </div>
   )
 }

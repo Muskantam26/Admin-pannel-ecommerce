@@ -13,7 +13,7 @@ export const getAllDepositsApi = async (payload) => {
 // Process Deposit (Confirm or Cancel)
 export const processDepositApi = async (data) => {
     try {
-        const response = await Axios.put("/transaction/confirm-deposit", data);
+        const response = await Axios.put("/admin/confirm-deposit", data);
         return response.data;
     } catch (error) {
         return error.response?.data || { success: false, message: "Server Error" };

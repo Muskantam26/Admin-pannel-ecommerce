@@ -27,6 +27,7 @@ import Notification from "../page/Notification";
 import Message from "../page/Message";
 import AddBanner from "../page/AddBanner";
 import EditBanner from "../page/EditBanner";
+import UserProfileDetails from "../page/UserProfileDetails";
 import { useSelector } from "react-redux";
 
 const AppRoutes = () => {
@@ -59,7 +60,8 @@ const AppRoutes = () => {
             <Route path="/add-banner" element={<AddBanner />} />
             <Route path={PathRoutes.EDIT_BANNER} element={<EditBanner />} />
             <Route path={PathRoutes.DEPOSITS} element={<DepositPage />} />
-            <Route path={PathRoutes.USER_MANAGEMENT} element={<UserManagement/>}/>
+            <Route path={PathRoutes.USER_MANAGEMENT} element={<UserManagement />} />
+            <Route path="/user-profile/:id" element={<UserProfileDetails />} />
           </Route>{" "}
         </>
       ) : (

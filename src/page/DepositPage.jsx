@@ -4,6 +4,7 @@ import { getAllDepositsApi, processDepositApi } from "../api/transaction-api";
 import { toast } from "react-toastify";
 import Loader from "../Component/PageLoader";
 import { CheckCircle, XCircle, Eye, RefreshCw } from "lucide-react";
+import { MainHeading } from "../Component/Heading";
 
 const DepositPage = () => {
     const [data, setData] = useState([]);
@@ -162,14 +163,18 @@ const DepositPage = () => {
     ];
 
     return (
-        <div className="card w-full bg-white rounded-xl shadow-sm p-4 h-full flex flex-col">
-            <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold text-gray-800">Deposit Requests</h2>
-                <button onClick={fetchDeposits} className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition">
+
+        <>
+        <div className="flex justify-between items-center mb-5">
+                <MainHeading
+                    title={"Deposit Requests"}
+                    subtitle={"Manage all user deposit requests"}
+                />
+                <button onClick={fetchDeposits} className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition text-gray-600" title="Refresh Data">
                     <RefreshCw size={18} className={loading ? "animate-spin" : ""} />
                 </button>
             </div>
-
+        <div className="card w-full bg-white rounded-xl shadow-sm p-4 h-full flex flex-col">
             <div className="flex-1 overflow-hidden">
                 {loading && <Loader />}
                 <CommonDataTable
@@ -179,7 +184,8 @@ const DepositPage = () => {
                     totalPages={totalPages}
                     onPageChange={setCurrentPage}
                     rowsPerPage={rowsPerPage}
-                    selectable={false}
+                    selectable={true}
+                    showSearch={true}
                 />
             </div>
 
@@ -262,6 +268,7 @@ const DepositPage = () => {
                 </div>
             )}
         </div>
+        </>
     );
 };
 

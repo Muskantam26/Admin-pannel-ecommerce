@@ -7,19 +7,19 @@ const CommonDataTable = ({
   totalPages,
   onPageChange,
   rowsPerPage = 6,
-   selectable = true, 
+  selectable = true,
 }) => {
 
-  
+
   return (
     <>
       <DataTable
         columns={columns}
         data={data}
         pagination={false}
-        selectableRows={selectable}  
+        selectableRows={selectable}
         responsive
-       
+
       />
 
       {/* Pagination */}
@@ -42,10 +42,9 @@ const CommonDataTable = ({
               key={index}
               onClick={() => onPageChange(index + 1)}
               className={`px-3 py-1 text-xs rounded
-                ${
-                  currentPage === index + 1
-                    ? "bg-(--bg-green) text-(--text-white)"
-                    : "bg-(--bg-main)"
+                ${currentPage === index + 1
+                  ? "bg-(--bg-green) text-(--text-white)"
+                  : "bg-(--bg-main)"
                 }`}
             >
               {index + 1}

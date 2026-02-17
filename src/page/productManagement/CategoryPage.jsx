@@ -7,6 +7,9 @@ import { toast } from "react-toastify";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import CommonDataTable from "../../Component/CommonDataTable";
+import { getAllCategoryApi, deleteCategoryApi } from "../../api/category-api";
+import ConfirmationModal from "../../Component/Model/ConfirmationModal";
+import ImagePreviewModal from "../../Component/Model/ImagePreviewModal";
 
 const CategoryPage = () => {
     const [categories, setCategories] = useState([]);
@@ -16,14 +19,15 @@ const CategoryPage = () => {
 
     // Pagination states
     const [currentPage, setCurrentPage] = useState(1);
-    const rowsPerPage = 10;
+    const rowsPerPage = 100;
 
     const fetchCategories = async () => {
         setLoading(true);
         try {
-            const res = await Axios.get("/category/get-all");
-            if (res.data.success) {
-                setCategories(res.data.data || []);
+            const res = await getAllCategoryApi();
+
+            if (res.success) {
+                setCategories(res.data || []);
             }
         } catch (error) {
             console.error("Error fetching categories:", error);
@@ -37,17 +41,31 @@ const CategoryPage = () => {
         fetchCategories();
     }, []);
 
-    const handleDelete = async (id) => {
-        if (!window.confirm("Are you sure you want to delete this category?")) return;
+    const [confirmModal, setConfirmModal] = useState({ isOpen: false, id: null });
+    const [previewModal, setPreviewModal] = useState({ isOpen: false, url: "", title: "" });
+
+    const handleDelete = (id) => {
+        setConfirmModal({ isOpen: true, id });
+    };
+
+    const onConfirmDelete = async () => {
+        if (!confirmModal.id) return;
         try {
-            const res = await Axios.delete(`/category/delete/${id}`);
-            if (res.data.success) {
-                toast.success(res.data.message);
-                fetchCategories();
+            const res = await deleteCategoryApi(confirmModal.id);
+            if (res.success) {
+                toast.success(res.message || "Category deleted successfully");
+                setCategories((prev) => ({
+                    ...prev,
+                    categories: (prev.categories || []).filter((cat) => cat._id !== confirmModal.id),
+                }));
+            } else {
+                toast.error(res.message || "Failed to delete category");
             }
         } catch (error) {
             console.error("Error deleting category:", error);
             toast.error("Failed to delete category");
+        } finally {
+            setConfirmModal({ isOpen: false, id: null });
         }
     };
 
@@ -60,8 +78,9 @@ const CategoryPage = () => {
     };
 
     // Filter categories
-    const filteredCategories = categories.filter((cat) =>
-        cat.name.toLowerCase().includes(search.toLowerCase())
+    console.log(categories);
+    const filteredCategories = (categories?.categories || []).filter((cat) =>
+        cat?.name?.toLowerCase().includes(search.toLowerCase())
     );
 
     // Calculate Pagination
@@ -70,16 +89,22 @@ const CategoryPage = () => {
         (currentPage - 1) * rowsPerPage,
         currentPage * rowsPerPage
     );
-
+    console.log(paginatedData);
     // Define Columns
     const columns = [
+        {
+            name: "ID",
+            selector: (row) => row.id,
+            sortable: true,
+        },
         {
             name: "Image",
             cell: (row) => (
                 <img
                     src={row.image || "https://via.placeholder.com/50"}
                     alt={row.name}
-                    className="w-10 h-10 object-cover rounded-md"
+                    className="w-10 h-10 object-cover rounded-md cursor-pointer hover:opacity-80 transition-opacity"
+                    onClick={() => setPreviewModal({ isOpen: true, url: row.image, title: row.name })}
                 />
             ),
             sortable: false,
@@ -87,6 +112,11 @@ const CategoryPage = () => {
         {
             name: "Name",
             selector: (row) => row.name,
+            sortable: true,
+        },
+        {
+            name: "Parent Category",
+            selector: (row) => row.parentId?.name || "None",
             sortable: true,
         },
         {
@@ -107,14 +137,14 @@ const CategoryPage = () => {
                 <div className="flex gap-2">
                     <button
                         onClick={() => handleEdit(row._id)}
-                        className="text-blue-500 hover:text-blue-700 p-2"
+                        className="text-blue-500 cursor-pointer hover:text-blue-700 p-2"
                         title="Edit"
                     >
                         <FaEdit size={16} />
                     </button>
                     <button
                         onClick={() => handleDelete(row._id)}
-                        className="text-red-500 hover:text-red-700 p-2"
+                        className="text-red-500 cursor-pointer hover:text-red-700 p-2"
                         title="Delete"
                     >
                         <FaTrash size={16} />
@@ -166,6 +196,21 @@ const CategoryPage = () => {
                     />
                 )}
             </div>
+
+            <ConfirmationModal
+                isOpen={confirmModal.isOpen}
+                onClose={() => setConfirmModal({ isOpen: false, id: null })}
+                onConfirm={onConfirmDelete}
+                title="Delete Category"
+                message="Are you sure you want to delete this category? This action cannot be undone."
+            />
+
+            <ImagePreviewModal
+                isOpen={previewModal.isOpen}
+                onClose={() => setPreviewModal({ isOpen: false, url: "", title: "" })}
+                imageUrl={previewModal.url}
+                title={previewModal.title}
+            />
         </div>
     );
 };
