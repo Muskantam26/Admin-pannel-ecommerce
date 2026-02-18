@@ -1,31 +1,28 @@
-import Axios from "../constant/Axios";
+import { Axios } from "../constant/MainContent";
 
-// Get All KYC Requests
-export const getAllKycRequestsApi = async (status = "") => {
+export const getAllKycApi = async (params) => {
     try {
-        const res = await Axios.get(`/admin/kyc/all-requests?status=${status}`);
-        return { success: true, data: res.data.data, message: "Fetched Successfully" };
+        const res = await Axios.get('/kyc/all', { params });
+        return res.data;
     } catch (error) {
-        return { success: false, message: error.response?.data?.message || "Failed to fetch KYC requests" };
+        return error.response?.data || { success: false, message: "Network Error" };
     }
 };
 
-// Update KYC Status
-export const updateKycStatusApi = async (id, status, remarks = "") => {
+export const verifyKycApi = async (data) => {
     try {
-        const res = await Axios.put(`/admin/kyc/update-status/${id}`, { status, remarks });
-        return { success: true, message: res.data.message };
+        const res = await Axios.post('/kyc/verify', data);
+        return res.data;
     } catch (error) {
-        return { success: false, message: error.response?.data?.message || "Failed to update KYC status" };
+        return error.response?.data || { success: false, message: "Network Error" };
     }
 };
 
-// Get Single KYC Request
-export const getKycRequestByIdApi = async (id) => {
+export const createKycByAdminApi = async (data) => {
     try {
-        const res = await Axios.get(`/admin/kyc/request/${id}`);
-        return { success: true, data: res.data.data };
+        const res = await Axios.post('/kyc/create', data);
+        return res.data;
     } catch (error) {
-        return { success: false, message: error.response?.data?.message || "Failed to fetch KYC request" };
+        return error.response?.data || { success: false, message: "Network Error" };
     }
 };

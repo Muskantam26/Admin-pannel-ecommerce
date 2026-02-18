@@ -34,7 +34,8 @@ export const InputField = ({
   value,
   type = "text",
   label,
-  name,        
+  name,
+  ...props
 }) => {
   return (
     <div className="flex flex-col gap-1 w-full">
@@ -47,11 +48,12 @@ export const InputField = ({
       <div className={`px-3 py-2 rounded-md ${border} ${className}`}>
         <input
           type={type}
-          name={name}          
+          name={name}
           value={value}
           onChange={onChange}
           placeholder={placeholder}
           className="w-full outline-none text-xs bg-transparent"
+          {...props}
         />
       </div>
     </div>

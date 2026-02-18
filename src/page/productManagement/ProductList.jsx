@@ -1,26 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Heading, MainHeading } from '../../Component/Heading'
-import SelectOption from '../../Component/Selectoption';
 import CommonDataTable from '../../Component/CommonDataTable';
 import { useNavigate } from "react-router-dom";
-import { LuCodesandbox } from "react-icons/lu";
-import { BsGridFill } from "react-icons/bs";
-import { IoLayersSharp } from "react-icons/io5";
-import { Edit, Eye,  Pencil } from 'lucide-react';
-import { RiDeleteBin6Line } from "react-icons/ri";
-import EditProduct from './EditProduct';
-import Modal from '../../Component/Model/Modal';
-import Delete from '../../alerts/Delete';
-// import AddCategoryModal from '../Details/AddCategoryModal';
-// import AddProductType from '../Details/AddProductType';
-// import AddProductBrand from '../Details/AddProductBrand';
-// import AddProductName from '../Details/AddProductName';
-// import { GiBrandyBottle } from 'react-icons/gi';
-// import { TbBrandAmongUs } from "react-icons/tb";
-import { PathRoutes } from '../../constant/Path';
+import { Edit, Eye, Trash2, Plus } from 'lucide-react';
+import ConfirmationModal from '../../Component/Model/ConfirmationModal';
 import Button from '../../Component/Btn';
 import { deleteProductApi, getAllProductsApi } from '../../api/product-api';
-
+import { toast } from 'react-toastify';
 
 const ProductList = () => {
   const navigate = useNavigate();
@@ -29,7 +15,6 @@ const ProductList = () => {
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [totalRecords, setTotalRecords] = useState(0);
   const rowsPerPage = 10;
 
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -41,18 +26,19 @@ const ProductList = () => {
 
   const fetchProducts = async () => {
     setLoading(true);
-    const res = await getAllProductsApi({ page: currentPage, limit: rowsPerPage });
-    if (res.products) { // API returns { products, pagination } or { products: [], ... } depending on successful structure
-      // Adjust based on actual API response structure. 
-      // product.controller.js getAllProducts returns: { products: [...], pagination: { ... } }
-      setProducts(res.products);
-      setTotalPages(res.pagination?.totalPages || 0);
-      setTotalRecords(res.pagination?.total || 0);
-    } else {
-      // Fallback or error handling
-      console.error("Failed to fetch products", res);
+    try {
+      const res = await getAllProductsApi({ page: currentPage, limit: rowsPerPage });
+      if (res.products) {
+        setProducts(res.products);
+        setTotalPages(res.pagination?.totalPages || 0);
+      } else {
+        console.error("Failed to fetch products", res);
+      }
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleDelete = async () => {
@@ -70,107 +56,133 @@ const ProductList = () => {
 
   const columns = [
     {
-      name: "SL",
-      cell: (row, index) => (currentPage - 1) * rowsPerPage + index + 1,
+      name: "#",
+      cell: (row, index) => <span className="text-gray-500 font-medium">{(currentPage - 1) * rowsPerPage + index + 1}</span>,
       width: "60px"
     },
     {
-      name: "Image",
+      name: "Product",
       cell: (row) => (
-        <img
-          src={row.image || (row.images && row.images.length > 0 ? (typeof row.images[0] === 'string' ? row.images[0] : row.images[0].src) : "https://via.placeholder.com/50")}
-          alt={row.name}
-          className="w-10 h-10 object-cover rounded-md"
-        />
+        <div className="flex items-center gap-3 py-2">
+          <div className="w-12 h-12 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center overflow-hidden shrink-0">
+            <img
+              src={row.image || (row.images && row.images.length > 0 ? (typeof row.images[0] === 'string' ? row.images[0] : row.images[0].src) : "https://via.placeholder.com/50")}
+              alt={row.name}
+              className="w-full h-full object-contain mix-blend-multiply"
+            />
+          </div>
+          <div>
+            <p className="font-semibold text-gray-900 text-sm line-clamp-1">{row.name}</p>
+            <p className="text-xs text-gray-500 font-mono">SKU: {row.sku || 'N/A'}</p>
+          </div>
+        </div>
       ),
-      width: "80px"
-    },
-    {
-      name: "Product Name",
-      selector: (row) => row.name,
-      sortable: true,
-      width: "200px"
+      width: "250px"
     },
     {
       name: "Category",
-      selector: (row) => row.category || "N/A",
-      width: "150px"
+      cell: (row) => (
+        <span className="px-2.5 py-1 rounded-md text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
+          {row.category?.name || "Uncategorized"}
+        </span>
+      ),
+      width: "140px"
     },
     {
       name: "Price",
-      selector: (row) => `₹${row.price}`,
+      selector: (row) => row.price,
       sortable: true,
+      cell: (row) => <span className="font-bold text-gray-900">₹{row.price}</span>,
       width: "100px"
     },
     {
       name: "Stock",
-      selector: (row) => row.stock || row.stockQty || "N/A",
-      width: "100px"
+      selector: (row) => row.stock,
+      cell: (row) => (
+        <div className="flex flex-col">
+          <span className={`text-sm font-semibold ${row.stock > 0 ? 'text-gray-900' : 'text-red-600'}`}>
+            {row.stock || 0}
+          </span>
+          <span className="text-[10px] text-gray-400 uppercase">Units</span>
+        </div>
+      ),
+      width: "90px"
     },
     {
       name: "Status",
       cell: (row) => (
-        <span className={`px-2 py-1 rounded-full text-xs ${row.status === 'ACTIVE' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-          {row.status || 'ACTIVE'}
-        </span>
+        <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-medium w-fit
+            ${row.status === 'ACTIVE'
+            ? 'bg-green-50 text-green-700 border-green-200'
+            : 'bg-yellow-50 text-yellow-700 border-yellow-200'
+          }`}>
+          <span className={`w-1.5 h-1.5 rounded-full ${row.status === 'ACTIVE' ? 'bg-green-600' : 'bg-yellow-600'}`}></span>
+          {row.status || 'DRAFT'}
+        </div>
       ),
-      width: "100px"
+      width: "110px"
     },
     {
-      name: "Action",
+      name: "Actions",
       cell: (row) => (
         <div className="flex gap-2">
-          <button className="p-2 rounded-lg bg-(--icon-btn) text-(--icon-btn-text) hover:opacity-80 disabled:opacity-50"
-            onClick={() => navigate(`/product/view/${row._id}`)} // Or keep simple view
-            title="View"
+          <button
+            className="p-1.5 rounded-md hover:bg-blue-50 text-gray-500 hover:text-blue-600 transition-colors"
+            onClick={() => navigate(`/product/view/${row._id}`)}
+            title="View Details"
           >
-            <Eye size={16} />
+            <Eye size={18} />
           </button>
-          <button className="p-2 rounded-lg bg-(--icon-btn-second) text-(--icon-text-second) hover:opacity-80"
+          <button
+            className="p-1.5 rounded-md hover:bg-purple-50 text-gray-500 hover:text-purple-600 transition-colors"
             onClick={() => navigate(`/product/edit/${row._id}`)}
-            title="Edit"
+            title="Edit Product"
           >
-            <Pencil size={16} />
+            <Edit size={18} />
           </button>
-          <button className="p-2 rounded-lg bg-(--bs-btn-second) text-(--text-white) hover:opacity-80"
+          <button
+            className="p-1.5 rounded-md hover:bg-red-50 text-gray-500 hover:text-red-600 transition-colors"
             onClick={() => {
               setSelectedProduct(row);
               setIsDeleteOpen(true);
             }}
-            title="Delete"
+            title="Delete Product"
           >
-            <RiDeleteBin6Line size={16} />
+            <Trash2 size={18} />
           </button>
         </div>
       ),
-      width: "150px"
+      width: "140px",
+      style: {
+        paddingRight: '10px'
+      }
+
     },
   ];
 
   return (
-    <div>
-      <div className='flex items-center justify-between'>
-        <div className="flex justify-between items-start w-full">
-          <div>
-            <MainHeading
-              title={"Product Management"}
-              subtitle={"Real-time overview of products & inventory"}
-            />
-          </div>
-
-          <div className='flex justify-end-safe mt-5'>
-            <Button
-              title={" + Add Product"}
-              className='p-2 text-xs rounded-sm'
-              onClick={() => navigate(`/add-product`)}
-            />
-          </div>
+    <div className="space-y-6">
+      <div className='flex flex-col md:flex-row md:items-end justify-between gap-4'>
+        <div>
+          <MainHeading
+            title={"Product Inventory"}
+            subtitle={"Manage your product catalog, prices, and stock levels."}
+          />
         </div>
+        <button
+          onClick={() => navigate(`/add-product`)}
+          className="flex items-center gap-2 px-5 py-2.5 bg-black text-white hover:bg-gray-800 rounded-lg transition-all shadow-lg hover:shadow-xl text-sm font-medium transform hover:-translate-y-0.5"
+        >
+          <Plus size={18} /> Add New Product
+        </button>
       </div>
 
-      <div className="bg-(--bg-box) shadow-2xl rounded-xl p-5 mt-5">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         {loading ? (
-          <div className="text-center p-10">Loading products...</div>
+          <div className="flex flex-col items-center justify-center p-12 text-gray-500">
+            <div className="w-8 h-8 border-2 border-gray-200 border-t-blue-600 rounded-full animate-spin mb-3"></div>
+            <p>Loading products...</p>
+          </div>
         ) : (
           <CommonDataTable
             columns={columns}
@@ -178,17 +190,21 @@ const ProductList = () => {
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={setCurrentPage}
+            pagination
           />
         )}
       </div>
 
-      <Modal isOpen={isDeleteOpen}>
-        <Delete
-          product={selectedProduct} // Pass full object or just name/id mainly for display
-          onClose={() => setIsDeleteOpen(false)}
-          onConfirm={handleDelete}
-        />
-      </Modal>
+      <ConfirmationModal
+        isOpen={isDeleteOpen}
+        onClose={() => setIsDeleteOpen(false)}
+        onConfirm={handleDelete}
+        title="Delete Product"
+        message={selectedProduct ? `Are you sure you want to permanently delete "${selectedProduct.name}"?` : "Are you sure you want to delete this product?"}
+        isDanger={true}
+        confirmText="Yes, Delete Product"
+        cancelText="Cancel"
+      />
     </div>
   );
 }

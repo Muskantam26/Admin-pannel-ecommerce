@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { logoutUser } from '../redux/slice/authSlice';
 import { hideLoader, showLoader } from '../redux/slice/loadingSlice';
 
-import { FiHome, FiX, FiChevronDown, FiChevronRight } from "react-icons/fi";
+import { FiHome, FiX, FiChevronDown, FiChevronRight, FiCreditCard } from "react-icons/fi";
 import { FaBoxOpen } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
 import { TbBrandOffice } from "react-icons/tb";
@@ -80,8 +80,18 @@ const manuItems = [
     subItems: [
       {
         id: PathRoutes.USER_MANAGEMENT,
-        label: "All Users", // Or "Overview"
+        label: "All Users",
         icon: FaUserGroup
+      },
+      {
+        id: PathRoutes.KYC_REQUESTS,
+        label: "KYC Requests",
+        icon: TbBrandOffice
+      },
+      {
+        id: PathRoutes.BANK_REQUESTS,
+        label: "Bank Requests",
+        icon: TbBrandOffice
       }
     ]
 

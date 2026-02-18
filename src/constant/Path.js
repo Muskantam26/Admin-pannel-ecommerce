@@ -23,7 +23,16 @@ export const PathRoutes = {
     PACKAGES: "/packages",
     NOTIFICATION: "/notification",
     MESSAGE: "/message",
-    
+    KYC_DETAILS: "/kyc-details",
+    USER_PROFILE_EDIT: "/user-profile/edit/:id",
+    USER_PROFILE_DETAILS: "/user-profile/:id",
+    KYC_REQUESTS: "/kyc-requests",
+    ADD_KYC: "/add-kyc",
+    BANK_REQUESTS: "/bank-requests",
+    BANK_DETAILS: "/bank-details/:id",
+    ADD_BANK: "/add-bank"
+
+
 
 
 };

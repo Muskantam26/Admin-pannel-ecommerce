@@ -7,15 +7,16 @@ const Button = ({
   text = "text-(--text-white)",
   onClick,
   className = "",
+  children,
 }) => {
   return (
     <button
-   
-        onClick={onClick}
+
+      onClick={onClick}
       className={`
         ${bg} ${text} cursor-pointer ${className}`}
     >
-      {title}
+      {children || title}
     </button>
   );
 };
@@ -44,6 +45,6 @@ export const ActionButton = ({
       {icon}
       <span className="text-xs ">{title}</span>
     </button>
-    
+
   );
 };
