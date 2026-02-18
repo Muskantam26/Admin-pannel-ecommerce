@@ -9,10 +9,12 @@ import OrderManagement from "../page/OrderManagement";
 import ProductManagement from "../page/ProductManagement";
 import ViewProduct from "../page/productManagement/ViewProduct";
 import UserManagement from "../page/UserManagement";
+
 import ViewOrdersDetails from "../page/ordermanagement/ViewOrdersDetails";
 import AddMember from "../page/AddMember";
 import AddProduct from "../page/productManagement/AddProduct";
 import CategoryPage from "../page/productManagement/CategoryPage";
+import SubCategoryPage from "../page/productManagement/SubCategoryPage";
 import CategoryForm from "../page/productManagement/CategoryForm";
 import CompanyPage from "../page/company/CompanyPage";
 import CompanyForm from "../page/company/CompanyForm";
@@ -27,6 +29,7 @@ import EditBanner from "../page/EditBanner";
 import UserProfileDetails from "../page/UserProfileDetails";
 import UserProfileEditPage from "../page/UserProfileEditPage";
 import { useSelector } from "react-redux";
+
 
 const AppRoutes = () => {
   const isLogin = useSelector((state) => state.auth);
@@ -52,6 +55,7 @@ const AppRoutes = () => {
             <Route path="/product/edit/:id" element={<AddProduct />} />
 
             <Route path="/add-category" element={<CategoryPage />} />
+            <Route path="/sub-category" element={<SubCategoryPage />} />
             <Route path="/category/create" element={<CategoryForm />} />
             <Route path="/category/edit/:id" element={<CategoryForm />} />
             <Route path="/company-settings" element={<CompanyPage />} />

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Heading, MainHeading } from '../Component/Heading'
+import InputBox from '../Component/InputBox';
 import UserCards from '../Component/UserCards'
 import { CgProfile } from 'react-icons/cg'
 import CommonDataTable from '../Component/CommonDataTable'
@@ -16,6 +17,7 @@ import ConfirmationModal from '../Component/Model/ConfirmationModal';
 const UserManagement = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [isAddUserOpen, setIsAddUserOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -183,8 +185,17 @@ const UserManagement = () => {
     },
   ];
 
-  const totalPages = Math.ceil(users.length / rowsPerPage);
-  const paginatedData = users.slice(
+
+
+  // Filter users based on search
+  const filteredUsers = users.filter((user) => 
+    (user.fullName || user.username || "").toLowerCase().includes(search.toLowerCase()) ||
+    (user.email || "").toLowerCase().includes(search.toLowerCase()) ||
+    (user.mobile || "").toLowerCase().includes(search.toLowerCase())
+  );
+
+  const totalPages = Math.ceil(filteredUsers.length / rowsPerPage);
+  const paginatedData = filteredUsers.slice(
     (currentPage - 1) * rowsPerPage,
     currentPage * rowsPerPage,
   )
@@ -249,7 +260,19 @@ const UserManagement = () => {
       </div>
 
       <div className='bg-(--bg-box) rounded-2xl p-5 mt-5 shadow-sm border border-gray-100'>
+        <div className='flex justify-between'>
         <Heading title={"User List"} />
+        <div className="mb-4 mt-4 ">
+            <InputBox
+                placeholder="Search User"
+                value={search}
+                onChange={(e) => {
+                    setSearch(e.target.value);
+                    setCurrentPage(1); 
+                }}
+            />
+        </div>
+        </div>
         {loading ? (
           <div className="p-10 text-center">Loading users...</div>
         ) : (
