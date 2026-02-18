@@ -13,6 +13,7 @@ import OrderActivityCard from "../Component/OrderActivityCard";
 import Chart from "react-apexcharts";
 import  {Heading, MainHeading } from "../Component/Heading";
 import CommonDataTable from "../Component/CommonDataTable";
+import { useSelector } from "react-redux";
 
 const Dashboard = () => {
   const apiChartData = {
@@ -335,6 +336,9 @@ const Dashboard = () => {
       ),
     },
   ];
+
+  const user = useSelector((state) => state.auth);
+  console.log(user);
 
   return (
     <div className="md:mt-5 overflow-x-hidden">

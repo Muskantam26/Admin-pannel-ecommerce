@@ -32,9 +32,10 @@ import { useSelector } from "react-redux";
 
 const AppRoutes = () => {
   const isLogin = useSelector((state) => state.auth);
+  console.log(isLogin)
   return (
     <Routes>
-      {isLogin.isLoggedIn ? (
+      {isLogin?.isLoggedIn ? (
         <>
           <Route element={<Layout />}>
             <Route index element={<Dashboard />} />

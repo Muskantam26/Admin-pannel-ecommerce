@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getCurrentUser, removeToken, saveToken } from "../authStorage";
 
 const initialState = {
   token: null,
@@ -23,13 +22,9 @@ const authSlice = createSlice({
       state.name = name;
       state.email = email;
       state.isLoggedIn = true;
-
-      saveToken(userId, token, role, name, email);
     },
 
     logoutUser(state) {
-      removeToken();
-
       state.token = null;
       state.userId = null;
       state.role = null;
@@ -37,21 +32,8 @@ const authSlice = createSlice({
       state.email = null;
       state.isLoggedIn = false;
     },
-
-    loadUserFromStorage(state) {
-      const user = getCurrentUser();
-
-      if (user?.token && user?.userId) {
-        state.token = user.token;
-        state.userId = user.userId;
-        state.role = user.role;
-        state.name = user.name;
-        state.email = user.email;
-        state.isLoggedIn = true;
-      }
-    },
   },
 });
 
-export const { loginUser, logoutUser, loadUserFromStorage } = authSlice.actions;
+export const { loginUser, logoutUser } = authSlice.actions;
 export default authSlice.reducer;

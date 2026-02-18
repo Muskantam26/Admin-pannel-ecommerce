@@ -2,7 +2,6 @@ import appLogo from "../assets/appLogo.png";
 import appFavicon from "../assets/appFavicon.png";
 import axios from "axios";
 import store from "../redux/store";
-import { getCurrentUser } from "../redux/authStorage";
 
 export const MainContent = {
   appName: "VEDANZO",
@@ -27,11 +26,11 @@ export const Axios = axios.create({
   baseURL: backendConfig.base,
   withCredentials: true,
 });
-const getToken = getCurrentUser()?.token;
+
 Axios.interceptors.request.use(
   (config) => {
     const state = store.getState();
-    const token = state?.auth?.token || getToken;
+    const token = state?.auth?.token;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
