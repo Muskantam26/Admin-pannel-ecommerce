@@ -8,6 +8,8 @@ import { toast } from "react-toastify";
 import Loader from "../Component/PageLoader";
 import ConfirmationModal from "../Component/Model/ConfirmationModal";
 
+
+
 const Packages = () => {
     const [packages, setPackages] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -21,14 +23,19 @@ const Packages = () => {
 
     const fetchPackages = async () => {
         setLoading(true);
-        const res = await getAllPackagesApi();
-        console.log(res);
-        if (res.success) {
-            setPackages(res.data || []);
-        } else {
-            toast.error(res.message);
+        try {
+            const res = await getAllPackagesApi();
+            console.log(res);
+            if (res.success) {
+                setPackages(res.data || []);
+            } else {
+                toast.error(res.message);
+            }
+        } catch (error) {
+             toast.error("Failed to fetch packages");
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
     };
 
     const handleSavePackage = async (data) => {

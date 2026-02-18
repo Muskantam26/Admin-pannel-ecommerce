@@ -10,6 +10,7 @@ import ImageUpload from "../../Component/Inputs/ImageUpload";
 import { useDispatch } from "react-redux";
 import { hideLoader, showLoader } from "../../redux/slice/loadingSlice";
 import { createCategoryApi, updateCategoryApi, getCategoryApi, getAllCategoryApi } from "../../api/category-api";
+import PageLoader from "../../Component/PageLoader";
 
 const CategoryForm = () => {
     const { id } = useParams();
@@ -129,6 +130,7 @@ const CategoryForm = () => {
 
     return (
         <div className="rounded-xl shadow-2xl mt-5 bg-(--bg-box) p-5 space-y-5">
+            {loading && <PageLoader />}
             <div className="flex justify-between">
                 <Heading title={id ? "Edit Category" : "Add Category"} />
                 <button

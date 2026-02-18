@@ -11,11 +11,13 @@ import ProductManagement from "../page/ProductManagement";
 import ViewProduct from "../page/productManagement/ViewProduct";
 import EditProduct from "../page/productManagement/EditProduct";
 import UserManagement from "../page/UserManagement";
+
 import ViewOrdersDetails from "../page/ordermanagement/ViewOrdersDetails";
 import AddMember from "../page/AddMember";
 // import AddCategoryModal from "../Details/AddCategoryModal";
 import AddProduct from "../page/productManagement/AddProduct";
 import CategoryPage from "../page/productManagement/CategoryPage";
+import SubCategoryPage from "../page/productManagement/SubCategoryPage";
 import CategoryForm from "../page/productManagement/CategoryForm";
 import CompanyPage from "../page/company/CompanyPage";
 import CompanyForm from "../page/company/CompanyForm";
@@ -29,6 +31,7 @@ import AddBanner from "../page/AddBanner";
 import EditBanner from "../page/EditBanner";
 import UserProfileDetails from "../page/UserProfileDetails";
 import { useSelector } from "react-redux";
+
 
 const AppRoutes = () => {
   const isLogin = useSelector((state) => state.auth);
@@ -50,6 +53,7 @@ const AppRoutes = () => {
             <Route path="/add-memeber" element={<AddMember />} />
             <Route path="/add-product" element={<AddProduct />} />
             <Route path="/add-category" element={<CategoryPage />} />
+            <Route path="/sub-category" element={<SubCategoryPage />} />
             <Route path="/category/create" element={<CategoryForm />} />
             <Route path="/category/edit/:id" element={<CategoryForm />} />
             <Route path="/company-settings" element={<CompanyPage />} />
@@ -62,6 +66,8 @@ const AppRoutes = () => {
             <Route path={PathRoutes.EDIT_BANNER} element={<EditBanner />} />
             <Route path={PathRoutes.DEPOSITS} element={<DepositPage />} />
             <Route path={PathRoutes.USER_MANAGEMENT} element={<UserManagement />} />
+           
+           
             <Route path="/user-profile/:id" element={<UserProfileDetails />} />
           </Route>{" "}
         </>

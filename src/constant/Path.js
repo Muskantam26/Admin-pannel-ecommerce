@@ -12,15 +12,18 @@ export const PathRoutes = {
     ORDER_MANAGEMENT: "/order-management",
     ORDERS_DETAILS: "/viewordersdetails",
     USER_MANAGEMENT: "/user-management",
+    USER_LIST: "/user-list",
     ADD_MEMBER: "/add-member",
     ADD_PRODUCT: "/add-product",
     ADD_CATEGORY: "/add-category",
+    SUB_CATEGORY: "/sub-category",
     COMPANY_SETTINGS: "/company-settings",
     COMPANY_FORM: "/company-form",
     REWARDS: "/rewards",
     PACKAGES: "/packages",
     NOTIFICATION: "/notification",
     MESSAGE: "/message",
+    
 
 
 };

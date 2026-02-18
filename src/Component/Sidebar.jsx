@@ -43,11 +43,16 @@ const manuItems = [
         label: "All Products",
         icon: FaBoxOpen
       },
-      // {
-      //   id: PathRoutes.ADD_PRODUCT,
-      //   label: "Add Product",
-      //   icon: FaBoxOpen
-      // }
+      {
+        id: PathRoutes.ADD_CATEGORY,
+        label: "Categories",
+        icon: BiCategory
+      },
+      {
+        id: PathRoutes.SUB_CATEGORY,
+        label: "Sub Category",
+        icon: BiCategory
+      }
     ]
 
   },
@@ -56,11 +61,7 @@ const manuItems = [
     icon: TbBrandOffice,
     id: PathRoutes.COMPANY_SETTINGS,
   },
-  {
-    label: "Categories",
-    icon: BiCategory,
-    id: PathRoutes.ADD_CATEGORY,
-  },
+
   {
     id: PathRoutes.ORDER_MANAGEMENT,
     icon: FaUserGroup,
@@ -76,6 +77,13 @@ const manuItems = [
     id: PathRoutes.USER_MANAGEMENT,
     icon: TbBrandOffice,
     label: "User Management",
+    subItems: [
+      {
+        id: PathRoutes.USER_MANAGEMENT,
+        label: "All Users", // Or "Overview"
+        icon: FaUserGroup
+      }
+    ]
 
   },
   {
