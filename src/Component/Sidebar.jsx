@@ -169,40 +169,45 @@ const Sidebar = ({ open, setOpen }) => {
   return (
 
     <>
-      {open && (
-        <div
-          className="fixed inset-0 bg-black/40 z-40 md:hidden "
-          onClick={() => setOpen(false)}
-        />
-      )}
+      {/* Overlay for mobile */}
+      <div
+        className={`fixed inset-0 bg-black/60 z-[49] md:hidden transition-opacity duration-300 backdrop-blur-sm
+          ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
+        `}
+        onClick={() => setOpen(false)}
+      />
 
 
       <div
         className={`
-          fixed md:static top-0 left-0 z-50
-          h-full
-          transform transition-transform duration-300
-         
-            ${open ? "translate-x-0" : "-translate-x-full"}
-    md:translate-x-0
-    
+          fixed top-0 left-0 z-50
+          h-full w-64
+          bg-(--bg-box) border-r border-(--bs-border) shadow-2xl md:shadow-none
+          transform transition-transform duration-300 ease-out
+          ${open ? "translate-x-0" : "-translate-x-full"}
+          md:translate-x-0
         `}
       >
 
-        <div className="absolute right-3 md:hidden flex justify-end p-3">
-          <FiX
-            className="text-xl cursor-pointer"
+        <div className="absolute right-3 top-3 md:hidden flex justify-end">
+          <button
             onClick={() => setOpen(false)}
-          />
+            className="p-1 rounded-full hover:bg-gray-100 transition-colors"
+          >
+            <FiX className="text-xl text-(--text-main)" />
+          </button>
         </div>
 
 
-        <div className="sidebar w-60 rounded-xs md:rounded-2xl flex flex-col h-full p-3  ">
+        <div className="flex flex-col h-full">
 
+          {/* Logo Area */}
+          <div className="p-5 flex items-center justify-center border-b border-dashed border-(--bs-border)">
+            <img src={MainContent.appLogo} alt="logo" className="h-12 w-auto object-contain transition-transform hover:scale-105 duration-300" />
+          </div>
 
-          <img src={MainContent.appLogo} alt="logo" className="h-10 w-25  " />
-
-          <div className='mt-7 overflow-y-auto custom-scroll'>
+          {/* Scrollable Menu Area */}
+          <div className="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-1">
 
 
             {manuItems.map((item, index) => {
@@ -210,19 +215,30 @@ const Sidebar = ({ open, setOpen }) => {
               const Icon = item.icon;
               const hasSubItems = item.subItems && item.subItems.length > 0;
               const isExpanded = expandedMenu[item.label];
+              const isActive = location.pathname === item.id || (item.subItems && item.subItems.some(sub => sub.id === location.pathname));
 
               return (
-                <div key={index} className=''>
+                <div key={index}
+                  className={`transition-all duration-500 ease-out
+                    ${open ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5'}
+                    md:opacity-100 md:translate-x-0
+                  `}
+                  style={{ transitionDelay: `${index * 50}ms` }}
+                >
 
                   {!item.icon ? (
-                    <p className="text-(--text-third) text-xs  mt-3 ml-4 font-semibold ">
-
+                    <p className="text-(--text-third) text-[10px] uppercase font-bold tracking-wider mt-4 mb-2 ml-3 opacity-80">
                       {item.label}
                     </p>
                   ) : (
                     <div>
-                      <div className={`flex items-center justify-between text-xs font-medium p-2 m-2 cursor-pointer rounded-lg hover:text-(--text-hover) hover:bg-(--btn-hover) transition-colors
-                            ${location.pathname === item.id ? 'bg-(--btn-hover) text-(--text-hover)' : 'text-(--icon-color)'}
+                      <div
+                        className={`
+                          group flex items-center justify-between text-[13px] font-medium p-2.5 mx-1 cursor-pointer rounded-xl transition-all duration-200
+                          ${isActive
+                            ? 'bg-(--btn-hover) text-(--text-hover)'
+                            : 'text-(--text-second) hover:bg-(--bs-btn-hover) hover:text-(--text-main)'
+                          }
                         `}
                         onClick={() => {
                           if (hasSubItems) {
@@ -233,34 +249,40 @@ const Sidebar = ({ open, setOpen }) => {
                         }}
                       >
                         <div className="flex items-center gap-3">
-                          <Icon className="text-sm " />
+                          <Icon className={`text-lg ${isActive ? 'text-(--text-hover)' : 'text-(--text-third) group-hover:text-(--bs-primary)'} transition-colors`} />
                           <span>{item.label}</span>
                         </div>
                         {/* Only show chevron if there are subitems */}
-                        {hasSubItems && (isExpanded ? <FiChevronDown /> : <FiChevronRight />)}
+                        {hasSubItems && (
+                          <div className={`transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
+                            <FiChevronDown />
+                          </div>
+                        )}
                       </div>
 
                       {/* Render Submenu with Smooth Transition */}
                       <div
-                        className={`ml-6 overflow-hidden transition-[max-height] duration-300 ease-in-out
-                                ${isExpanded ? "max-h-96" : "max-h-0"}
+                        className={`ml-4 pl-4 border-l border-(--bs-border) overflow-hidden transition-all duration-300 ease-in-out
+                                ${isExpanded ? "max-h-96 opacity-100 mt-1" : "max-h-0 opacity-0"}
                             `}
                       >
                         {hasSubItems && item.subItems.map((subItem, subIndex) => (
                           <div
                             key={subIndex}
-                            className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer text-xs text-(--text-second) hover:text-(--text-hover) hover:bg-(--btn-hover)
-                                        ${location.pathname === subItem.id ? 'text-(--text-hover) font-medium' : ''}
+                            className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer text-[12px] transition-colors mb-1
+                                        ${location.pathname === subItem.id
+                                ? 'bg-(--btn-hover) text-(--text-hover) font-semibold'
+                                : 'text-(--text-second) hover:text-(--text-main) hover:bg-(--bs-btn-hover)'}
                                     `}
-                            onClick={() => handleNavigation(subItem.id)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleNavigation(subItem.id);
+                            }}
                           >
-                            {subItem.icon && <subItem.icon className="text-sm" />}
+                            <span className={`w-1.5 h-1.5 rounded-full ${location.pathname === subItem.id ? 'bg-(--text-hover)' : 'bg-gray-300'}`}></span>
                             <span>{subItem.label}</span>
                           </div>
                         ))}
-                        {!hasSubItems && (
-                          <div className="p-2 text-xs text-gray-400 italic">No submenus yet</div>
-                        )}
                       </div>
                     </div>
                   )}
@@ -269,16 +291,23 @@ const Sidebar = ({ open, setOpen }) => {
             })}
           </div>
 
-          <div className="flex items-center gap-3 mt-auto pt-5 ">
-
-            <img
-              src={img}
-              alt="user"
-              className="w-8 h-8 rounded-xl object-cover"
-            />
-            <div className="text-xs leading-tight ">
-              <p className="font-semibold text-(--text-main)">{user.name}</p>
-              <p className="text-(--text-second)">{user.email}</p>
+          {/* User Profile Footer */}
+          <div className="p-3 mt-auto border-t border-(--bs-border)">
+            <div className="flex items-center gap-3 p-2 rounded-xl bg-(--bg-main) border border-(--bs-border)">
+              <img
+                src={img}
+                alt="user"
+                className="w-9 h-9 rounded-lg object-cover"
+              />
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-semibold text-(--text-main) truncate">{user.name}</p>
+                <p className="text-[10px] text-(--text-second) truncate">{user.email}</p>
+              </div>
+              <button
+                onClick={() => handleNavigation('logout')}
+                className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Logout">
+                <BiLogOut size={16} />
+              </button>
             </div>
           </div>
         </div>

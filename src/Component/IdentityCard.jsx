@@ -63,7 +63,7 @@ const IdentityCard = ({ user }) => {
                 </button>
             </div>
 
-            <div ref={cardRef} className="flex flex-col gap-6 items-center p-4 bg-transparent">
+            <div ref={cardRef} className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center p-4 bg-transparent">
                 {/* FRONT SIDE */}
                 <div className="relative w-full max-w-[480px] aspect-[1.586] rounded-3xl overflow-hidden shadow-2xl text-white select-none">
                     {/* Background */}

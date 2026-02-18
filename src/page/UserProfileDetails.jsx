@@ -238,32 +238,69 @@ const UserProfileDetails = () => {
 
             {/* Bank Details */}
             <div className="bg-(--bg-box) rounded-2xl p-6 shadow-sm border border-(--bs-border)">
-                <h3 className="text-lg font-bold mb-4 flex items-center gap-2 text-(--text)">
+                <h3 className="text-lg font-bold mb-6 flex items-center gap-2 text-(--text)">
                     <FaWallet className="text-(--bs-text-primary)" /> Bank Details
                 </h3>
-                <div className="space-y-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {user.bankDetails?.length > 0 ? (
                         user.bankDetails.map((bank, index) => (
-                            <div key={index} className="p-3 bg-(--bg-main) rounded-xl border border-(--bs-border)">
-                                <div className="flex justify-between items-start mb-2">
-                                    <h4 className="font-bold text-sm text-(--text)">{bank.bankName}</h4>
-                                    {bank.isDefault && <span className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">Default</span>}
+                            <div key={index} className="relative overflow-hidden group bg-white  rounded-xl border border-(--bs-border) p-5 hover:shadow-lg transition-all duration-300">
+
+                                <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+                                    <FaMoneyBillWave size={60} />
                                 </div>
-                                <div className="space-y-1">
-                                    <p className="text-xs text-(--text-second)">A/C: <span className="text-(--text) font-medium">{bank.accountNumber}</span></p>
-                                    <p className="text-xs text-(--text-second)">IFSC: <span className="text-(--text) font-medium">{bank.ifscCode}</span></p>
-                                    <p className="text-xs text-(--text-second)">Branch: <span className="text-(--text) font-medium">{bank.branchName || 'N/A'}</span></p>
-                                    <p className="text-xs text-(--text-second)">Holder: <span className="text-(--text) font-medium">{bank.accountHolderName}</span></p>
-                                    <p className="text-xs mt-1">
-                                        <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${bank.status === 'VERIFIED' ? 'bg-green-100 text-green-700' : bank.status === 'REJECTED' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'}`}>
+
+                                <div className="flex justify-between items-start mb-4 relative z-10">
+                                    <div className="flex items-center gap-3">
+                                        <div className="p-2.5 bg-blue-50 text-blue-600 rounded-lg">
+                                            <FaNetworkWired size={20} />
+                                        </div>
+                                        <div>
+                                            <h4 className="font-bold text-sm text-(--text) uppercase tracking-wide">{bank.bankName}</h4>
+                                            <p className="text-xs text-(--text-second) font-medium">{bank.branchName || 'N/A'}</p>
+                                        </div>
+                                    </div>
+                                    {bank.isDefault && (
+                                        <span className="text-[10px] bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-bold shadow-sm">
+                                            DEFAULT
+                                        </span>
+                                    )}
+                                </div>
+
+                                <div className="space-y-3 relative z-10">
+                                    <div className="grid grid-cols-2 gap-y-3">
+                                        <div>
+                                            <p className="text-[10px] font-bold text-(--text-second) uppercase tracking-wider mb-0.5">Account Number</p>
+                                            <p className="font-mono text-sm font-bold text-(--text) tracking-wide">{bank.accountNumber}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] font-bold text-(--text-second) uppercase tracking-wider mb-0.5">IFSC Code</p>
+                                            <p className="font-mono text-sm font-bold text-(--text)">{bank.ifscCode}</p>
+                                        </div>
+                                        <div className="col-span-2">
+                                            <p className="text-[10px] font-bold text-(--text-second) uppercase tracking-wider mb-0.5">Account Holder</p>
+                                            <p className="text-sm font-medium text-(--text) truncate">{bank.accountHolderName}</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="pt-3 border-t border-dashed border-(--bs-border) flex justify-between items-center">
+                                        <span className="text-[10px] text-(--text-second) font-medium italic">Added on: {new Date().toLocaleDateString()}</span> {/* Placeholder for added date */}
+                                        <span className={`px-3 py-1 rounded-md text-[11px] font-bold flex items-center gap-1.5
+                                            ${bank.status === 'VERIFIED' ? 'bg-green-100 text-green-700' :
+                                                bank.status === 'REJECTED' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'}
+                                        `}>
+                                            <span className={`w-2 h-2 rounded-full ${bank.status === 'VERIFIED' ? 'bg-green-500' : bank.status === 'REJECTED' ? 'bg-red-500' : 'bg-yellow-500'}`}></span>
                                             {bank.status}
                                         </span>
-                                    </p>
+                                    </div>
                                 </div>
                             </div>
                         ))
                     ) : (
-                        <p className="text-sm text-(--text-second) text-center py-4 italic">No bank details found.</p>
+                        <div className="col-span-full py-10 text-center bg-gray-50 rounded-xl border border-dashed border-gray-300">
+                            <FaWallet className="mx-auto text-4xl text-gray-300 mb-2" />
+                            <p className="text-sm text-gray-500 font-medium">No bank details found for this user.</p>
+                        </div>
                     )}
                 </div>
             </div>
