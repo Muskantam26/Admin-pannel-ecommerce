@@ -341,7 +341,7 @@ const UserProfileDetails = () => {
                             {/* Header */}
                             <div className="flex justify-between items-start">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center border border-white/20">
+                                    <div className="w-10 h-10 rounded-lg flex items-center justify-center backdrop-blur-sm" style={{ backgroundColor: 'rgba(255,255,255,0.1)', borderColor: 'rgba(255,255,255,0.2)', borderWidth: '1px', borderStyle: 'solid' }}>
                                         <FaCheckCircle className="text-[#a8d5ba]" size={20} />
                                     </div>
                                     <span className="text-2xl font-serif tracking-wide font-bold">AYURVEDA</span>
@@ -371,7 +371,7 @@ const UserProfileDetails = () => {
                                     <p className="text-[#a8d5ba] font-medium tracking-wider text-sm uppercase mb-1">
                                         {user.basicDetails?.rankName || "Distributor"}
                                     </p>
-                                    <p className="text-white/60 text-xs font-mono tracking-widest">
+                                    <p className="text-xs font-mono tracking-widest" style={{ color: 'rgba(255,255,255,0.6)' }}>
                                         ID: {user.id || 'N/A'}
                                     </p>
                                 </div>
@@ -388,7 +388,7 @@ const UserProfileDetails = () => {
                                     {/* Signature Placeholder */}
                                     <div className="text-center">
                                         <p className="font-cursive text-xl opacity-90 leading-none" style={{ fontFamily: 'cursive' }}>{user.fullName?.split(' ')[0] || user.username} S.</p>
-                                        <div className="h-px w-24 bg-white/30 my-1"></div>
+                                        <div className="h-px w-24 my-1" style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}></div>
                                         <p className="text-[8px] text-[#a8d5ba] uppercase tracking-wider">Authorized Signature</p>
                                     </div>
 
