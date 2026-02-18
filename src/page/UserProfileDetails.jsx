@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+
 import { useParams, useNavigate } from 'react-router-dom';
 import { getUserApi, toggleUserBlockApi, loginAsUserApi, toggleUserWithdrawalApi } from '../api/user-api';
 import { MainHeading } from '../Component/Heading';
@@ -12,6 +11,7 @@ import Modal from '../Component/Model/Modal';
 
 import { FiFileText, FiDownload, FiShield, FiXCircle } from 'react-icons/fi';
 import { PathRoutes } from '../constant/Path';
+import IdentityCard from '../Component/IdentityCard';
 
 const UserProfileDetails = () => {
     const { id } = useParams();
@@ -23,7 +23,8 @@ const UserProfileDetails = () => {
     const [modalConfig, setModalConfig] = useState({ isOpen: false, type: '', data: null });
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState(null);
-    const idCardRef = useRef(null);
+
+
 
     useEffect(() => {
         fetchUserDetails();
@@ -86,43 +87,7 @@ const UserProfileDetails = () => {
         </div>
     );
 
-    const handleDownloadPNG = async () => {
-        if (idCardRef.current) {
-            try {
-                const canvas = await html2canvas(idCardRef.current, { scale: 2, useCORS: true });
-                const link = document.createElement('a');
-                link.download = `${user.fullName || 'User'}_ID_Card.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            } catch (error) {
-                console.error("Error downloading PNG:", error);
-                toast.error("Failed to download ID Card");
-            }
-        }
-    };
 
-    const handleDownloadPDF = async () => {
-        if (idCardRef.current) {
-            try {
-                const canvas = await html2canvas(idCardRef.current, { scale: 2, useCORS: true });
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF('landscape', 'mm', 'a4');
-                const imgProps = pdf.getImageProperties(imgData);
-                const pdfWidth = pdf.internal.pageSize.getWidth();
-                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-                // Center the image
-                const x = (pdf.internal.pageSize.getWidth() - pdfWidth) / 2;
-                const y = (pdf.internal.pageSize.getHeight() - pdfHeight) / 2;
-
-                pdf.addImage(imgData, 'PNG', x, y, pdfWidth, pdfHeight);
-                pdf.save(`${user.fullName || 'User'}_ID_Card.pdf`);
-            } catch (error) {
-                console.error("Error downloading PDF:", error);
-                toast.error("Failed to download ID Card PDF");
-            }
-        }
-    };
 
     return (
         <div className="space-y-6">
@@ -305,107 +270,7 @@ const UserProfileDetails = () => {
 
             {/* ID Card Section */}
             <div className="bg-(--bg-box) rounded-3xl p-8 shadow-sm border border-(--bs-border)">
-                <div className="flex justify-between items-center mb-6">
-                    <h3 className="text-lg font-bold flex items-center gap-2 text-(--text)">
-                        <FaIdCard className="text-(--bs-text-primary)" /> Identity Card
-                    </h3>
-                    <div className="flex gap-3">
-                        <button
-                            onClick={handleDownloadPNG}
-                            className="flex items-center gap-2 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs font-semibold"
-                        >
-                            <FiDownload /> Download PNG
-                        </button>
-                        <button
-                            onClick={handleDownloadPDF}
-                            className="flex items-center gap-2 px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-xs font-semibold"
-                        >
-                            <FiFileText /> Download PDF
-                        </button>
-                    </div>
-                </div>
-
-                <div className="flex justify-center md:justify-start">
-                    {/* ID Card Design */}
-                    <div ref={idCardRef} className="relative w-full max-w-[480px] aspect-[1.586] rounded-3xl overflow-hidden shadow-2xl text-white select-none">
-                        {/* Background */}
-                        <div className="absolute inset-0 bg-[#1a3c2f] z-0">
-                            {/* Texture/Pattern */}
-                            <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 50% 50%, #ffffff 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-[#2a5c48] rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 opacity-50"></div>
-                            <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#0f261e] rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 opacity-50"></div>
-                        </div>
-
-                        {/* Content */}
-                        <div className="relative z-10 w-full h-full p-8 flex flex-col justify-between">
-                            {/* Header */}
-                            <div className="flex justify-between items-start">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-lg flex items-center justify-center backdrop-blur-sm" style={{ backgroundColor: 'rgba(255,255,255,0.1)', borderColor: 'rgba(255,255,255,0.2)', borderWidth: '1px', borderStyle: 'solid' }}>
-                                        <FaCheckCircle className="text-[#a8d5ba]" size={20} />
-                                    </div>
-                                    <span className="text-2xl font-serif tracking-wide font-bold">AYURVEDA</span>
-                                </div>
-                                <div className="opacity-80">
-                                    <FiShield size={24} />
-                                </div>
-                            </div>
-
-                            {/* Middle - Photo & Details */}
-                            <div className="flex items-center gap-6 my-4">
-                                <div className="relative">
-                                    <div className="w-24 h-24 rounded-full border-2 border-[#a8d5ba] p-1">
-                                        <img
-                                            src={user.picture || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}
-                                            alt="Profile"
-                                            className="w-full h-full rounded-full object-cover bg-white"
-                                        />
-                                    </div>
-                                    <div className="absolute bottom-1 right-1 bg-[#a8d5ba] text-[#1a3c2f] rounded-full p-1 border-2 border-[#1a3c2f]">
-                                        <FaCheckCircle size={12} />
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <h2 className="text-2xl font-bold font-serif mb-1">{user.fullName || user.username}</h2>
-                                    <p className="text-[#a8d5ba] font-medium tracking-wider text-sm uppercase mb-1">
-                                        {user.basicDetails?.rankName || "Distributor"}
-                                    </p>
-                                    <p className="text-xs font-mono tracking-widest" style={{ color: 'rgba(255,255,255,0.6)' }}>
-                                        ID: {user.id || 'N/A'}
-                                    </p>
-                                </div>
-                            </div>
-
-                            {/* Footer */}
-                            <div className="flex justify-between items-end">
-                                <div>
-                                    <p className="text-[10px] text-[#a8d5ba] uppercase tracking-wider mb-1">Valid Thru</p>
-                                    <p className="font-mono text-lg font-bold">12/2028</p>
-                                </div>
-
-                                <div className="flex flex-col items-end gap-2">
-                                    {/* Signature Placeholder */}
-                                    <div className="text-center">
-                                        <p className="font-cursive text-xl opacity-90 leading-none" style={{ fontFamily: 'cursive' }}>{user.fullName?.split(' ')[0] || user.username} S.</p>
-                                        <div className="h-px w-24 my-1" style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}></div>
-                                        <p className="text-[8px] text-[#a8d5ba] uppercase tracking-wider">Authorized Signature</p>
-                                    </div>
-
-                                    {/* QR Placeholder */}
-                                    {/* <div className="w-10 h-10 bg-white rounded-lg p-0.5">
-                                         <img src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${user.id}`} alt="QR" className="w-full h-full" />
-                                     </div> */}
-                                </div>
-                            </div>
-                            <div className="absolute bottom-6 right-6">
-                                <div className="w-12 h-12 bg-white rounded-xl p-1">
-                                    <img src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${user.id}`} alt="QR" className="w-full h-full object-contain" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <IdentityCard user={user} />
             </div>
 
             {/* KYC Documents Section */}
@@ -474,7 +339,8 @@ const UserProfileDetails = () => {
                         ))}
                     </div>
                 </div>
-            )}
+            )
+            }
 
             {/* Confirmation Modal */}
             <ConfirmationModal
@@ -553,7 +419,7 @@ const UserProfileDetails = () => {
                     </div>
                 </div>
             </Modal>
-        </div>
+        </div >
     );
 };
 
