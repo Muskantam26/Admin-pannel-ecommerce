@@ -8,9 +8,10 @@ import { RiDeleteBin6Line, RiProfileFill } from 'react-icons/ri'
 import Button, { ActionButton } from '../Component/Btn'
 import Modal from '../Component/Model/Modal'
 import AddMember from './AddMember'
-import { getAllUsersApi, toggleUserBlockApi } from "../api/user-api";
+import { getAllUsersApi, toggleUserBlockApi, toggleUserWithdrawalApi } from "../api/user-api";
 import { toast } from "react-toastify";
 import { useNavigate } from 'react-router-dom';
+import ConfirmationModal from '../Component/Model/ConfirmationModal';
 
 const UserManagement = () => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const UserManagement = () => {
   const [loading, setLoading] = useState(false);
   const [isAddUserOpen, setIsAddUserOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [modalConfig, setModalConfig] = useState({ isOpen: false, type: '', data: null });
   const rowsPerPage = 10;
 
   useEffect(() => {
@@ -35,21 +37,49 @@ const UserManagement = () => {
     setLoading(false);
   };
 
-  const handleToggleBlock = async (id) => {
-    if (!window.confirm("Are you sure you want to change block status?")) return;
-    const res = await toggleUserBlockApi(id);
-    if (res.success) {
+  const handleAction = (type, data) => {
+    setModalConfig({ isOpen: true, type, data });
+  };
+
+  const confirmAction = async () => {
+    const { type, data } = modalConfig;
+    let res;
+
+    switch (type) {
+      case 'block':
+        res = await toggleUserBlockApi(data.id);
+        break;
+      case 'withdrawal':
+        res = await toggleUserWithdrawalApi(data.id);
+        break;
+      default:
+        return;
+    }
+
+    if (res?.success) {
       toast.success(res.message);
       fetchUsers();
     } else {
-      toast.error(res.message);
+      toast.error(res?.message || "Action Failed");
     }
-  }
+    setModalConfig({ isOpen: false, type: '', data: null });
+  };
 
   const columns = [
     {
-      name: "Name",
-      selector: (row) => row.fullName || row.username,
+      name: "ID",
+      selector: (row) => row.id || row._id,
+      sortable: true,
+      width: "100px",
+    },
+    {
+      name: "Full Name",
+      selector: (row) => row.fullName || "N/A",
+      sortable: true,
+    },
+    {
+      name: "Username",
+      selector: (row) => row.username,
       sortable: true,
     },
     {
@@ -92,12 +122,41 @@ const UserManagement = () => {
       ),
     },
     {
+      name: "KYC",
+      cell: (row) => (
+        <span className={`px-2 py-1 rounded-full text-xs font-medium ${row.kyc ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+          {row.kyc ? "Verified" : "Pending"}
+        </span>
+      ),
+    },
+    {
+      name: "Team",
+      selector: (row) => row.totalDownlineUsers || 0,
+      sortable: true,
+      center: true,
+    },
+    {
+      name: "Withdrawal",
+      cell: (row) => (
+        <button
+          onClick={() => handleAction('withdrawal', { id: row._id || row.id, status: row.active?.isWithdrawal })}
+          className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${row.active?.isWithdrawal
+            ? 'bg-green-100 text-green-700 hover:bg-green-200'
+            : 'bg-orange-100 text-orange-700 hover:bg-orange-200'
+            }`}
+          title="Toggle Withdrawal"
+        >
+          {row.active?.isWithdrawal ? "Enabled" : "Disabled"}
+        </button>
+      )
+    },
+    {
       name: "Join Date",
       selector: (row) => new Date(row.createdAt).toLocaleDateString(),
       sortable: true,
     },
     {
-      name: "Total Directs",
+      name: "Directs", // Renamed for space
       selector: (row) => row.totalDirectUsers || 0,
       sortable: true,
       center: true
@@ -113,7 +172,7 @@ const UserManagement = () => {
             <Eye size={14} />
           </button>
           <button
-            onClick={() => handleToggleBlock(row._id || row.id)}
+            onClick={() => handleAction('block', { id: row._id || row.id, status: row.active?.isBlocked })}
             className={`p-2 rounded-lg ${row.active?.isBlocked ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}
             title={row.active?.isBlocked ? "Unblock User" : "Block User"}
           >
@@ -204,6 +263,29 @@ const UserManagement = () => {
           />
         )}
       </div>
+
+      <ConfirmationModal
+        isOpen={modalConfig.isOpen}
+        onClose={() => setModalConfig({ ...modalConfig, isOpen: false })}
+        onConfirm={confirmAction}
+        title={
+          modalConfig.type === 'block' ? (modalConfig.data?.status ? "Unblock User" : "Block User") :
+            modalConfig.type === 'withdrawal' ? (modalConfig.data?.status ? "Disable Withdrawal" : "Enable Withdrawal") : "Confirm Action"
+        }
+        message={
+          modalConfig.type === 'block' ? `Are you sure you want to ${modalConfig.data?.status ? "unblock" : "block"} this user?` :
+            modalConfig.type === 'withdrawal' ? `Are you sure you want to ${modalConfig.data?.status ? "disable" : "enable"} withdrawal for this user?` :
+              "Are you sure you want to proceed?"
+        }
+        isDanger={
+          (modalConfig.type === 'block' && !modalConfig.data?.status) ||
+          (modalConfig.type === 'withdrawal' && modalConfig.data?.status)
+        }
+        confirmText={
+          modalConfig.type === 'block' ? (modalConfig.data?.status ? "Unblock" : "Block") :
+            modalConfig.type === 'withdrawal' ? (modalConfig.data?.status ? "Disable" : "Enable") : "Confirm"
+        }
+      />
     </div>
   )
 }

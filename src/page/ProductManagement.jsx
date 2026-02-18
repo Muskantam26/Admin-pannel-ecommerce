@@ -1,485 +1,184 @@
-import React, { useState } from 'react'
-import { Heading, MainHeading } from '../Component/Heading'
-import SelectOption from '../Component/Selectoption';
-
+import React, { useState, useEffect } from 'react';
+import { Heading, MainHeading } from '../Component/Heading';
 import CommonDataTable from '../Component/CommonDataTable';
 import { useNavigate } from "react-router-dom";
-import { LuCodesandbox } from "react-icons/lu";
-import { BsGridFill } from "react-icons/bs";
-import { IoLayersSharp } from "react-icons/io5";
-import { Edit, Eye,  Pencil } from 'lucide-react';
+import { Eye, Pencil } from 'lucide-react';
 import { RiDeleteBin6Line } from "react-icons/ri";
-import EditProduct from './productManagement/EditProduct';
 import Modal from '../Component/Model/Modal';
 import Delete from '../alerts/Delete';
-// import AddCategoryModal from '../Details/AddCategoryModal';
-// import AddProductType from '../Details/AddProductType';
-// import AddProductBrand from '../Details/AddProductBrand';
-// import AddProductName from '../Details/AddProductName';
-// import { GiBrandyBottle } from 'react-icons/gi';
-// import { TbBrandAmongUs } from "react-icons/tb";
-import { PathRoutes } from '../constant/Path';
 import Button from '../Component/Btn';
-
+import { getAllProductsApi, deleteProductApi } from '../api/product-api';
+import { toast } from 'react-toastify';
 
 const ProductManagement = () => {
+  const navigate = useNavigate();
 
-
-  
-  // const [activeModal, setActiveModal] = useState(null);
-  // const handleSave = (data) => { console.log("Backend payload:", data); };
-  
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
- 
-
-const [selectedProduct, setSelectedProduct] = useState(null);
-
-
-
-const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-
-
-     const navigate = useNavigate();
-
-
-
- const productList=[
-    {
-        id:1, 
-        sl:"01",
-        image:"src/assets/pills.jpg",
-        category:"Asthma",
-        type:"Pill",
-        brand:"Apack Solution",
-        product_name:"Dumo",
-        product_id:"A15PM",
-        unit:"Quantity(q)",
-        varient:"1",
-        color:"Red",
-        Price:"1,00,000",
-    },
-    {
-             id:2,
-             sl:"02",
-             image:"src/assets/pills.jpg",
-             category:"Asthma",
-             type:"Pill",
-             brand:"Apack Solution",
-             product_name:"Dumo",
-             product_id:"A15PM",
-             unit:"Quantity(q)",
-             varient:"1",
-             color:"Grreen",
-             Price:"2,00,000"
-    },
-
-     {
-             id:3,
-             sl:"03",
-             image:"src/assets/pills.jpg",
-             category:"Asthma",
-             type:"Pill",
-             brand:"Apack Solution",
-             product_name:"Dumo",
-             product_id:"A15PM",
-             unit:"Quantity(q)",
-             varient:"1",
-             color:"Grreen",
-             Price:"2,00,000"
-    },
-
-     {
-             id:4,
-             sl:"04",
-             image:"src/assets/pills.jpg",
-             category:"Asthma",
-             type:"Pill",
-             brand:"Apack Solution",
-             product_name:"Dumo",
-             product_id:"A15PM",
-             unit:"Quantity(q)",
-             varient:"1",
-             color:"Grreen",
-             Price:"2,00,000"
-    },
-     {
-             id:5,
-             sl:"05",
-             image:"src/assets/pills.jpg",
-             category:"Asthma",
-             type:"Pill",
-             brand:"Apack Solution",
-             product_name:"Dumo",
-             product_id:"A15PM",
-             unit:"Quantity(q)",
-             varient:"1",
-             color:"Grreen",
-             Price:"2,00,000"
-    },
-     {
-             id:6,
-             sl:"06",
-             image:"src/assets/pills.jpg",
-             category:"Asthma",
-             type:"Pill",
-             brand:"Apack Solution",
-             product_name:"Dumo",
-             product_id:"A15PM",
-             unit:"Quantity(q)",
-             varient:"1",
-             color:"Grreen",
-             Price:"2,00,000"
-    },
-     {
-             id:7,
-             sl:"07",
-             image:"src/assets/pills.jpg",
-             category:"Asthma",
-             type:"Pill",
-             brand:"Apack Solution",
-             product_name:"Dumo",
-             product_id:"A15PM",
-             unit:"Quantity(q)",
-             varient:"1",
-             color:"Grreen",
-             Price:"2,00,000"
-    },
-     {
-             id:8,
-             sl:"08",
-             image:"src/assets/pills.jpg",
-             category:"Asthma",
-             type:"Pill",
-             brand:"Apack Solution",
-             product_name:"Dumo",
-             product_id:"A15PM",
-             unit:"Quantity(q)",
-             varient:"1",
-             color:"Grreen",
-             Price:"2,00,000"
-    },
-     {
-             id:9,
-             sl:"09",
-             image:"src/assets/pills.jpg",
-             category:"Asthma",
-             type:"Pill",
-             brand:"Apack Solution",
-             product_name:"Dumo",
-             product_id:"A15PM",
-             unit:"Quantity(q)",
-             varient:"1",
-             color:"Grreen",
-             Price:"2,00,000"
-    },
- ]
-
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-   const rowsPerPage = 10;
- 
-   const totalPages = Math.ceil(productList.length / rowsPerPage);
- 
-   const paginatedData = productList.slice(
-     (currentPage - 1) * rowsPerPage,
-     currentPage * rowsPerPage,
-   );
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const rowsPerPage = 10;
 
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
+  useEffect(() => {
+    fetchProducts();
+  }, [currentPage]);
 
-   const columns = [
+  const fetchProducts = async () => {
+    setLoading(true);
+    const res = await getAllProductsApi({ page: currentPage, limit: rowsPerPage });
+    if (res.products) { // API returns { products, pagination } or { products: [], ... } depending on successful structure
+      // Adjust based on actual API response structure. 
+      // product.controller.js getAllProducts returns: { products: [...], pagination: { ... } }
+      setProducts(res.products);
+      setTotalPages(res.pagination?.totalPages || 0);
+      setTotalRecords(res.pagination?.total || 0);
+    } else {
+      // Fallback or error handling
+      console.error("Failed to fetch products", res);
+    }
+    setLoading(false);
+  };
+
+  const handleDelete = async () => {
+    if (!selectedProduct) return;
+
+    const res = await deleteProductApi(selectedProduct._id);
+    if (res.message && (res.message.includes('successfully') || res.success)) {
+      toast.success("Product deleted successfully");
+      fetchProducts();
+      setIsDeleteOpen(false);
+    } else {
+      toast.error(res.message || "Failed to delete product");
+    }
+  };
+
+  const columns = [
     {
       name: "SL",
-      selector: (row) => row.sl,
-      sortable: true,
-      
+      cell: (row, index) => (currentPage - 1) * rowsPerPage + index + 1,
+      width: "60px"
     },
     {
-  name: "Image",
-  cell: (row) => (
-    <img
-      src={row.image}
-      alt="product"
-      className="w-9 h-9 object-cover rounded-md "
-    />
-  ),
-},
-
-    {
-      name: "Category",
-      selector: (row) => row.category,
-    },
-    {
-      name: "Type",
-      selector: (row) => row.type,
-    },
-    {
-      name: "Brand",
-      selector: (row) => row.brand,
+      name: "Image",
+      cell: (row) => (
+        <img
+          src={row.image || (row.images && row.images.length > 0 ? (typeof row.images[0] === 'string' ? row.images[0] : row.images[0].src) : "https://via.placeholder.com/50")}
+          alt={row.name}
+          className="w-10 h-10 object-cover rounded-md"
+        />
+      ),
+      width: "80px"
     },
     {
       name: "Product Name",
-      selector: (row) => row.product_name,
+      selector: (row) => row.name,
+      sortable: true,
+      width: "200px"
     },
     {
-      name: "Product ID",
-      cell: (row) => row.product_id ,
+      name: "Category",
+      selector: (row) => row.category || "N/A",
+      width: "150px"
     },
     {
-      name: "Unit",
-      selector: (row) => row.unit,
+      name: "Price",
+      selector: (row) => `₹${row.price}`,
+      sortable: true,
+      width: "100px"
     },
     {
-        name:"Varient",
-        selector:(row)=>row.varient,
+      name: "Stock",
+      selector: (row) => row.stock || row.stockQty || "N/A",
+      width: "100px"
     },
     {
-        name:"Color",
-        selector:(row)=>row.color,
-    },
-    {
-        name:"Price(Rs)",
-        selector:(row)=>row.Price,
+      name: "Status",
+      cell: (row) => (
+        <span className={`px-2 py-1 rounded-full text-xs ${row.status === 'ACTIVE' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+          {row.status || 'ACTIVE'}
+        </span>
+      ),
+      width: "100px"
     },
     {
       name: "Action",
       cell: (row) => (
         <div className="flex gap-2">
-          <button className="p-2 rounded-lg bg-(--icon-btn) text-(--icon-btn-text)"   onClick={() => navigate(PathRoutes.PRODUCT_VIEW)}>
-            <Eye size={10} />
-
-          </button>
-          <button className="p-2 rounded-lg bg-(--icon-btn-second) text-(--icon-text-second)" 
-           onClick={() => {
-          setSelectedProduct(row);
-          setIsModalOpen(true);
-        }}
+          <button className="p-2 rounded-lg bg-(--icon-btn) text-(--icon-btn-text) hover:opacity-80 disabled:opacity-50"
+            onClick={() => navigate(`/product/view/${row._id}`)} // Or keep simple view
+            title="View"
           >
-            <Pencil size={10} />
+            <Eye size={16} />
           </button>
-          <button className="p-2 rounded-lg bg-(--bs-btn-second) text-(--text-white) "
-           onClick={() => {
-  setSelectedProduct(row);
-  setIsDeleteOpen(true);
-}}
-
+          <button className="p-2 rounded-lg bg-(--icon-btn-second) text-(--icon-text-second) hover:opacity-80"
+            onClick={() => navigate(`/product/edit/${row._id}`)}
+            title="Edit"
           >
-            <RiDeleteBin6Line size={10} />
+            <Pencil size={16} />
+          </button>
+          <button className="p-2 rounded-lg bg-(--bs-btn-second) text-(--text-white) hover:opacity-80"
+            onClick={() => {
+              setSelectedProduct(row);
+              setIsDeleteOpen(true);
+            }}
+            title="Delete"
+          >
+            <RiDeleteBin6Line size={16} />
           </button>
         </div>
       ),
+      width: "150px"
     },
   ];
 
-
- 
   return (
-
     <div>
+      <div className='flex items-center justify-between'>
+        <div className="flex justify-between items-start w-full">
+          <div>
+            <MainHeading
+              title={"Product Management"}
+              subtitle={"Real-time overview of products & inventory"}
+            />
+          </div>
 
-        <div className='flex  items-center justify-between '>
-           <div className="flex justify-between items-start w-full">
-  
-  {/* Left Side - Heading */}
-  <div>
-    <MainHeading
-      title={"Product Management"}
-      subtitle={"Real-time overview of orders, payments, customers & operations"}
-    />
-
-
-  </div>
-
-     <div className='flex justify-end-safe mt-5'>
- <Button
- title={" + Add Product"}
- className='p-2 text-xs rounded-sm'
-onClick={()=>navigate(`/add-product`)}
-/>
- 
- 
- </div>
- 
-
-  {/* Right Side - Buttons */}
-{/*  
- <div className=" grid grid-cols-2 gap-5">
- <ActionButton
-    title='Add Product'
-    icon={<LuCodesandbox />}
-    className='flex-col justify-items-center px-3'
-    onClick={() => setActiveModal("name")}/>
-
- 
-    <ActionButton
-    title='Add Category'
-    icon={<BsGridFill/>}
-    onClick={() => setActiveModal("category")}
-    className='flex-col justify-items-center px-2'
-    />
-    
-   <ActionButton
-    title='Add Type'
-    icon={<IoLayersSharp/>}
-    className='flex-col justify-items-center px-6'
-    onClick={() => setActiveModal("type")}/>
-
-    <ActionButton
-    title='Add Brand'
-    icon={<TbBrandAmongUs/>}
-    className='flex-col justify-items-center px-5'
-    onClick={() => setActiveModal("brand")}/>
-
-   
-  </div> */}
-
-</div>
-{/* Modals */}
-{/* <AddCategoryModal
-  isOpen={activeModal === "category"}
-  onClose={() => setActiveModal(null)}
-  onSave={handleSave}
-/>
-
-<AddProductType
-  isOpen={activeModal === "type"}
-  onClose={() => setActiveModal(null)}
-  onSave={handleSave}
-/>
-
-<AddProductBrand
-  isOpen={activeModal === "brand"}
-  onClose={() => setActiveModal(null)}
-  onSave={handleSave}
-/>
-
-<AddProductName
-  isOpen={activeModal === "name"}
-  onClose={() => setActiveModal(null)}
-  onSave={handleSave}
-/> */}
-
-        {/* </div> */}
+          <div className='flex justify-end-safe mt-5'>
+            <Button
+              title={" + Add Product"}
+              className='p-2 text-xs rounded-sm'
+              onClick={() => navigate(`/add-product`)}
+            />
+          </div>
         </div>
-       
+      </div>
 
-        {/* <div className='bg-(--bg-box) rounded-xl shadow-xl p-4 mt-5'> */}
-       {/* <Heading
-       title={"Create Products - Category / Type / Brand / Name"}
-    
-       /> */}
+      <div className="bg-(--bg-box) shadow-2xl rounded-xl p-5 mt-5">
+        {loading ? (
+          <div className="text-center p-10">Loading products...</div>
+        ) : (
+          <CommonDataTable
+            columns={columns}
+            data={products}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        )}
+      </div>
 
-      
-
-
-      {/* <div className='grid grid-cols-4 gap-3 mt-5'> 
-        <SelectOption
-  label="Product Category"
-  options={category}
-  value={values.category}
-  onChange={(val) =>
-    setValues({ ...values, category: val })
-  }
-/>
-
- <SelectOption
-  label="Product Type"
-  options={type}
-  value={values.type}
-  onChange={(val) =>
-    setValues({ ...values, type: val })
-  }
-/>
-
- <SelectOption
-  label="Brand"
-  options={brand}
-  value={values.brand}
-  onChange={(val) =>
-    setValues({ ...values, brand: val })
-  }
-/>
-
- <SelectOption
-  label="Product Name"
-  options={name}
-  value={values.name}
-  onChange={(val) =>
-    setValues({ ...values, name: val })
-  }
-/>
-
-
-      </div> */}
-     
-        {/* <div className='flex justify-end-safe mt-5'>
- <Button
- title={" + Add Product"}
- className='p-2 text-xs rounded-sm'
-onClick={()=>navigate(`/add-product`)}
-/>
- 
- 
- </div> */}
- 
-        {/* <div className='flex items-center justify-center gap-3 mt-5'> */}
-
-
-            {/* <div>
-<Button
-title={"Reset"}
-className='text-xs p-2 px-7 rounded-sm'
-/>
-</div> */}
-
-{/* 
-<div>
-<Button
-title={"Save Product"}
-className='text-xs bg-(--bs-btn-third) p-2 px-5 rounded-sm'
-
-/>
-</div> */}
-{/* </div> */}
-        {/* </div> */}
-      
-<div className="bg-(--bg-box) shadow-2xl rounded-xl p-5 mt-5">
-<CommonDataTable
-columns={columns}
-data={paginatedData}
-currentPage={currentPage}
-totalPages={totalPages}
-onPageChange={setCurrentPage}
-
-/>
-</div>
-
-<Modal isOpen={isModalOpen}>
-  <EditProduct
-    productData={selectedProduct}
-    onClose={() => setIsModalOpen(false)}
-    
-  />
-</Modal>
-
-
-<Modal isOpen={isDeleteOpen}>
-  <Delete
-    product={selectedProduct}
-    onClose={() => setIsDeleteOpen(false)}
-    onConfirm={(product) => {
-      console.log("Delete:", product.id);
-      setIsDeleteOpen(false);
-    }}
-  />
-</Modal>
-
-
-
-
- 
+      <Modal isOpen={isDeleteOpen}>
+        <Delete
+          product={selectedProduct} // Pass full object or just name/id mainly for display
+          onClose={() => setIsDeleteOpen(false)}
+          onConfirm={handleDelete}
+        />
+      </Modal>
     </div>
-  )
+  );
 }
 
-export default ProductManagement
+export default ProductManagement;

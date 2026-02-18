@@ -39,3 +39,23 @@ export const getUserApi = async (id) => {
         return { success: false, message: error.response?.data?.message || "Failed to fetch user details" };
     }
 };
+
+// Toggle User Withdrawal Status
+export const toggleUserWithdrawalApi = async (id) => {
+    try {
+        const res = await Axios.put(`/admin/toggle-withdrawal/${id}`);
+        return res.data;
+    } catch (error) {
+        return { success: false, message: error.response?.data?.message || "Failed to toggle withdrawal status" };
+    }
+};
+
+// Update User Details
+export const updateUserApi = async (id, data) => {
+    try {
+        const res = await Axios.put(`/admin/update-user/${id}`, data);
+        return res.data;
+    } catch (error) {
+        return { success: false, message: error.response?.data?.message || "Failed to update user details" };
+    }
+};

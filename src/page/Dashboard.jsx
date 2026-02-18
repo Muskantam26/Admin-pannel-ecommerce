@@ -337,8 +337,6 @@ const Dashboard = () => {
     },
   ];
 
-  const user = useSelector((state) => state.auth);
-  console.log(user);
 
   return (
     <div className="md:mt-5 overflow-x-hidden">

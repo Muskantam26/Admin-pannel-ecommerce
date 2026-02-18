@@ -4,11 +4,11 @@ import InputBox from '../Component/InputBox'
 import Button from '../Component/Btn'
 import { FaRegSave } from "react-icons/fa";
 import { GoPlusCircle } from "react-icons/go";
-import Input from '../Inputs/Input';
-import Textarea from '../Inputs/Textarea';
-import Select from '../Inputs/Select';
-import ImageUpload from '../Inputs/ImageUpload';
+import Textarea from '../Component/Inputs/Textarea';
+import Select from '../Component/Inputs/Select';
+import ImageUpload from '../Component/Inputs/ImageUpload';
 import { IoToggle } from "react-icons/io5";
+import Input from '../Component/Inputs/Input';
 
 
 const ProductAddManagement = () => {

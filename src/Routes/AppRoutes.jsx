@@ -6,14 +6,11 @@ import SiteManager from "../page/SiteManager";
 
 
 import OrderManagement from "../page/OrderManagement";
-// import ProductAddManagement from "../page/ProductAddManagement";
 import ProductManagement from "../page/ProductManagement";
 import ViewProduct from "../page/productManagement/ViewProduct";
-import EditProduct from "../page/productManagement/EditProduct";
 import UserManagement from "../page/UserManagement";
 import ViewOrdersDetails from "../page/ordermanagement/ViewOrdersDetails";
 import AddMember from "../page/AddMember";
-// import AddCategoryModal from "../Details/AddCategoryModal";
 import AddProduct from "../page/productManagement/AddProduct";
 import CategoryPage from "../page/productManagement/CategoryPage";
 import CategoryForm from "../page/productManagement/CategoryForm";
@@ -28,27 +25,32 @@ import Message from "../page/Message";
 import AddBanner from "../page/AddBanner";
 import EditBanner from "../page/EditBanner";
 import UserProfileDetails from "../page/UserProfileDetails";
+import UserProfileEditPage from "../page/UserProfileEditPage";
 import { useSelector } from "react-redux";
 
 const AppRoutes = () => {
   const isLogin = useSelector((state) => state.auth);
-  console.log(isLogin)
   return (
     <Routes>
       {isLogin?.isLoggedIn ? (
         <>
           <Route element={<Layout />}>
+            {/* <Route path="/dashboard" element={<Dashboard />} /> */}
             <Route index element={<Dashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/site-manager" element={<SiteManager />} />
-            {/* <Route path="/product-add-management" element={<ProductAddManagement/>}/> */}
+
             <Route path="/product-management" element={<ProductManagement />} />
             <Route path="/product/view" element={<ViewProduct />} />
-            <Route path="/product/edit" element={<EditProduct />} />
+            {/* <Route path="/product/edit" element={<EditProduct />} /> */}
             <Route path="/order-management" element={<OrderManagement />} />
             <Route path="/viewordersdetails" element={<ViewOrdersDetails />} />
             <Route path="/add-memeber" element={<AddMember />} />
+
+            {/* Product Routes */}
             <Route path="/add-product" element={<AddProduct />} />
+            <Route path="/product/edit/:id" element={<AddProduct />} />
+
             <Route path="/add-category" element={<CategoryPage />} />
             <Route path="/category/create" element={<CategoryForm />} />
             <Route path="/category/edit/:id" element={<CategoryForm />} />
@@ -62,6 +64,7 @@ const AppRoutes = () => {
             <Route path={PathRoutes.EDIT_BANNER} element={<EditBanner />} />
             <Route path={PathRoutes.DEPOSITS} element={<DepositPage />} />
             <Route path={PathRoutes.USER_MANAGEMENT} element={<UserManagement />} />
+            <Route path="/user-profile/edit/:id" element={<UserProfileEditPage />} />
             <Route path="/user-profile/:id" element={<UserProfileDetails />} />
           </Route>{" "}
         </>
