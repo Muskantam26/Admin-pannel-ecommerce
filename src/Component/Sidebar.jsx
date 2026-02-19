@@ -29,14 +29,39 @@ const manuItems = [
 
   },
   {
+    id: PathRoutes.ADMIN_MANAGEMENT,
+    icon: TbBrandOffice,
+    label: "Admin Management",
+    allowedRoles: ['SUPER-ADMIN', 'ADMIN'],
+    allowedPermissions: ['MANAGE_ADMIN'],
+    subItems: [
+      {
+        id: PathRoutes.ADMIN_MANAGEMENT,
+        label: "All Admins",
+        icon: FaUserGroup,
+        allowedRoles: ['SUPER-ADMIN', 'ADMIN']
+      },
+      {
+        id: PathRoutes.ADD_ADMIN, // Ensure this path exists in Path.js
+        label: "Add Admin",
+        icon: FiHome, // Using a placeholder icon or import FiPlus
+        allowedRoles: ['SUPER-ADMIN', 'ADMIN']
+      }
+    ]
+  },
+  {
     id: PathRoutes.PACKAGES,
     icon: FaLayerGroup,
     label: "Packages",
+    allowedRoles: ['SUPER-ADMIN', 'ADMIN', 'MANAGER'],
+    allowedPermissions: ['MANAGE_PACKAGES'],
   },
   {
     id: PathRoutes.PRODUCT_MANAGEMENT,
     icon: FaBoxOpen,
     label: "Product Management",
+    allowedRoles: ['SUPER-ADMIN', 'ADMIN', 'MANAGER'],
+    allowedPermissions: ['MANAGE_PRODUCTS'],
     subItems: [
       {
         id: PathRoutes.PRODUCT_MANAGEMENT,
@@ -60,12 +85,16 @@ const manuItems = [
     label: "Company Details",
     icon: TbBrandOffice,
     id: PathRoutes.COMPANY_SETTINGS,
+    allowedRoles: ['SUPER-ADMIN', 'ADMIN'],
+    allowedPermissions: ['MANAGE_SETTINGS'],
   },
 
   {
     id: PathRoutes.ORDER_MANAGEMENT,
     icon: FaUserGroup,
     label: "Order Management",
+    allowedRoles: ['SUPER-ADMIN', 'ADMIN', 'MANAGER', 'STAFF'],
+    allowedPermissions: ['MANAGE_ORDERS'],
     subItems: [
       {
         id: PathRoutes.ORDER_MANAGEMENT,
@@ -83,11 +112,14 @@ const manuItems = [
     id: PathRoutes.DEPOSIT_REQUESTS,
     icon: FaBoxOpen,
     label: "Deposit Management",
+    allowedRoles: ['SUPER-ADMIN', 'ADMIN', 'MANAGER'],
+    allowedPermissions: ['MANAGE_PAYMENTS'],
     subItems: [
       {
         id: PathRoutes.ADD_DEPOSIT,
         label: "Manual Deposit",
         icon: FiCreditCard
+
       },
       {
         id: PathRoutes.DEPOSIT_REQUESTS,
@@ -101,6 +133,8 @@ const manuItems = [
     id: PathRoutes.USER_MANAGEMENT,
     icon: TbBrandOffice,
     label: "User Management",
+    allowedRoles: ['SUPER-ADMIN', 'ADMIN', 'MANAGER'],
+    allowedPermissions: ['MANAGE_USERS'],
     subItems: [
       {
         id: PathRoutes.USER_MANAGEMENT,
@@ -134,6 +168,8 @@ const manuItems = [
     id: PathRoutes.SITE_MANAGER,
     icon: FaMailBulk,
     label: "Site Manager",
+    allowedRoles: ['SUPER-ADMIN', 'ADMIN'],
+    allowedPermissions: ['MANAGE_SIDEBAR'],
 
   },
   {
@@ -171,7 +207,7 @@ const Sidebar = ({ open, setOpen }) => {
     }));
   };
 
-  const { name, email, profileImage } = useSelector((state) => state.auth);
+  const { name, email, profileImage, role, permissions } = useSelector((state) => state.auth);
 
   // Dynamic Avatar based on name
   const userImage = `https://ui-avatars.com/api/?name=${encodeURIComponent(name || "User")}&background=random&color=fff`;
@@ -192,6 +228,28 @@ const Sidebar = ({ open, setOpen }) => {
       }, 500);
     }
     setOpen(false); // Close mobile menu if open
+  };
+
+  // Check if user has access to this menu item
+  const hasAccess = (item) => {
+    if (!role) return false;
+
+    // Super Admin has access to everything
+    if (role === 'SUPER-ADMIN') return true;
+
+    // Check Role Access
+    if (item.allowedRoles && !item.allowedRoles.includes(role)) {
+      return false;
+    }
+
+    // Check Permission Access (if item has specific permissions required)
+    if (item.allowedPermissions && item.allowedPermissions.length > 0) {
+      if (!permissions || !permissions.some(p => item.allowedPermissions.includes(p))) {
+        return false;
+      }
+    }
+
+    return true;
   };
 
   return (
@@ -239,6 +297,9 @@ const Sidebar = ({ open, setOpen }) => {
 
 
             {manuItems.map((item, index) => {
+
+              // Check access permissions
+              if (!hasAccess(item)) return null;
 
               const Icon = item.icon;
               const hasSubItems = item.subItems && item.subItems.length > 0;
@@ -297,23 +358,26 @@ const Sidebar = ({ open, setOpen }) => {
                                 ${isExpanded ? "max-h-96 opacity-100 mt-1" : "max-h-0 opacity-0"}
                             `}
                       >
-                        {hasSubItems && item.subItems.map((subItem, subIndex) => (
-                          <div
-                            key={subIndex}
-                            className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer text-[12px] transition-colors mb-1
+                        {hasSubItems && item.subItems.map((subItem, subIndex) => {
+                          if (!hasAccess(subItem)) return null; // Check nested permission
+                          return (
+                            <div
+                              key={subIndex}
+                              className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer text-[12px] transition-colors mb-1
                                         ${location.pathname === subItem.id
-                                ? 'bg-(--btn-hover) text-(--text-hover) font-semibold'
-                                : 'text-(--text-second) hover:text-(--text-main) hover:bg-(--bs-btn-hover)'}
+                                  ? 'bg-(--btn-hover) text-(--text-hover) font-semibold'
+                                  : 'text-(--text-second) hover:text-(--text-main) hover:bg-(--bs-btn-hover)'}
                                     `}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleNavigation(subItem.id);
-                            }}
-                          >
-                            <span className={`w-1.5 h-1.5 rounded-full ${location.pathname === subItem.id ? 'bg-(--text-hover)' : 'bg-gray-300'}`}></span>
-                            <span>{subItem.label}</span>
-                          </div>
-                        ))}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleNavigation(subItem.id);
+                              }}
+                            >
+                              <span className={`w-1.5 h-1.5 rounded-full ${location.pathname === subItem.id ? 'bg-(--text-hover)' : 'bg-gray-300'}`}></span>
+                              <span>{subItem.label}</span>
+                            </div>
+                          )
+                        })}
                       </div>
 
 

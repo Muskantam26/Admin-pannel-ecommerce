@@ -40,6 +40,9 @@ import UserProfileDetails from "../page/UserProfileDetails";
 import UserProfileEditPage from "../page/UserProfileEditPage";
 import CartPage from "../page/orderManagement/CartPage";
 import CartDetailsPage from "../page/orderManagement/CartDetailsPage";
+import AdminPage from "../page/AdminManagement/AdminPage";
+import AdminAddPage from "../page/AdminManagement/AdminAddPage";
+import AdminDetailsPage from "../page/AdminManagement/AdminDetailsPage";
 import { useSelector } from "react-redux";
 
 
@@ -69,7 +72,7 @@ const AppRoutes = () => {
             <Route path={PathRoutes.PRODUCT_EDIT_ID} element={<AddProduct />} />
 
             <Route path={PathRoutes.ADD_CATEGORY} element={<CategoryPage />} />
-            <Route path={PathRoutes. SUB_CATEGORY} element={<SubCategoryPage />} />
+            <Route path={PathRoutes.SUB_CATEGORY} element={<SubCategoryPage />} />
             <Route path={PathRoutes.CATEGORY_CREATE} element={<CategoryForm />} />
             <Route path={PathRoutes.CATEGORY_EDIT_ID} element={<CategoryForm />} />
             <Route path={PathRoutes.COMPANY_SETTINGS} element={<CompanyPage />} />
@@ -97,7 +100,13 @@ const AppRoutes = () => {
             <Route path={PathRoutes.ADD_BANK} element={<AddBankPage />} />
             <Route path={PathRoutes.ADDRESS_REQUESTS} element={<AddressRequestPage />} />
             <Route path={PathRoutes.ADD_ADDRESS} element={<AddAddressPage />} />
+            <Route path={PathRoutes.ADD_ADDRESS} element={<AddAddressPage />} />
             <Route path={PathRoutes.ADDRESS_DETAILS} element={<AddressDetailsPage />} />
+
+            {/* Admin Management */}
+            <Route path={PathRoutes.ADMIN_MANAGEMENT} element={<AdminPage />} />
+            <Route path={PathRoutes.ADD_ADMIN} element={<AdminAddPage />} />
+            <Route path={`${PathRoutes.ADMIN_DETAILS}/:id`} element={<AdminDetailsPage />} />
           </Route>{" "}
         </>
       ) : (

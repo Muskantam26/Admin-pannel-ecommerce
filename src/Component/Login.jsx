@@ -44,6 +44,8 @@ const Login = () => {
           role: response?.data?.role,
           name: response?.data?.name,
           email: response?.data?.email,
+          permissions: response?.data?.permissions,
+          user: response?.data?.user,
         }),
       );
       toast.success("Welcome Back Admin!")

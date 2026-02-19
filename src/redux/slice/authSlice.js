@@ -6,7 +6,9 @@ const initialState = {
   role: null,
   name: null,
   email: null,
+  permissions: [], // Initialize permissions
   isLoggedIn: false,
+  user:null
 };
 
 const authSlice = createSlice({
@@ -14,13 +16,15 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     loginUser(state, action) {
-      const { token, userId, role, name, email } = action.payload;
+      const { token, userId, role, name, email,user } = action.payload;
 
       state.token = token;
       state.userId = userId;
       state.role = role;
       state.name = name;
       state.email = email;
+      state.user = user;
+      state.permissions = action.payload.permissions || []; // Restore permissions
       state.isLoggedIn = true;
     },
 
@@ -30,6 +34,7 @@ const authSlice = createSlice({
       state.role = null;
       state.name = null;
       state.email = null;
+      state.user = null;
       state.isLoggedIn = false;
     },
   },
