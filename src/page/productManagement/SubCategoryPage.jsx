@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Heading, MainHeading } from "../../Component/Heading";
 import Button from "../../Component/Btn";
 import InputBox from "../../Component/InputBox";
-import { Axios } from "../../constant/MainContent";
 import { toast } from "react-toastify";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -183,19 +182,15 @@ const SubCategoryPage = () => {
                         }}
                     />
                 </div>
-
-                {loading ? (
-                    <PageLoader/>
-                ) : (
-                    <CommonDataTable
-                        columns={columns}
-                        data={paginatedData}
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        onPageChange={setCurrentPage}
-                        rowsPerPage={rowsPerPage}
-                    />
-                )}
+                
+                <CommonDataTable
+                    columns={columns}
+                    data={paginatedData}
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                    rowsPerPage={rowsPerPage}
+                />
             </div>
 
             <ConfirmationModal

@@ -84,7 +84,7 @@ const UserManagement = () => {
       name: "ID",
       selector: (row) => row.id || row._id,
       sortable: true,
-      width: "100px",
+      width: "150px"
     },
     {
       name: "Full Name",
@@ -110,10 +110,12 @@ const UserManagement = () => {
       name: "Email",
       selector: (row) => row.email,
       sortable: true,
+      width: "200px",
     },
     {
       name: "Mobile",
       selector: (row) => row.mobile || "N/A",
+      width: "150px",
     },
     {
       name: "Role",
@@ -144,12 +146,6 @@ const UserManagement = () => {
       ),
     },
     {
-      name: "Team",
-      selector: (row) => row.totalDownlineUsers || 0,
-      sortable: true,
-      center: true,
-    },
-    {
       name: "Withdrawal",
       cell: (row) => (
         <button
@@ -174,6 +170,12 @@ const UserManagement = () => {
       selector: (row) => row.totalDirectUsers || 0,
       sortable: true,
       center: true
+    },
+    {
+      name: "Team",
+      selector: (row) => row.totalDownlineUsers || 0,
+      sortable: true,
+      center: true,
     },
     {
       name: "Action",
