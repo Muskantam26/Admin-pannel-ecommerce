@@ -66,6 +66,18 @@ const manuItems = [
     id: PathRoutes.ORDER_MANAGEMENT,
     icon: FaUserGroup,
     label: "Order Management",
+    subItems: [
+      {
+        id: PathRoutes.ORDER_MANAGEMENT,
+        label: "All Orders",
+        icon: FaUserGroup
+      },
+      {
+        id: PathRoutes.ALL_CARTS,
+        label: "All Carts",
+        icon: FaBoxOpen
+      }
+    ]
   },
   {
     id: PathRoutes.DEPOSIT_REQUESTS,
@@ -160,7 +172,7 @@ const Sidebar = ({ open, setOpen }) => {
   };
 
   const { name, email, profileImage } = useSelector((state) => state.auth);
-  
+
   // Dynamic Avatar based on name
   const userImage = `https://ui-avatars.com/api/?name=${encodeURIComponent(name || "User")}&background=random&color=fff`;
 
@@ -265,7 +277,7 @@ const Sidebar = ({ open, setOpen }) => {
                         }}
 
 
-                        
+
                       >
                         <div className="flex items-center gap-3">
                           <Icon className={`text-lg ${isActive ? 'text-(--text-hover)' : 'text-(--text-third) group-hover:text-(--bs-primary)'} transition-colors`} />
@@ -278,7 +290,7 @@ const Sidebar = ({ open, setOpen }) => {
                           </div>
                         )}
                       </div>
-                              
+
                       {/* Render Submenu with Smooth Transition */}
                       <div
                         className={`ml-4 pl-4 border-l border-(--bs-border) overflow-hidden transition-all duration-300 ease-in-out
@@ -304,7 +316,7 @@ const Sidebar = ({ open, setOpen }) => {
                         ))}
                       </div>
 
-                   
+
                     </div>
                   )}
                 </div>

@@ -38,6 +38,8 @@ import AddBanner from "../page/AddBanner";
 import EditBanner from "../page/EditBanner";
 import UserProfileDetails from "../page/UserProfileDetails";
 import UserProfileEditPage from "../page/UserProfileEditPage";
+import CartPage from "../page/orderManagement/CartPage";
+import CartDetailsPage from "../page/orderManagement/CartDetailsPage";
 import { useSelector } from "react-redux";
 
 
@@ -52,12 +54,14 @@ const AppRoutes = () => {
             <Route index element={<Dashboard />} />
             <Route path={PathRoutes.ADMIN_DASHBOARD} element={<Dashboard />} />
             <Route path={PathRoutes.SITE_MANAGER} element={<SiteManager />} />
-            
+
             <Route path="/product-management" element={<ProductManagement />} />
             <Route path="/product/view/:id" element={<ViewProduct />} />
             {/* <Route path="/product/edit" element={<EditProduct />} /> */}
             <Route path={PathRoutes.ORDER_MANAGEMENT} element={<OrderManagement />} />
             <Route path={PathRoutes.ORDERS_DETAILS} element={<ViewOrdersDetails />} />
+            <Route path={PathRoutes.ALL_CARTS} element={<CartPage />} />
+            <Route path={PathRoutes.CART_DETAILS} element={<CartDetailsPage />} />
             <Route path={PathRoutes.ADD_MEMBER} element={<AddMember />} />
 
             {/* Product Routes */}

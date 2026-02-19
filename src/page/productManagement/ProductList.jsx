@@ -84,7 +84,7 @@ const ProductList = () => {
       name: "Category",
       cell: (row) => (
         <span className="px-2.5 py-1 rounded-md text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
-          {row.category?.name || "Uncategorized"}
+          {row.category || "Uncategorized"}
         </span>
       ),
       width: "140px"

@@ -27,8 +27,9 @@ const ViewProduct = () => {
     setLoading(true);
     try {
       const res = await getProductByIdApi(id);
+      console.log(res)
       if (res && (res.success || res.data)) {
-        const productData = res.data || res;
+        const productData = res?.data?.data || res;
         setProduct(productData);
         const mainImg = productData.image;
         const galleryIds = productData.images || [];

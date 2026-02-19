@@ -180,7 +180,7 @@ const AddressRequestPage = () => {
                     </button>
                 </div>
             ),
-            width: "350px"
+            width: "150px"
         }
     ];
 
