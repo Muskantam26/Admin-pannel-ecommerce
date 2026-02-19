@@ -245,7 +245,10 @@ const AddProduct = () => {
       pv: Number(formData.pv),
       dp: Number(formData.dp),
       bp: Number(formData.bp),
-      discount: Number(formData.discount),
+      discount: {
+        type: 'PERCENTAGE', // Hardcoded as per current UI limitation, or add a selector if needed
+        value: Number(formData.discount)
+      },
       images: images.map(img => img.src),
       image: images.length > 0 ? images[0].src : ""
     };

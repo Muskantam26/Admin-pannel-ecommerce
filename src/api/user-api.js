@@ -59,3 +59,11 @@ export const updateUserApi = async (id, data) => {
         return { success: false, message: error.response?.data?.message || "Failed to update user details" };
     }
 };
+export const searchUserApi = async (query) => {
+    try {
+        const { data } = await Axios.get(`/admin/search?query=${query}`);
+        return data;
+    } catch (error) {
+        return { success: false, message: error.response?.data?.message || "Error searching user" };
+    }
+};

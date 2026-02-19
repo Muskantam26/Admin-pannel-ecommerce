@@ -9,6 +9,12 @@ import OrderManagement from "../page/OrderManagement";
 import ProductManagement from "../page/ProductManagement";
 import ViewProduct from "../page/productManagement/ViewProduct";
 import UserManagement from "../page/UserManagement";
+import KycRequestPage from "../page/UserManagement/KycRequestPage";
+import BankRequestPage from "../page/UserManagement/BankRequestPage";
+import BankDetailsPage from "../page/UserManagement/BankDetailsPage";
+import AddBankPage from "../page/UserManagement/AddBankPage";
+import AddKycPage from "../page/UserManagement/AddKycPage";
+import KycDetailsPage from "../page/UserManagement/KycDetailsPage";
 
 import ViewOrdersDetails from "../page/ordermanagement/ViewOrdersDetails";
 import AddMember from "../page/AddMember";
@@ -43,8 +49,8 @@ const AppRoutes = () => {
             <Route path={PathRoutes.ADMIN_DASHBOARD} element={<Dashboard />} />
             <Route path={PathRoutes.SITE_MANAGER} element={<SiteManager />} />
 
-            <Route path={`/${PathRoutes.PRODUCT_MANAGEMENT}`} element={<ProductManagement />} />
-            <Route path={PathRoutes.PRODUCT_VIEW} element={<ViewProduct />} />
+            <Route path="/product-management" element={<ProductManagement />} />
+            <Route path="/product/view/:id" element={<ViewProduct />} />
             {/* <Route path="/product/edit" element={<EditProduct />} /> */}
             <Route path={PathRoutes.ORDER_MANAGEMENT} element={<OrderManagement />} />
             <Route path={PathRoutes.ORDERS_DETAILS} element={<ViewOrdersDetails />} />
@@ -70,6 +76,12 @@ const AppRoutes = () => {
             <Route path={PathRoutes.USER_MANAGEMENT} element={<UserManagement />} />
             <Route path={PathRoutes.USER_PROFILE_EDIT} element={<UserProfileEditPage />} />
             <Route path={PathRoutes.USER_PROFILE_DETAILS} element={<UserProfileDetails />} />
+            <Route path={PathRoutes.KYC_REQUESTS} element={<KycRequestPage />} />
+            <Route path={PathRoutes.ADD_KYC} element={<AddKycPage />} />
+            <Route path={`${PathRoutes.KYC_DETAILS}/:id`} element={<KycDetailsPage />} />
+            <Route path={PathRoutes.BANK_REQUESTS} element={<BankRequestPage />} />
+            <Route path={PathRoutes.BANK_DETAILS} element={<BankDetailsPage />} />
+            <Route path={PathRoutes.ADD_BANK} element={<AddBankPage />} />
           </Route>{" "}
         </>
       ) : (
