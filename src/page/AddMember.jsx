@@ -3,6 +3,7 @@ import { Heading } from "../Component/Heading";
 import { RxCrossCircled } from "react-icons/rx";
 import { InputField } from "../Component/InputBox";
 import Button from "../Component/Btn";
+import { FiLock } from "react-icons/fi";
 
 const AddMember = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -14,21 +15,6 @@ const AddMember = ({ onClose }) => {
     role: "",
   });
 
-  const [permissions, setPermissions] = useState([
-    { id: 1, label: "Email me when someone follows me", enabled: true },
-    { id: 2, label: "Email me when someone answers on my post", enabled: false },
-    { id: 3, label: "Email me when someone mentions me", enabled: true },
-    { id: 4, label: "Email me when someone follows me", enabled: true },
-    { id: 5, label: "Email me when someone answers on my post", enabled: false },
-    { id: 6, label: "Email me when someone mentions me", enabled: true },
-     { id: 7, label: "Email me when someone answers on my post", enabled: false },
-    { id: 8, label: "Email me when someone mentions me", enabled: true },
-    { id: 9, label: "Email me when someone follows me", enabled: true },
-    { id: 10, label: "Email me when someone answers on my post", enabled: false },
-    { id: 11, label: "Email me when someone mentions me", enabled: true },
-  ]);
-
-
   const handleChange = (field, value) => {
     setFormData((prev) => ({
       ...prev,
@@ -36,145 +22,104 @@ const AddMember = ({ onClose }) => {
     }));
   };
 
- 
-  const togglePermission = (id) => {
-    setPermissions((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, enabled: !item.enabled } : item
-      )
-    );
+  const generatePassword = () => {
+    const randomPassword = Math.random().toString(36).slice(-8);
+    handleChange("password", randomPassword);
   };
 
-
   return (
-    <div className="bg-(--bg-box) rounded-4xl shadow-2xl p-8 w-200 mx-auto ">
+    <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl mx-auto overflow-hidden animate-fade-in-up">
       
-           
-
       {/* Header */}
-      <div className="flex justify-between items-center mb-2 ">
-        <div className="w-full text-center flex justify-center items-center">
-          <Heading title={"Add Member"}
-          
-          />
-        </div>
-
-       
-
-        <button onClick={onClose}>
-          <RxCrossCircled
-            className="bg-(--bs-btn-second) text-(--text-white) rounded-full cursor-pointer"
-            size={28}
-          />
+      <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50/50">
+        <Heading title={"Add New Member"} className="text-xl font-bold text-gray-800" />
+        <button 
+          onClick={onClose}
+          className="p-2 hover:bg-(--bs-btn-second) rounded-full transition-colors text-(--text-white) bg-(--bs-btn-second) cursor-pointer"
+        >
+          <RxCrossCircled size={24} />
         </button>
       </div>
 
-         
-      <div className="flex gap-10">
+      {/* Form Content */}
+      <div className="p-8 space-y-6">
         
-        {/* left side add member form*/}
-        <div className="w-1/2 space-y-5 ">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <InputField
-            label="Name"
+            label="Full Name"
+            placeholder="e.g. John Doe"
             value={formData.name}
-
-
             onChange={(e) => handleChange("name", e.target.value)}
-            placeholder="Enter name"
           />
 
           <InputField
-            label="Mobile"
+            label="Mobile Number"
+            placeholder="e.g. +91 9876543210"
             value={formData.mobile}
-            
-
+             type="tel"
             onChange={(e) => handleChange("mobile", e.target.value)}
-            placeholder="Enter mobile number"
           />
 
           <InputField
-            label="Email"
+            label="Email Address"
+            placeholder="john@example.com"
             value={formData.email}
-           
-
+            type="email"
             onChange={(e) => handleChange("email", e.target.value)}
-            placeholder="Enter email"
           />
 
-          <InputField
-            label="Generate Password"
-            value={formData.password}
-          
-
-            onChange={(e) => handleChange("password", e.target.value)}
-            placeholder="Generate password"
-          />
+          <div className="relative">
+             <InputField
+              label="Password"
+              placeholder="••••••••"
+              value={formData.password}
+              type="text"
+              onChange={(e) => handleChange("password", e.target.value)}
+            />
+            <button 
+              onClick={generatePassword}
+              className="absolute top-[34px] right-3 text-xs font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 px-2 py-1 rounded"
+              type="button"
+            >
+              Generate
+            </button>
+          </div>
 
           <InputField
             label="Joining Date"
             type="date"
             value={formData.joiningDate}
-            
             onChange={(e) => handleChange("joiningDate", e.target.value)}
           />
 
-          <InputField
-            label="Assign Role"
-            value={formData.role}
-         
-
-            onChange={(e) => handleChange("role", e.target.value)}
-            placeholder="Enter role"
-          />
-        </div>
-                
-
-        {/* right side  role Permission card  */}
-        <div className="w-1/2 bg-(--card-box) rounded-4xl shadow-md p-4">
-          <h2 className="text-lg font-semibold mb-6">Role Permission</h2>
-
-          <div className="space-y-5">
-            {permissions.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center gap-4 cursor-pointer"
-                onClick={() => togglePermission(item.id)}
-              >
-                {/* Toggle */}
-                <div
-                  className={`w-8 h-5 flex items-center rounded-full p-1 transition ${
-                    item.enabled
-                      ? "bg-(--btn-hover)"
-                      : "bg-(--input-bg)"
-                  }`}
-                >
-                  <div
-                    className={`bg-white w-3 h-3 rounded-full shadow-md transform transition ${
-                      item.enabled ? "translate-x-4" : ""
-                    }`}
-                  />
-                </div>
-
-                <p className="text-[10px] text-(--text-third)">
-                  {item.label}
-                </p>
-              </div>
-            ))}
+          <div>
+            <label className="text-sm font-medium text-gray-700 mb-1 block">Assign Role</label>
+            <select
+              value={formData.role}
+              onChange={(e) => handleChange("role", e.target.value)}
+              className="w-full border border-gray-300 rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            >
+              <option value="">Select Role</option>
+              <option value="Admin">Admin</option>
+              <option value="Manager">Manager</option>
+              <option value="Support">Support</option>
+              <option value="User">User</option>
+            </select>
           </div>
         </div>
+
       </div>
 
-     
-      <div className="flex justify-center gap-4 mt-10">
+      {/* Footer Actions */}
+      <div className="flex justify-end gap-3 p-6 border-t border-gray-100 bg-gray-50/50">
         <Button
-        title={"Cancle"}
-        className="p-1.5 px-5 text-sm rounded-sm shadow-2xl "
+          title={"Cancel"}
+          onClick={onClose}
+          className="px-6 py-2.5 rounded-lg border border-gray-300 bg-(--bs-btn-second) text-(--text-white) font-medium transition-colors shadow-sm transition-all transform hover:-translate-y-0.5"
         />
-
-
         <Button
-        title={"Create User"}
-        className="bg-(--bs-btn-third) p-1.5 px-5 text-sm rounded-sm shadow-2xl"
+          title={"Create Member"}
+          className="px-6 py-2.5 rounded-lg bg-(--bs-btn) text-(--text-white) font-medium shadow-md shadow-blue-500/20 transition-all transform hover:-translate-y-0.5"
         />
       </div>
     </div>

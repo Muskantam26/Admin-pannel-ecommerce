@@ -161,7 +161,7 @@ const chartData = [
       name: "Action",
       cell: () => (
         <div className="flex gap-2">
-          <button className="p-2 rounded-lg bg-(--icon-btn) text-(--icon-btn-text)"  onClick={()=>navigate(PathRoutes.ORDERS_DETAILS)} >
+          <button className="p-2 rounded-lg bg-(--icon-btn) text-(--icon-btn-text) cursor-pointer"  onClick={()=>navigate(PathRoutes.ORDERS_DETAILS)} >
             <Eye size={10} />
 
           </button>
@@ -283,7 +283,7 @@ onPageChange={setCurrentPage}
   <Heading
   title={"Notification & Alert"}/>
 
-  <div className='grid grid-cols-3 gap-7 mt-5'>
+  <div className='grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 mt-5'>  
     <AlertCard
     icon={<AlertCircle/>}
     category="Operations"

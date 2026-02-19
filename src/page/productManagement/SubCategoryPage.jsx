@@ -158,6 +158,7 @@ const SubCategoryPage = () => {
 
     return (
         <div className="p-5">
+            
             <div className="flex justify-between items-center mb-5">
                 <MainHeading
                     title={"Sub Category Management"}

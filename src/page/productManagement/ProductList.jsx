@@ -20,6 +20,7 @@ import Delete from '../../alerts/Delete';
 import { PathRoutes } from '../../constant/Path';
 import Button from '../../Component/Btn';
 import { deleteProductApi, getAllProductsApi } from '../../api/product-api';
+import PageLoader from '../../Component/PageLoader';
 
 
 const ProductList = () => {
@@ -120,19 +121,19 @@ const ProductList = () => {
       name: "Action",
       cell: (row) => (
         <div className="flex gap-2">
-          <button className="p-2 rounded-lg bg-(--icon-btn) text-(--icon-btn-text) hover:opacity-80 disabled:opacity-50"
+          <button className="p-2 rounded-lg bg-(--icon-btn) text-(--icon-btn-text) hover:opacity-80 disabled:opacity-50 cursor-pointer"
             onClick={() => navigate(`/product/view/${row._id}`)} // Or keep simple view
             title="View"
           >
             <Eye size={16} />
           </button>
-          <button className="p-2 rounded-lg bg-(--icon-btn-second) text-(--icon-text-second) hover:opacity-80"
+          <button className="p-2 rounded-lg bg-(--icon-btn-second) text-(--icon-text-second) hover:opacity-80 cursor-pointer"
             onClick={() => navigate(`/product/edit/${row._id}`)}
             title="Edit"
           >
             <Pencil size={16} />
           </button>
-          <button className="p-2 rounded-lg bg-(--bs-btn-second) text-(--text-white) hover:opacity-80"
+          <button className="p-2 rounded-lg bg-(--bs-btn-second) text-(--text-white) hover:opacity-80 cursor-pointer"
             onClick={() => {
               setSelectedProduct(row);
               setIsDeleteOpen(true);
@@ -170,7 +171,7 @@ const ProductList = () => {
 
       <div className="bg-(--bg-box) shadow-2xl rounded-xl p-5 mt-5">
         {loading ? (
-          <div className="text-center p-10">Loading products...</div>
+         <PageLoader/>
         ) : (
           <CommonDataTable
             columns={columns}

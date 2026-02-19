@@ -169,13 +169,13 @@ const UserManagement = () => {
         <div className="flex gap-2">
           <button
             onClick={() => navigate(`/user-profile/${row._id || row.id}`)}
-            className="p-2 rounded-lg bg-blue-100 text-blue-600"
+            className="p-2 rounded-lg bg-blue-100 text-blue-600 cursor-pointer"
             title="View Details">
             <Eye size={14} />
           </button>
           <button
             onClick={() => handleAction('block', { id: row._id || row.id, status: row.active?.isBlocked })}
-            className={`p-2 rounded-lg ${row.active?.isBlocked ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}
+            className={`p-2 rounded-lg cursor-pointer ${row.active?.isBlocked ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}
             title={row.active?.isBlocked ? "Unblock User" : "Block User"}
           >
             {row.active?.isBlocked ? <Unlock size={14} /> : <Lock size={14} />}

@@ -23,7 +23,11 @@ export const PathRoutes = {
     PACKAGES: "/packages",
     NOTIFICATION: "/notification",
     MESSAGE: "/message",
-    
+    PRODUCT_EDIT_ID: "/product/edit/:id",
+    CATEGORY_CREATE: "/category/create",
+    CATEGORY_EDIT_ID: "/category/edit/:id",
+    USER_PROFILE_EDIT: "/user-profile/edit/:id",
+    USER_PROFILE_DETAILS: "/user-profile/:id",
 
 
 };

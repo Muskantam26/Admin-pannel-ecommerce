@@ -40,36 +40,36 @@ const AppRoutes = () => {
           <Route element={<Layout />}>
             {/* <Route path="/dashboard" element={<Dashboard />} /> */}
             <Route index element={<Dashboard />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/site-manager" element={<SiteManager />} />
+            <Route path={PathRoutes.ADMIN_DASHBOARD} element={<Dashboard />} />
+            <Route path={PathRoutes.SITE_MANAGER} element={<SiteManager />} />
 
-            <Route path="/product-management" element={<ProductManagement />} />
-            <Route path="/product/view" element={<ViewProduct />} />
+            <Route path={`/${PathRoutes.PRODUCT_MANAGEMENT}`} element={<ProductManagement />} />
+            <Route path={PathRoutes.PRODUCT_VIEW} element={<ViewProduct />} />
             {/* <Route path="/product/edit" element={<EditProduct />} /> */}
-            <Route path="/order-management" element={<OrderManagement />} />
-            <Route path="/viewordersdetails" element={<ViewOrdersDetails />} />
-            <Route path="/add-memeber" element={<AddMember />} />
+            <Route path={PathRoutes.ORDER_MANAGEMENT} element={<OrderManagement />} />
+            <Route path={PathRoutes.ORDERS_DETAILS} element={<ViewOrdersDetails />} />
+            <Route path={PathRoutes.ADD_MEMBER} element={<AddMember />} />
 
             {/* Product Routes */}
-            <Route path="/add-product" element={<AddProduct />} />
-            <Route path="/product/edit/:id" element={<AddProduct />} />
+            <Route path={PathRoutes.ADD_PRODUCT} element={<AddProduct />} />
+            <Route path={PathRoutes.PRODUCT_EDIT_ID} element={<AddProduct />} />
 
-            <Route path="/add-category" element={<CategoryPage />} />
-            <Route path="/sub-category" element={<SubCategoryPage />} />
-            <Route path="/category/create" element={<CategoryForm />} />
-            <Route path="/category/edit/:id" element={<CategoryForm />} />
-            <Route path="/company-settings" element={<CompanyPage />} />
-            <Route path="/company-form" element={<CompanyForm />} />
+            <Route path={PathRoutes.ADD_CATEGORY} element={<CategoryPage />} />
+            <Route path={PathRoutes.SUB_CATEGORY} element={<SubCategoryPage />} />
+            <Route path={PathRoutes.CATEGORY_CREATE} element={<CategoryForm />} />
+            <Route path={PathRoutes.CATEGORY_EDIT_ID} element={<CategoryForm />} />
+            <Route path={PathRoutes.COMPANY_SETTINGS} element={<CompanyPage />} />
+            <Route path={PathRoutes.COMPANY_FORM} element={<CompanyForm />} />
             <Route path={PathRoutes.REWARDS} element={<Rewards />} />
             <Route path={PathRoutes.PACKAGES} element={<Packages />} />
             <Route path={PathRoutes.NOTIFICATION} element={<Notification />} />
             <Route path={PathRoutes.MESSAGE} element={<Message />} />
-            <Route path="/add-banner" element={<AddBanner />} />
+            <Route path={PathRoutes.ADD_BANNER} element={<AddBanner />} />
             <Route path={PathRoutes.EDIT_BANNER} element={<EditBanner />} />
             <Route path={PathRoutes.DEPOSITS} element={<DepositPage />} />
             <Route path={PathRoutes.USER_MANAGEMENT} element={<UserManagement />} />
-            <Route path="/user-profile/edit/:id" element={<UserProfileEditPage />} />
-            <Route path="/user-profile/:id" element={<UserProfileDetails />} />
+            <Route path={PathRoutes.USER_PROFILE_EDIT} element={<UserProfileEditPage />} />
+            <Route path={PathRoutes.USER_PROFILE_DETAILS} element={<UserProfileDetails />} />
           </Route>{" "}
         </>
       ) : (

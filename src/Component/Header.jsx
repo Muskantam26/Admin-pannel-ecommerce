@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { FaBell } from "react-icons/fa6";
 import { IoSettings } from "react-icons/io5";
 import img from "../assets/user.jpg";
@@ -6,10 +7,11 @@ import { FaSearch } from "react-icons/fa";
 import { IoMdMenu } from "react-icons/io";
 
 const Header = ({onMenuClick}) => {
-  const [user] = useState({
-    name: "Mr. Rajat Pradhan",
-    role: "Admin Manager",
-  });
+  /* REMOVED STATIC USER STATE */
+  const { name, role } = useSelector((state) => state.auth);
+
+  // Dynamic Avatar based on name
+  const userImage = `https://ui-avatars.com/api/?name=${encodeURIComponent(name || "User")}&background=random&color=fff`;
 
   const [showUser, setShowUser] = useState(false);
 
@@ -45,20 +47,21 @@ const Header = ({onMenuClick}) => {
 
         {/* User */}
         <div className="relative flex items-center gap-3 h-7 w-7 md:w-7 md:h-7">
-          <img
-            src={img}
-            alt="user"
-            onClick={() => setShowUser(!showUser)}
-            className="  rounded-xl object-cover cursor-pointer "
-          />
+            <img
+              src={userImage} 
+              alt="user"
+              onClick={() => setShowUser(!showUser)}
+              className="w-full h-full rounded-full object-cover cursor-pointer border border-gray-200"
+              onError={(e) => { e.target.src = "https://via.placeholder.com/40" }}
+            />
 
           {showUser && (
-            <div className="absolute top-10 right-0 bg-(--bg-box) shadow-lg rounded-lg px-3 py-2 text-xs leading-tight z-50">
-              {/* <p className="font-semibold text-(--text-main)">
-                {user.name}
-              </p> */}
-              <p className="text-(--text-second)">
-                {user.role}
+            <div className="absolute top-10 right-0 bg-(--bg-box) shadow-lg rounded-lg px-3 py-2 text-xs leading-tight z-50 min-w-[120px]">
+               <p className="font-semibold text-(--text-main) mb-1">
+                {name || "User"}
+              </p> 
+               <p className="text-(--text-second) text-[10px] uppercase tracking-wider">
+                {role || "Admin"}
               </p>
             </div>
           )}

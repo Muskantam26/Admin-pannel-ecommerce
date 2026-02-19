@@ -5,6 +5,7 @@ import Button from "../Component/Btn";
 import { Heading } from "../Component/Heading";
 import { InputField } from "../Component/InputBox";
 import { FiPlus, FiTrash2 } from "react-icons/fi";
+import { IoArrowBack } from "react-icons/io5";
 
 const AddNewPackage = ({ onClose, onSaveClick, initialData }) => {
 
@@ -63,7 +64,16 @@ const AddNewPackage = ({ onClose, onSaveClick, initialData }) => {
     <div className="rounded-xl shadow-lg mt-5 bg-white p-6 space-y-8 animate-fade-in-up">
 
       <div className="flex justify-between items-center border-b pb-4 border-gray-100">
-        <Heading title={"Add New Package"} className="text-2xl font-bold text-gray-800" />
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={onClose} 
+            className="p-2 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors text-gray-600"
+            title="Back to Packages"
+          >
+            <IoArrowBack size={20} />
+          </button>
+          <Heading title={"Add New Package"} className="text-2xl font-bold text-gray-800" />
+        </div>
         <button onClick={onClose} className="p-2 hover:bg-(--bs-btn-second) hover:text-(--text-white) rounded-full transition-colors cursor-pointer">
           <RxCrossCircled size={24} className="text-(--text-white) bg-(--bs-btn-second) rounded-full cursor-pointer" />
         </button>

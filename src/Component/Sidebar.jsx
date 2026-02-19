@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../redux/slice/authSlice';
 import { hideLoader, showLoader } from '../redux/slice/loadingSlice';
 
@@ -132,11 +132,11 @@ const Sidebar = ({ open, setOpen }) => {
     }));
   };
 
-  const [user] = useState({
-    name: "Mr. Rajat Pradhan",
-    email: "rajatpradhan@gmail.com"
-
-  });
+  /* REMOVED STATIC USER STATE */
+  const { name, email } = useSelector((state) => state.auth);
+  
+  // Dynamic Avatar based on name
+  const userImage = `https://ui-avatars.com/api/?name=${encodeURIComponent(name || "User")}&background=random&color=fff`;
 
   const handleNavigation = (id) => {
     if (id === "logout") {
@@ -212,7 +212,7 @@ const Sidebar = ({ open, setOpen }) => {
                   ) : (
                     <div>
                       <div className={`flex items-center justify-between text-xs font-medium p-2 m-2 cursor-pointer rounded-lg hover:text-(--text-hover) hover:bg-(--btn-hover) transition-colors
-                            ${location.pathname === item.id ? 'bg-(--btn-hover) text-(--text-hover)' : 'text-(--icon-color)'}
+                            ${location.pathname === item.id ? 'bg-(--btn-hover) text-(--text-white)' : 'text-(--icon-color)'}
                         `}
                         onClick={() => {
                           if (hasSubItems) {
@@ -221,6 +221,9 @@ const Sidebar = ({ open, setOpen }) => {
                             if (item.id) handleNavigation(item.id);
                           }
                         }}
+
+
+                        
                       >
                         <div className="flex items-center gap-3">
                           <Icon className="text-sm " />
@@ -229,10 +232,10 @@ const Sidebar = ({ open, setOpen }) => {
                         {/* Only show chevron if there are subitems */}
                         {hasSubItems && (isExpanded ? <FiChevronDown /> : <FiChevronRight />)}
                       </div>
-
+                              
                       {/* Render Submenu with Smooth Transition */}
                       <div
-                        className={`ml-6 overflow-hidden transition-[max-height] duration-300 ease-in-out
+                        className={`ml-6 overflow-hidden transition-[max-height] duration-300 ease-in-out space-y-2
                                 ${isExpanded ? "max-h-96" : "max-h-0"}
                             `}
                       >
@@ -240,7 +243,7 @@ const Sidebar = ({ open, setOpen }) => {
                           <div
                             key={subIndex}
                             className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer text-xs text-(--text-second) hover:text-(--text-hover) hover:bg-(--btn-hover)
-                                        ${location.pathname === subItem.id ? 'text-(--text-hover) font-medium' : ''}
+                                        ${location.pathname === subItem.id ? 'bg-(--btn-hover) text-(--text-white) font-medium' : ''}
                                     `}
                             onClick={() => handleNavigation(subItem.id)}
                           >
@@ -252,6 +255,8 @@ const Sidebar = ({ open, setOpen }) => {
                           <div className="p-2 text-xs text-gray-400 italic">No submenus yet</div>
                         )}
                       </div>
+
+                   
                     </div>
                   )}
                 </div>
@@ -259,16 +264,18 @@ const Sidebar = ({ open, setOpen }) => {
             })}
           </div>
 
-          <div className="flex items-center gap-3 mt-auto pt-5 ">
+
+            <div className="flex items-center gap-3 mt-auto pt-5 ">
 
             <img
-              src={img}
+              src={userImage} 
               alt="user"
-              className="w-8 h-8 rounded-xl object-cover"
+              className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm"
+              onError={(e) => { e.target.src = "https://via.placeholder.com/40" }}
             />
             <div className="text-xs leading-tight ">
-              <p className="font-semibold text-(--text-main)">{user.name}</p>
-              <p className="text-(--text-second)">{user.email}</p>
+              <p className="font-semibold text-(--text-main) truncate max-w-[140px]" title={name}>{name || "Admin User"}</p>
+              <p className="text-(--text-second) truncate max-w-[140px]" title={email}>{email || "admin@example.com"}</p>
             </div>
           </div>
         </div>

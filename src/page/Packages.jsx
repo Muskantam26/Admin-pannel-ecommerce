@@ -5,8 +5,10 @@ import { FaCrown, FaGem, FaBoxOpen, FaCheck, FaEdit, FaTrash } from "react-icons
 import AddNewPackage from "./AddNewPackage";
 import { getAllPackagesApi, createPackageApi, updatePackageApi, deletePackageApi } from "../api/package-api";
 import { toast } from "react-toastify";
-import Loader from "../Component/PageLoader";
+
 import ConfirmationModal from "../Component/Model/ConfirmationModal";
+import PageLoader from '../Component/PageLoader';
+
 
 
 
@@ -112,7 +114,7 @@ const Packages = () => {
                         </button>
                     </div>
 
-                    {loading ? <div className="text-center p-10"><p>Loading...</p></div> : (
+                    {loading ? <PageLoader/> : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             {packages.map((pkg) => (
                                 <div
@@ -152,6 +154,7 @@ const Packages = () => {
                                             </span>
                                         )}
                                     </div>
+                                    
 
                                     {/* Stats Grid */}
                                     <div className={`w-full grid grid-cols-2 gap-3 mb-6 p-4 rounded-xl
