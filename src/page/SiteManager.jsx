@@ -137,8 +137,6 @@ const SiteManager = () => {
         </div>
       ),
       ignoreRowClick: true,
-      allowOverflow: true,
-      button: true,
     },
   ];
 

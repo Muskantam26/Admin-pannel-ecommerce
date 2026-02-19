@@ -98,6 +98,8 @@ const SubCategoryPage = () => {
         },
         {
             name: "Image",
+            selector: (row) => row.image || 'N/A',
+            imageSelector: (row) => row.image,
             cell: (row) => (
                 <img
                     src={row.image || "https://via.placeholder.com/50"}
@@ -125,6 +127,7 @@ const SubCategoryPage = () => {
         },
         {
             name: "Description",
+            selector: (row) => row.description || 'N/A',
             cell: (row) => (
                 <span className="truncate max-w-xs">{row.description}</span>
             ),
@@ -151,8 +154,6 @@ const SubCategoryPage = () => {
                 </div>
             ),
             ignoreRowClick: true,
-            allowOverflow: true,
-            button: true,
         },
     ];
 

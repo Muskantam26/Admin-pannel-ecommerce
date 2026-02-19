@@ -86,7 +86,8 @@ const DepositPage = () => {
         },
         {
             name: "Date",
-            selector: (row) => <DateTime date={row.createdAt} />,
+            selector: (row) => new Date(row.createdAt).toLocaleDateString(),
+            cell: (row) => <DateTime date={row.createdAt} />,
             sortable: true,
             width: "120px"
         },
@@ -122,6 +123,7 @@ const DepositPage = () => {
         },
         {
             name: "Screenshot",
+            imageSelector: (row) => row.file || null,
             cell: (row) => (
                 row.file ? (
                     <button onClick={() => setPreviewImage(row.file)} className="text-blue-500 hover:text-blue-700">
@@ -134,6 +136,7 @@ const DepositPage = () => {
         },
         {
             name: "Status",
+            selector: (row) => row.status,
             cell: (row) => {
                 let color = "bg-yellow-100 text-yellow-700";
                 if (row.status === "Confirmed") color = "bg-green-100 text-green-700";

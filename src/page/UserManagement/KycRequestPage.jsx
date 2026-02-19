@@ -79,12 +79,15 @@ const KycRequestPage = () => {
         },
         {
             name: "Request ID",
+            selector: (row) => row?.id,
             cell: (row) => <span className="text-(--text-second) text-xs font-mono">{row?.id}</span>,
             width: "120px"
         },
 
         {
             name: "User Details",
+            selector: (row) => `${row.user?.username} (${row.user?.email})`,
+            imageSelector: (row) => row.user?.picture || "https://img.icons8.com/color/48/user-male--v2.png",
             cell: (row) => (
                 <div className="flex items-center gap-3 py-2">
                     <img
@@ -105,6 +108,7 @@ const KycRequestPage = () => {
         },
         {
             name: "Status",
+            selector: (row) => row.status,
             cell: (row) => {
                 let statusColor = "bg-gray-100 text-gray-600";
                 let Icon = Clock;

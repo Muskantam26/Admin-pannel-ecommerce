@@ -77,6 +77,7 @@ const AddressRequestPage = () => {
         },
         {
             name: "User Details",
+            selector: (row) => `${row.userId?.username} (${row.userId?.email})`,
             cell: (row) => (
                 <div className="flex items-center gap-3 py-2">
                     <img
@@ -97,6 +98,7 @@ const AddressRequestPage = () => {
         },
         {
             name: "Address Info",
+            selector: (row) => `${row.name}, ${row.address}, ${row.locality}, ${row.city}, ${row.state} - ${row.pincode}`,
             cell: (row) => (
                 <div className="flex flex-col gap-1">
                     <div className="flex items-center gap-2">
@@ -116,6 +118,7 @@ const AddressRequestPage = () => {
         },
         {
             name: "Contact",
+            selector: (row) => `Mobile: ${row.mobile} ${row.alternatePhone ? `, Alt: ${row.alternatePhone}` : ''}`,
             cell: (row) => (
                 <div className="flex flex-col gap-1">
                     <div className="flex flex-col">
@@ -134,6 +137,7 @@ const AddressRequestPage = () => {
         },
         {
             name: "Status",
+            selector: (row) => row.status,
             cell: (row) => {
                 let statusColor = "bg-gray-100 text-gray-600";
                 let Icon = Clock;

@@ -79,6 +79,8 @@ const BankRequestPage = () => {
         },
         {
             name: "User Details",
+            selector: (row) => `${row.userId?.username} (${row.userId?.email})`,
+            imageSelector: (row) => row.userId?.picture || "https://img.icons8.com/color/48/user-male--v2.png",
             cell: (row) => (
                 <div className="flex items-center gap-3 py-2">
                     <img
@@ -99,6 +101,7 @@ const BankRequestPage = () => {
         },
         {
             name: "Bank Info",
+            selector: (row) => `${row.bankName} - ${row.branchName || ''}`,
             cell: (row) => (
                 <div className="flex flex-col gap-1">
                     <div className="flex items-center gap-2">
@@ -114,6 +117,7 @@ const BankRequestPage = () => {
         },
         {
             name: "Account Details",
+            selector: (row) => `Acc: ${row.accountNumber}, IFSC: ${row.ifscCode}`,
             cell: (row) => (
                 <div className="flex flex-col gap-1">
                     <div className="flex flex-col">
@@ -137,6 +141,7 @@ const BankRequestPage = () => {
         },
         {
             name: "Status",
+            selector: (row) => row.status,
             cell: (row) => {
                 let statusColor = "bg-gray-100 text-gray-600";
                 let Icon = Clock;

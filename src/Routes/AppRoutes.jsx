@@ -65,7 +65,7 @@ const AppRoutes = () => {
             <Route path={PathRoutes.PRODUCT_EDIT_ID} element={<AddProduct />} />
 
             <Route path={PathRoutes.ADD_CATEGORY} element={<CategoryPage />} />
-            <Route path={PathRoutes.SUB_CATEGORY} element={<SubCategoryPage />} />
+            <Route path={PathRoutes. SUB_CATEGORY} element={<SubCategoryPage />} />
             <Route path={PathRoutes.CATEGORY_CREATE} element={<CategoryForm />} />
             <Route path={PathRoutes.CATEGORY_EDIT_ID} element={<CategoryForm />} />
             <Route path={PathRoutes.COMPANY_SETTINGS} element={<CompanyPage />} />

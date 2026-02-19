@@ -16,6 +16,8 @@
     "async-await": "^0.1.40",
     "axios": "^1.13.5",
     "chart.js": "^4.5.1",
+    "exceljs": "^4.4.0",
+    "file-saver": "^2.0.5",
     "framer-motion": "^12.34.0",
     "html2canvas": "^1.4.1",
     "imagekit-javascript": "^4.0.1",

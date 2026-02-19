@@ -63,6 +63,8 @@ const ProductList = () => {
     },
     {
       name: "Product",
+      selector: (row) => `${row.name} ${row.sku ? `(SKU: ${row.sku})` : ''}`,
+      imageSelector: (row) => row.image || (row.images && row.images.length > 0 ? (typeof row.images[0] === 'string' ? row.images[0] : row.images[0].src) : null),
       cell: (row) => (
         <div className="flex items-center gap-3 py-2">
           <div className="w-12 h-12 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center overflow-hidden shrink-0">
@@ -82,6 +84,7 @@ const ProductList = () => {
     },
     {
       name: "Category",
+      selector: (row) => row.category?.name || "Uncategorized",
       cell: (row) => (
         <span className="px-2.5 py-1 rounded-md text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
           {row.category?.name || "Uncategorized"}
@@ -111,6 +114,7 @@ const ProductList = () => {
     },
     {
       name: "Status",
+      selector: (row) => row.status || 'DRAFT',
       cell: (row) => (
         <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-medium w-fit
             ${row.status === 'ACTIVE'

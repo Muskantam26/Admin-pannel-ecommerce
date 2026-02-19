@@ -153,8 +153,6 @@ const CategoryPage = () => {
                 </div>
             ),
             ignoreRowClick: true,
-            allowOverflow: true,
-            button: true,
         },
     ];
 
@@ -179,7 +177,7 @@ const CategoryPage = () => {
                         value={search}
                         onChange={(e) => {
                             setSearch(e.target.value);
-                            setCurrentPage(1); // Reset to first page on search
+                            setCurrentPage(1); 
                         }}
                     />
                 </div>
