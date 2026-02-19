@@ -184,7 +184,7 @@ const SubCategoryPage = () => {
                 </div>
 
                 {loading ? (
-                    <p className="text-center p-5">Loading...</p>
+                    <PageLoader/>
                 ) : (
                     <CommonDataTable
                         columns={columns}

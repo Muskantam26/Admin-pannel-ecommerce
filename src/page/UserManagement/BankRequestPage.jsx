@@ -9,6 +9,7 @@ import ConfirmationModal from '../../Component/Model/ConfirmationModal';
 import { toast } from 'react-toastify';
 import Button from '../../Component/Btn';
 import { FiPlus } from 'react-icons/fi';
+import PageLoader from '../../Component/PageLoader';
 
 const BankRequestPage = () => {
     const navigate = useNavigate();
@@ -195,7 +196,7 @@ const BankRequestPage = () => {
                     )}
                     <button
                         onClick={() => navigate(`/bank-details/${row._id}`)}
-                        className="h-8 px-3 whitespace-nowrap bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition-all active:scale-95 flex items-center gap-2 text-xs font-bold border border-blue-200 shadow-sm ml-auto"
+                        className="h-8 px-3 whitespace-nowrap bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition-all active:scale-95 flex items-center gap-2 text-xs font-bold border border-blue-200 shadow-sm ml-auto cursor-pointer"
                         title="View Details"
                     >
                         <Eye size={14} /> View
@@ -244,9 +245,7 @@ const BankRequestPage = () => {
 
             <div className="bg-(--bg-box) rounded-2xl shadow-sm border border-(--bs-border) overflow-hidden p-4">
                 {loading ? (
-                    <div className="flex justify-center p-20">
-                        <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                    </div>
+                   <PageLoader/>
                 ) : (
                     <CommonDataTable
                         columns={columns}

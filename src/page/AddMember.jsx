@@ -125,5 +125,5 @@ const AddMember = ({ onClose }) => {
     </div>
   );
 };
-
+ 
 export default AddMember;

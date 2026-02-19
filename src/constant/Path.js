@@ -35,7 +35,8 @@ export const PathRoutes = {
     ADD_KYC: "/add-kyc",
     BANK_REQUESTS: "/bank-requests",
     BANK_DETAILS: "/bank-details/:id",
-    ADD_BANK: "/add-bank"
+    ADD_BANK: "/add-bank",
+    PRODUCT_VIEW_ID:"/product/view/:id",
 
 
 

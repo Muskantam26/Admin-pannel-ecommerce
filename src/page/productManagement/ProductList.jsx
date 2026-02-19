@@ -7,6 +7,7 @@ import ConfirmationModal from '../../Component/Model/ConfirmationModal';
 import Button from '../../Component/Btn';
 import { deleteProductApi, getAllProductsApi } from '../../api/product-api';
 import { toast } from 'react-toastify';
+import PageLoader from '../../Component/PageLoader';
 
 const ProductList = () => {
   const navigate = useNavigate();
@@ -127,17 +128,19 @@ const ProductList = () => {
       cell: (row) => (
         <div className="flex gap-2">
           <button
-            className="p-1.5 rounded-md hover:bg-blue-50 text-gray-500 hover:text-blue-600 transition-colors"
+            className="p-1.5 rounded-md hover:bg-blue-50 text-gray-500 hover:text-blue-600 transition-colors cursor-pointer"
             onClick={() => navigate(`/product/view/${row._id}`)}
             title="View Details"
           >
+            
             <Eye size={18} />
           </button>
           <button
-            className="p-1.5 rounded-md hover:bg-purple-50 text-gray-500 hover:text-purple-600 transition-colors"
+            className="p-1.5 rounded-md hover:bg-purple-50 text-gray-500 hover:text-purple-600 transition-colors cursor-pointer"
             onClick={() => navigate(`/product/edit/${row._id}`)}
             title="Edit Product"
           >
+
             <Edit size={18} />
           </button>
           <button
@@ -161,8 +164,8 @@ const ProductList = () => {
   ];
 
   return (
-    <div className="space-y-6">
-      <div className='flex flex-col md:flex-row md:items-end justify-between gap-4'>
+    <div className="space-y-6 ">
+      <div className='flex flex-col md:flex-row md:items-end justify-between gap-4 '>
         <div>
           <MainHeading
             title={"Product Inventory"}
@@ -177,12 +180,9 @@ const ProductList = () => {
         </button>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden p-3">
         {loading ? (
-          <div className="flex flex-col items-center justify-center p-12 text-gray-500">
-            <div className="w-8 h-8 border-2 border-gray-200 border-t-blue-600 rounded-full animate-spin mb-3"></div>
-            <p>Loading products...</p>
-          </div>
+         <PageLoader/>
         ) : (
           <CommonDataTable
             columns={columns}
@@ -195,6 +195,8 @@ const ProductList = () => {
         )}
       </div>
 
+              
+
       <ConfirmationModal
         isOpen={isDeleteOpen}
         onClose={() => setIsDeleteOpen(false)}
@@ -206,6 +208,8 @@ const ProductList = () => {
         cancelText="Cancel"
       />
     </div>
+
+    
   );
 }
 

@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { FaBell } from "react-icons/fa6";
 import { IoSettings } from "react-icons/io5";
-import img from "../assets/user.jpg";
+
 import { FaSearch } from "react-icons/fa";
 import { IoMdMenu } from "react-icons/io";
 
 const Header = ({ onMenuClick }) => {
-  const [user] = useState({
-    name: "Mr. Rajat Pradhan",
-    role: "Admin Manager",
-  });
+  /* REMOVED STATIC USER STATE */
+  const { name, role, profileImage, email } = useSelector((state) => state.auth);
+  const userImage = `https://ui-avatars.com/api/?name=${encodeURIComponent(name || "User")}&background=random&color=fff`;
+
 
   const [showUser, setShowUser] = useState(false);
 
@@ -53,20 +53,20 @@ const Header = ({ onMenuClick }) => {
             className="flex items-center gap-2 cursor-pointer hover:bg-(--bs-btn-hover) p-1 rounded-xl transition-all"
           >
             <img
-              src={img}
+              src={profileImage || userImage}
               alt="user"
               className="w-8 h-8 rounded-lg object-cover shadow-sm"
             />
             <div className="hidden md:block text-left">
-              <p className="text-[10px] text-(--text-second) font-medium uppercase tracking-wider">Admin</p>
+              <p className="text-[10px] text-(--text-second) font-medium uppercase tracking-wider">{role || "Admin"}</p>
             </div>
           </div>
 
           {showUser && (
             <div className="absolute top-full right-0 mt-2 w-48 bg-(--bg-box) shadow-xl rounded-xl border border-(--bs-border) p-2 z-50 animate-fade-in-up">
               <div className="px-3 py-2 border-b border-(--bs-border) mb-1">
-                <p className="font-semibold text-sm text-(--text-main)">{user.name}</p>
-                <p className="text-xs text-(--text-second)">{user.role}</p>
+                <p className="font-semibold text-sm text-(--text-main)">{name || "User"}</p>
+                <p className="text-xs text-(--text-second)">{email || "admin@example.com"}</p>
               </div>
               <button className="w-full text-left px-3 py-2 text-xs font-medium text-(--text-second) hover:bg-(--bs-btn-hover) hover:text-(--bs-primary) rounded-lg transition-colors">
                 Profile Settings

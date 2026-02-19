@@ -48,7 +48,7 @@ const AppRoutes = () => {
             <Route index element={<Dashboard />} />
             <Route path={PathRoutes.ADMIN_DASHBOARD} element={<Dashboard />} />
             <Route path={PathRoutes.SITE_MANAGER} element={<SiteManager />} />
-
+            
             <Route path="/product-management" element={<ProductManagement />} />
             <Route path="/product/view/:id" element={<ViewProduct />} />
             {/* <Route path="/product/edit" element={<EditProduct />} /> */}
