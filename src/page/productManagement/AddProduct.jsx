@@ -42,6 +42,7 @@ const AddProduct = () => {
     // Arrays
     colors: [],
     sizes: [],
+    customVariants: [],
     keyFeatures: [],
     specifications: [],
     metaKeywords: [],
@@ -64,6 +65,8 @@ const AddProduct = () => {
   // Inputs for Array Fields
   const [colorInput, setColorInput] = useState({ name: "", hex: "#000000" });
   const [sizeInput, setSizeInput] = useState("");
+  const [newVariantType, setNewVariantType] = useState("");
+  const [variantOptionInputs, setVariantOptionInputs] = useState({}); // Map of variantIndex -> input value
   const [featureInput, setFeatureInput] = useState("");
   const [specInput, setSpecInput] = useState({ label: "", value: "" });
   const [keywordInput, setKeywordInput] = useState("");
@@ -135,6 +138,7 @@ const AddProduct = () => {
 
         colors: data.colors || [],
         sizes: data.sizes || [],
+        customVariants: data.customVariants || [],
         keyFeatures: data.keyFeatures || [],
         specifications: data.specifications || [],
         metaKeywords: data.metaKeywords || [],
@@ -196,6 +200,48 @@ const AddProduct = () => {
   };
   const removeSize = (idx) => {
     setFormData(prev => ({ ...prev, sizes: prev.sizes.filter((_, i) => i !== idx) }));
+  };
+
+  // Custom Variants
+  const addVariantType = () => {
+    if (!newVariantType) return;
+    setFormData(prev => ({
+      ...prev,
+      customVariants: [...prev.customVariants, { variantType: newVariantType, options: [] }]
+    }));
+    setNewVariantType("");
+  };
+
+  const removeVariantType = (idx) => {
+    setFormData(prev => ({
+      ...prev,
+      customVariants: prev.customVariants.filter((_, i) => i !== idx)
+    }));
+    // Clean up input state
+    const newInputs = { ...variantOptionInputs };
+    delete newInputs[idx];
+    setVariantOptionInputs(newInputs);
+  };
+
+  const addVariantOption = (variantIdx) => {
+    const inputVal = variantOptionInputs[variantIdx];
+    if (!inputVal) return;
+
+    setFormData(prev => {
+      const newVariants = [...prev.customVariants];
+      newVariants[variantIdx].options.push(inputVal);
+      return { ...prev, customVariants: newVariants };
+    });
+
+    setVariantOptionInputs(prev => ({ ...prev, [variantIdx]: "" }));
+  };
+
+  const removeVariantOption = (variantIdx, optionIdx) => {
+    setFormData(prev => {
+      const newVariants = [...prev.customVariants];
+      newVariants[variantIdx].options = newVariants[variantIdx].options.filter((_, i) => i !== optionIdx);
+      return { ...prev, customVariants: newVariants };
+    });
   };
 
   // Features
@@ -518,7 +564,7 @@ const AddProduct = () => {
             </div>
 
             {/* Sizes */}
-            <div>
+            <div className="mb-6">
               <label className="text-sm font-medium text-gray-700 mb-2 block">Sizes</label>
               <div className="flex gap-2 mb-3">
                 <input placeholder="Add Size (e.g. XL)" value={sizeInput} onChange={e => setSizeInput(e.target.value)} className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500" />
@@ -529,6 +575,54 @@ const AddProduct = () => {
                   <span key={i} className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-full text-xs font-medium text-gray-700 border border-gray-200">
                     {s} <button onClick={() => removeSize(i)} className="text-gray-400 hover:text-red-500"><RxCrossCircled /></button>
                   </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Custom Variants */}
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-2 block">Custom Variants (Optional)</label>
+
+              {/* Add New Variant Type Input */}
+              <div className="flex gap-2 mb-4">
+                <input
+                  placeholder="Add New Variant Type (e.g. Volume, Material)"
+                  value={newVariantType}
+                  onChange={e => setNewVariantType(e.target.value)}
+                  className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500"
+                />
+                <button onClick={addVariantType} className="px-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-1 text-sm"><FiPlus /> Add Type</button>
+              </div>
+
+              {/* List of Variant Types */}
+              <div className="space-y-4">
+                {formData.customVariants.map((variant, vIdx) => (
+                  <div key={vIdx} className="border border-gray-200 rounded-lg p-3 bg-gray-50">
+                    <div className="flex justify-between items-center mb-2">
+                      <h4 className="text-sm font-bold text-gray-800">{variant.variantType}</h4>
+                      <button onClick={() => removeVariantType(vIdx)} className="text-red-500 hover:text-red-700 text-xs font-medium">Remove Group</button>
+                    </div>
+
+                    {/* Add Option to this Type */}
+                    <div className="flex gap-2 mb-2">
+                      <input
+                        placeholder={`Add ${variant.variantType} Option (e.g. 100ml)`}
+                        value={variantOptionInputs[vIdx] || ""}
+                        onChange={e => setVariantOptionInputs(prev => ({ ...prev, [vIdx]: e.target.value }))}
+                        className="flex-1 border border-gray-300 rounded-lg px-2 py-1.5 text-xs outline-none focus:border-blue-500"
+                      />
+                      <button onClick={() => addVariantOption(vIdx)} className="px-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition text-xs"><FiPlus /></button>
+                    </div>
+
+                    {/* Options List */}
+                    <div className="flex flex-wrap gap-2">
+                      {variant.options.map((opt, oIdx) => (
+                        <span key={oIdx} className="flex items-center gap-1 bg-white px-2 py-1 rounded border border-gray-200 text-xs text-gray-600 shadow-sm">
+                          {opt} <button onClick={() => removeVariantOption(vIdx, oIdx)} className="text-gray-400 hover:text-red-500"><RxCrossCircled /></button>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>

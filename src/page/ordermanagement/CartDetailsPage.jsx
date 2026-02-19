@@ -202,17 +202,14 @@ const CartDetailsPage = () => {
                                                     </div>
 
                                                     <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 mb-4">
-                                                        {item.variant?.color && (
-                                                            <div className="flex items-center gap-1.5 bg-(--bg-main) px-3 py-1 rounded-full border border-(--bs-border) text-xs font-semibold text-(--text-second)">
-                                                                <span className="w-2.5 h-2.5 rounded-full border border-gray-200" style={{ backgroundColor: item.variant.color.toLowerCase() }}></span>
-                                                                Color: {item.variant.color}
+                                                        {item.variants?.map((v, i) => (
+                                                            <div key={i} className="flex items-center gap-1.5 bg-(--bg-main) px-3 py-1 rounded-full border border-(--bs-border) text-xs font-semibold text-(--text-second)">
+                                                                {v.variantType === 'Color' && (
+                                                                    <span className="w-2.5 h-2.5 rounded-full border border-gray-200" style={{ backgroundColor: v.value.toLowerCase() }}></span>
+                                                                )}
+                                                                {v.variantType}: {v.value}
                                                             </div>
-                                                        )}
-                                                        {item.variant?.size && (
-                                                            <div className="flex items-center gap-1.5 bg-(--bg-main) px-3 py-1 rounded-full border border-(--bs-border) text-xs font-semibold text-(--text-second)">
-                                                                Size: {item.variant.size}
-                                                            </div>
-                                                        )}
+                                                        ))}
                                                         <div className="text-xs font-medium text-(--text-third)">
                                                             SKU/ID: <span className="font-mono">{item?.productId?.id || item?.productId?._id}</span>
                                                         </div>
