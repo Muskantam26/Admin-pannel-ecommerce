@@ -62,6 +62,11 @@ const ProductList = () => {
       width: "60px"
     },
     {
+      name: "ID",
+      cell: (row, index) => <span className="text-gray-500 font-medium">{row?.id}</span>,
+      width: "200px"
+    },
+    {
       name: "Product",
       selector: (row) => `${row.name} ${row.sku ? `(SKU: ${row.sku})` : ''}`,
       imageSelector: (row) => row.image || (row.images && row.images.length > 0 ? (typeof row.images[0] === 'string' ? row.images[0] : row.images[0].src) : null),
