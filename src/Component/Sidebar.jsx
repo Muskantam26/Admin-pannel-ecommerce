@@ -39,13 +39,15 @@ const manuItems = [
         id: PathRoutes.ADMIN_MANAGEMENT,
         label: "All Admins",
         icon: FaUserGroup,
-        allowedRoles: ['SUPER-ADMIN', 'ADMIN']
+        allowedRoles: ['SUPER-ADMIN', 'ADMIN'],
+        allowedPermissions: ['VIEW_ADMINS']
       },
       {
         id: PathRoutes.ADD_ADMIN, // Ensure this path exists in Path.js
         label: "Add Admin",
         icon: FiHome, // Using a placeholder icon or import FiPlus
-        allowedRoles: ['SUPER-ADMIN', 'ADMIN']
+        allowedRoles: ['SUPER-ADMIN', 'ADMIN'],
+        allowedPermissions: ['CREATE_ADMIN']
       }
     ]
   },
@@ -66,17 +68,20 @@ const manuItems = [
       {
         id: PathRoutes.PRODUCT_MANAGEMENT,
         label: "All Products",
-        icon: FaBoxOpen
+        icon: FaBoxOpen,
+        allowedPermissions: ['VIEW_PRODUCTS']
       },
       {
         id: PathRoutes.ADD_CATEGORY,
         label: "Categories",
-        icon: BiCategory
+        icon: BiCategory,
+        allowedPermissions: ['MANAGE_CATEGORIES']
       },
       {
         id: PathRoutes.SUB_CATEGORY,
         label: "Sub Category",
-        icon: BiCategory
+        icon: BiCategory,
+        allowedPermissions: ['MANAGE_SUB_CATEGORIES']
       }
     ]
 
@@ -99,12 +104,14 @@ const manuItems = [
       {
         id: PathRoutes.ORDER_MANAGEMENT,
         label: "All Orders",
-        icon: FaUserGroup
+        icon: FaUserGroup,
+        allowedPermissions: ['VIEW_ORDERS']
       },
       {
         id: PathRoutes.ALL_CARTS,
         label: "All Carts",
-        icon: FaBoxOpen
+        icon: FaBoxOpen,
+        allowedPermissions: ['VIEW_CARTS']
       }
     ]
   },
@@ -118,13 +125,15 @@ const manuItems = [
       {
         id: PathRoutes.ADD_DEPOSIT,
         label: "Manual Deposit",
-        icon: FiCreditCard
+        icon: FiCreditCard,
+        allowedPermissions: ['CREATE_DEPOSIT']
 
       },
       {
         id: PathRoutes.DEPOSIT_REQUESTS,
         label: "Deposit Requests",
-        icon: FaBoxOpen
+        icon: FaBoxOpen,
+        allowedPermissions: ['VIEW_DEPOSIT_REQUESTS']
       }
     ]
   },
@@ -139,22 +148,26 @@ const manuItems = [
       {
         id: PathRoutes.USER_MANAGEMENT,
         label: "All Users",
-        icon: FaUserGroup
+        icon: FaUserGroup,
+        allowedPermissions: ['VIEW_USERS']
       },
       {
         id: PathRoutes.KYC_REQUESTS,
         label: "KYC Requests",
-        icon: TbBrandOffice
+        icon: TbBrandOffice,
+        allowedPermissions: ['MANAGE_KYC']
       },
       {
         id: PathRoutes.BANK_REQUESTS,
         label: "Bank Requests",
-        icon: TbBrandOffice
+        icon: TbBrandOffice,
+        allowedPermissions: ['MANAGE_BANK']
       },
       {
         id: PathRoutes.ADDRESS_REQUESTS,
         label: "Address Requests", // Added Address Requests
-        icon: TbBrandOffice
+        icon: TbBrandOffice,
+        allowedPermissions: ['MANAGE_ADDRESS']
       }
     ]
 

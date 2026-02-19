@@ -62,7 +62,7 @@ const AppRoutes = () => {
             <Route path="/product/view/:id" element={<ViewProduct />} />
             {/* <Route path="/product/edit" element={<EditProduct />} /> */}
             <Route path={PathRoutes.ORDER_MANAGEMENT} element={<OrderManagement />} />
-            <Route path={PathRoutes.ORDERS_DETAILS} element={<ViewOrdersDetails />} />
+            <Route path={`${PathRoutes.ORDERS_DETAILS}/:id`} element={<ViewOrdersDetails />} />
             <Route path={PathRoutes.ALL_CARTS} element={<CartPage />} />
             <Route path={PathRoutes.CART_DETAILS} element={<CartDetailsPage />} />
             <Route path={PathRoutes.ADD_MEMBER} element={<AddMember />} />

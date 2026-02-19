@@ -1,72 +1,96 @@
 import React from 'react';
 import { Check } from 'lucide-react';
 
-const OrderProgressBar = () => {
+const OrderProgressBar = ({ status, trackHistory = [] }) => {
+  // Define standard order steps
   const steps = [
-    { label: 'Sampling', date: 'Wed, 11th Jan', status: 'completed' },
-    { label: 'Artwork', date: 'Sat, 13th Jan', status: 'completed' },
-    { label: 'Raw Material', date: 'Tus, 11th Jan', status: 'completed' },
-    { label: 'Packaging', date: 'Mon 16th Jan', status: 'completed' },
-    { label: 'Production', date: 'Expected by, Mon 17th', status: 'current' },
-    { label: 'QC', date: 'Expected by, Mon 18th', status: 'pending' },
-    { label: 'Dispatch', date: 'Expected by, Mon 06h', status: 'pending' },
+    { label: 'Pending', value: 'PENDING' },
+    { label: 'Placed', value: 'PLACED' },
+    { label: 'Confirmed', value: 'CONFIRMED' },
+    { label: 'Shipped', value: 'SHIPPED' },
+    { label: 'Delivered', value: 'DELIVERED' },
+    { label: 'Returned', value: 'RETURNED' },
   ];
 
-  return (
-    <div className="mt-5">
-      
+  // Helper to determine step status
+  const getStepStatus = (stepValue, index) => {
+    const statusOrder = ['PENDING', 'PLACED', 'PROCESSING', 'CONFIRMED', 'SHIPPED', 'DELIVERED', 'RETURNED'];
+    const currentStatusIndex = statusOrder.indexOf(status);
+    const stepIndex = statusOrder.indexOf(stepValue);
 
+    if (status === 'CANCELLED') {
+      // If cancelled, maybe show all as pending or handle specifically. 
+      // For now, let's keep it simple or show 'failed' style if we had one.
+      return 'pending';
+    }
+
+    // If status is RETURNED, everything should be green (completed) up to Delivered? 
+    // Or just Returned is green? Usually Returned means it WAS delivered then returned.
+    // Let's assume standard flow: PENDING -> ... -> DELIVERED -> RETURNED.
+    // So if current is RETURNED, everything before it (index < current) is completed.
+
+    if (stepIndex < currentStatusIndex) return 'completed';
+    if (stepIndex === currentStatusIndex) return 'completed'; // Current step is also completed state (Green tick)
+
+    return 'pending';
+  };
+
+  // Find date for a step from history if available
+  const getStepDate = (stepValue) => {
+    const historyItem = trackHistory.find(h => h.status === stepValue);
+    if (historyItem) {
+      return new Date(historyItem.changedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+    return '';
+  };
+
+  return (
+    <div className="mt-8 px-4">
       <div className="relative flex justify-between items-start">
         {/* The Connector Lines (Background Layer) */}
-        <div className="absolute top-13.75 left-0 w-full h-1 flex px-10">
-            {steps.map((step, index) => (
-                index < steps.length - 1 && (
-                    <div 
-                        key={index}
-                        className={`h-full flex-1 ${
-                            step.status === 'completed' && steps[index+1].status === 'completed' ? 'bg-emerald-500' : 
-                            step.status === 'completed' || step.status === 'current' ? 'bg-orange-400' : 'bg-gray-300'
-                        }`}
-                    />
-                )
-            ))}
+        <div className="absolute top-3 left-0 w-full h-1 flex px-10 -z-0">
+          {steps.map((step, index) => (
+            index < steps.length - 1 && (
+              <div
+                key={index}
+                className={`h-full flex-1 transition-colors duration-500 ${getStepStatus(step.value) === 'completed' ? 'bg-emerald-500' : 'bg-gray-200'
+                  }`}
+              />
+            )
+          ))}
         </div>
 
         {/* The Steps (Top Layer) */}
-        {steps.map((step, index) => (
-          <div key={index} className="relative z-10 flex flex-col items-center flex-1">
-            {/* Label */}
-            <span className={`text-sm font-medium mb-6 ${
-              step.status === 'completed' ? 'text-emerald-500' : 
-              step.status === 'current' ? 'text-(--text-second)' : 'text-(--text-second)'
-            }`}>
-              {step.label}
-            </span>
+        {steps.map((step, index) => {
+          const stepStatus = getStepStatus(step.value);
+          return (
+            <div key={index} className="relative z-10 flex flex-col items-center flex-1">
+              {/* Icon Circle */}
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 border-4 ${stepStatus === 'completed' ? 'border-emerald-500 bg-emerald-500' :
+                stepStatus === 'current' ? 'border-orange-200 bg-orange-500' : 'border-white bg-gray-200'
+                }`}>
+                {stepStatus === 'completed' ? (
+                  <Check className="w-4 h-4 text-white stroke-[3px]" />
+                ) : (
+                  <div className={`w-2 h-2 rounded-full ${stepStatus === 'current' ? 'bg-white' : ''}`} />
+                )}
+              </div>
 
+              {/* Label */}
+              <span className={`text-xs font-semibold mt-3 uppercase tracking-wider ${stepStatus === 'completed' ? 'text-emerald-600' :
+                stepStatus === 'current' ? 'text-orange-600' : 'text-gray-400'
+                }`}>
+                {step.label}
+              </span>
 
-
-            {/* Icon Circle */}
-            <div className={`w-6 h-6 rounded-full  flex items-center justify-center transition-colors duration-300 ${
-              step.status === 'completed' ? 'border-emerald-500 bg-emerald-500' : 
-              step.status === 'current' ? 'bg-orange-400' : 'bg-gray-300'
-            }`}>
-                
-              {step.status === 'completed' ? (
-                <Check className="w-3 h-3 text-(--text-white) stroke-[3px]" />
-              ) : (
-                <div className={`w-2 h-2 rounded-full ${step.status === 'current' ? 'bg-orange-400' : ''}`} />
-              )}
+              {/* Date */}
+              <span className="mt-1 text-[10px] text-gray-500 font-medium">
+                {getStepDate(step.value) || '-'}
+              </span>
             </div>
-
-            {/* Date */}
-            <span className="mt-6 text-xs text-(--text-second)  text-center px-2">
-              {step.date}
-            </span>
-          </div>    
-        ))}
+          );
+        })}
       </div>
-
-     
     </div>
   );
 };
