@@ -11,6 +11,16 @@ const CommonDataTable = ({
 }) => {
 
 
+  const customStyles = {
+    headCells: {
+      style: {
+        fontWeight: 'bold',
+        fontSize: '12px',
+        color: 'var(--text-main)',
+      },
+    },
+  };
+
   return (
     <>
       <DataTable
@@ -19,7 +29,7 @@ const CommonDataTable = ({
         pagination={false}
         selectableRows={selectable}
         responsive
-
+        customStyles={customStyles}
       />
 
       {/* Pagination */}
@@ -59,6 +69,8 @@ const CommonDataTable = ({
             Next
           </button>
         </div>
+ {/*  */}
+
       </div>
     </>
   );

@@ -10,6 +10,7 @@ import CommonDataTable from "../../Component/CommonDataTable";
 import { getAllCategoryApi, deleteCategoryApi } from "../../api/category-api";
 import ConfirmationModal from "../../Component/Model/ConfirmationModal";
 import ImagePreviewModal from "../../Component/Model/ImagePreviewModal";
+import PageLoader from "../../Component/PageLoader";
 
 const CategoryPage = () => {
     const [categories, setCategories] = useState([]);
@@ -137,14 +138,14 @@ const CategoryPage = () => {
                 <div className="flex gap-2">
                     <button
                         onClick={() => handleEdit(row._id)}
-                        className="text-blue-500 cursor-pointer hover:text-blue-700 p-2"
+                        className="text-blue-500 cursor-pointer hover:text-blue-700 p-2 cursor-pointer"
                         title="Edit"
                     >
                         <FaEdit size={16} />
                     </button>
                     <button
                         onClick={() => handleDelete(row._id)}
-                        className="text-red-500 cursor-pointer hover:text-red-700 p-2"
+                        className="text-red-500 cursor-pointer hover:text-red-700 p-2 cursor-pointer"
                         title="Delete"
                     >
                         <FaTrash size={16} />
@@ -184,7 +185,7 @@ const CategoryPage = () => {
                 </div>
 
                 {loading ? (
-                    <p className="text-center p-5">Loading...</p>
+                    <PageLoader/>
                 ) : (
                     <CommonDataTable
                         columns={columns}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../redux/slice/authSlice';
 import { hideLoader, showLoader } from '../redux/slice/loadingSlice';
 
@@ -12,7 +12,7 @@ import { FaMailBulk, FaLayerGroup } from "react-icons/fa";
 import { GoBell } from "react-icons/go";
 import { RiMailSendLine } from "react-icons/ri";
 import { BiCategory, BiLogOut } from "react-icons/bi";
-import img from "../assets/user.jpg"
+
 import { useNavigate, useLocation } from "react-router-dom";
 import { MainContent } from '../constant/MainContent';
 import { PathRoutes } from '../constant/Path';
@@ -159,11 +159,10 @@ const Sidebar = ({ open, setOpen }) => {
     }));
   };
 
-  const [user] = useState({
-    name: "Mr. Rajat Pradhan",
-    email: "rajatpradhan@gmail.com"
-
-  });
+  const { name, email, profileImage } = useSelector((state) => state.auth);
+  
+  // Dynamic Avatar based on name
+  const userImage = `https://ui-avatars.com/api/?name=${encodeURIComponent(name || "User")}&background=random&color=fff`;
 
   const handleNavigation = (id) => {
     if (id === "logout") {
@@ -264,6 +263,9 @@ const Sidebar = ({ open, setOpen }) => {
                             if (item.id) handleNavigation(item.id);
                           }
                         }}
+
+
+                        
                       >
                         <div className="flex items-center gap-3">
                           <Icon className={`text-lg ${isActive ? 'text-(--text-hover)' : 'text-(--text-third) group-hover:text-(--bs-primary)'} transition-colors`} />
@@ -276,7 +278,7 @@ const Sidebar = ({ open, setOpen }) => {
                           </div>
                         )}
                       </div>
-
+                              
                       {/* Render Submenu with Smooth Transition */}
                       <div
                         className={`ml-4 pl-4 border-l border-(--bs-border) overflow-hidden transition-all duration-300 ease-in-out
@@ -301,6 +303,8 @@ const Sidebar = ({ open, setOpen }) => {
                           </div>
                         ))}
                       </div>
+
+                   
                     </div>
                   )}
                 </div>
@@ -312,13 +316,13 @@ const Sidebar = ({ open, setOpen }) => {
           <div className="p-3 mt-auto border-t border-(--bs-border)">
             <div className="flex items-center gap-3 p-2 rounded-xl bg-(--bg-main) border border-(--bs-border)">
               <img
-                src={img}
+                src={profileImage || userImage}
                 alt="user"
                 className="w-9 h-9 rounded-lg object-cover"
               />
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-semibold text-(--text-main) truncate">{user.name}</p>
-                <p className="text-[10px] text-(--text-second) truncate">{user.email}</p>
+                <p className="text-xs font-semibold text-(--text-main) truncate">{name || "User"}</p>
+                <p className="text-[10px] text-(--text-second) truncate">{email || "admin@example.com"}</p>
               </div>
               <button
                 onClick={() => handleNavigation('logout')}

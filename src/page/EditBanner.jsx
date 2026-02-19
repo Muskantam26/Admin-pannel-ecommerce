@@ -29,7 +29,7 @@ const EditBanner = () => {
         remarks: 'Priority placement requested by marketing team.',
         images: [
             { id: 1, src: BannerImg },
-            { id: 2, src: BannerImg } // Mock existing images
+            { id: 2, src: BannerImg } 
         ]
     });
 

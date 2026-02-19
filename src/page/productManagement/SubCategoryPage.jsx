@@ -158,6 +158,7 @@ const SubCategoryPage = () => {
 
     return (
         <div className="p-5">
+            
             <div className="flex justify-between items-center mb-5">
                 <MainHeading
                     title={"Sub Category Management"}
@@ -183,7 +184,7 @@ const SubCategoryPage = () => {
                 </div>
 
                 {loading ? (
-                    <p className="text-center p-5">Loading...</p>
+                    <PageLoader/>
                 ) : (
                     <CommonDataTable
                         columns={columns}

@@ -25,6 +25,11 @@ export const PathRoutes = {
     PACKAGES: "/packages",
     NOTIFICATION: "/notification",
     MESSAGE: "/message",
+    PRODUCT_EDIT_ID: "/product/edit/:id",
+    CATEGORY_CREATE: "/category/create",
+    CATEGORY_EDIT_ID: "/category/edit/:id",
+    USER_PROFILE_EDIT: "/user-profile/edit/:id",
+    USER_PROFILE_DETAILS: "/user-profile/:id",
     KYC_DETAILS: "/kyc-details",
     USER_PROFILE_EDIT: "/user-profile/edit/:id",
     USER_PROFILE_DETAILS: "/user-profile/:id",
@@ -35,7 +40,8 @@ export const PathRoutes = {
     ADD_BANK: "/add-bank",
     ADDRESS_REQUESTS: "/address-requests",
     ADD_ADDRESS: "/add-address",
-    ADDRESS_DETAILS: "/address-details/:id"
+    ADDRESS_DETAILS: "/address-details/:id",
+    PRODUCT_VIEW_ID:"/product/view/:id",
 
 
 
