@@ -41,7 +41,9 @@ export const PathRoutes = {
     ADDRESS_REQUESTS: "/address-requests",
     ADD_ADDRESS: "/add-address",
     ADDRESS_DETAILS: "/address-details/:id",
-    PRODUCT_VIEW_ID:"/product/view/:id",
+    ALL_CARTS: "/all-carts",
+    CART_DETAILS: "/cart-details/:id",
+    PRODUCT_VIEW_ID: "/product/view/:id",
 
 
 

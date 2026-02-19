@@ -119,14 +119,14 @@ const AddProduct = () => {
     setLoading(true);
     const res = await getProductByIdApi(id);
     if (res.success) {
-      const data = res.data;
+      const data = res?.data?.data;
       setFormData({
-        name: data.name || "",
-        slug: data.slug || "",
-        price: data.price || "",
-        discount: typeof data.discount === 'object' ? (data.discount?.value || "") : (data.discount || ""),
-        taxIncluded: data.taxIncluded ?? true,
-        stock: data.stock || "",
+        name: data?.name || "",
+        slug: data?.slug || "",
+        price: data?.price || "",
+        discount: typeof data?.discount === 'object' ? (data?.discount?.value || "") : (data?.discount || ""),
+        taxIncluded: data?.taxIncluded ?? true,
+        stock: data?.stock || "",
         stockStatus: data.stock > 0 ? "in_stock" : "out_stock",
         category: data.category?._id || data.category || "", // Handle populated object or ID
         subCategory: data.subCategory || "",
