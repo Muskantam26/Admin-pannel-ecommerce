@@ -13,6 +13,9 @@ import KycRequestPage from "../page/UserManagement/KycRequestPage";
 import BankRequestPage from "../page/UserManagement/BankRequestPage";
 import BankDetailsPage from "../page/UserManagement/BankDetailsPage";
 import AddBankPage from "../page/UserManagement/AddBankPage";
+import AddressRequestPage from "../page/UserManagement/AddressRequestPage";
+import AddAddressPage from "../page/UserManagement/AddAddressPage";
+import AddressDetailsPage from "../page/UserManagement/AddressDetailsPage";
 import AddKycPage from "../page/UserManagement/AddKycPage";
 import KycDetailsPage from "../page/UserManagement/KycDetailsPage";
 
@@ -24,6 +27,7 @@ import SubCategoryPage from "../page/productManagement/SubCategoryPage";
 import CategoryForm from "../page/productManagement/CategoryForm";
 import CompanyPage from "../page/company/CompanyPage";
 import CompanyForm from "../page/company/CompanyForm";
+import DepositRequestPage from "../page/DepositRequestPage";
 import DepositPage from "../page/DepositPage";
 import Login from "../Component/Login";
 import Rewards from "../page/Rewards";
@@ -72,7 +76,12 @@ const AppRoutes = () => {
             <Route path={PathRoutes.MESSAGE} element={<Message />} />
             <Route path="/add-banner" element={<AddBanner />} />
             <Route path={PathRoutes.EDIT_BANNER} element={<EditBanner />} />
-            <Route path={PathRoutes.DEPOSITS} element={<DepositPage />} />
+
+            {/* Deposit Routes */}
+            <Route path={PathRoutes.DEPOSITS} element={<DepositRequestPage />} />
+            <Route path={PathRoutes.DEPOSIT_REQUESTS} element={<DepositRequestPage />} />
+            <Route path={PathRoutes.ADD_DEPOSIT} element={<DepositPage />} />
+
             <Route path={PathRoutes.USER_MANAGEMENT} element={<UserManagement />} />
             <Route path={PathRoutes.USER_PROFILE_EDIT} element={<UserProfileEditPage />} />
             <Route path={PathRoutes.USER_PROFILE_DETAILS} element={<UserProfileDetails />} />
@@ -82,6 +91,9 @@ const AppRoutes = () => {
             <Route path={PathRoutes.BANK_REQUESTS} element={<BankRequestPage />} />
             <Route path={PathRoutes.BANK_DETAILS} element={<BankDetailsPage />} />
             <Route path={PathRoutes.ADD_BANK} element={<AddBankPage />} />
+            <Route path={PathRoutes.ADDRESS_REQUESTS} element={<AddressRequestPage />} />
+            <Route path={PathRoutes.ADD_ADDRESS} element={<AddAddressPage />} />
+            <Route path={PathRoutes.ADDRESS_DETAILS} element={<AddressDetailsPage />} />
           </Route>{" "}
         </>
       ) : (

@@ -28,14 +28,14 @@ const ProductList = () => {
     setLoading(true);
     try {
       const res = await getAllProductsApi({ page: currentPage, limit: rowsPerPage });
-      if (res.products) {
-        setProducts(res.products);
-        setTotalPages(res.pagination?.totalPages || 0);
+      if (res.success) {
+        setProducts(res.data.products);
+        setTotalPages(res.data.pagination?.totalPages || 0);
       } else {
-        console.error("Failed to fetch products", res);
+        toast.error(res.message || "Failed to fetch products");
       }
     } catch (error) {
-      console.error("Error fetching products:", error);
+      toast.error(error.message || "Failed to fetch products");
     } finally {
       setLoading(false);
     }

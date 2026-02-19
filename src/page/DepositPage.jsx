@@ -1,274 +1,342 @@
-import React, { useEffect, useState } from "react";
-import CommonDataTable from "../Component/CommonDataTable";
-import { getAllDepositsApi, processDepositApi } from "../api/transaction-api";
-import { toast } from "react-toastify";
-import Loader from "../Component/PageLoader";
-import { CheckCircle, XCircle, Eye, RefreshCw } from "lucide-react";
-import { MainHeading } from "../Component/Heading";
+import React, { useState, useEffect } from 'react';
+import { Heading } from '../Component/Heading';
+import { useNavigate } from 'react-router-dom';
+import { FiArrowLeft, FiCheckCircle, FiUploadCloud, FiTrash2, FiUser, FiCreditCard, FiSearch, FiX, FiDollarSign } from 'react-icons/fi';
+import { uploadFile, convertToBase64 } from '../utils/fileUpload';
+import { depositFundApi } from '../api/transaction-api'; // Ensure this is exported from api
+import { searchUserApi } from '../api/user-api';
+import { toast } from 'react-toastify';
+import { FaIndianRupeeSign } from 'react-icons/fa6';
 
 const DepositPage = () => {
-    const [data, setData] = useState([]);
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
-    const rowsPerPage = 10;
 
-    // Modal States
-    const [showConfirmModal, setShowConfirmModal] = useState(false);
-    const [showCancelModal, setShowCancelModal] = useState(false);
-    const [selectedTx, setSelectedTx] = useState(null);
-    const [rejectReason, setRejectReason] = useState("");
-    const [previewImage, setPreviewImage] = useState(null);
+    // User Search State
+    const [searchQuery, setSearchQuery] = useState('');
+    const [userResults, setUserResults] = useState([]);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [isSearching, setIsSearching] = useState(false);
 
+    const [formData, setFormData] = useState({
+        amount: '',
+        type: 'DEPOSIT',
+        paymentMode: 'CASH',
+        transactionId: '',
+        remarks: '',
+        screenshot: null,
+        screenshotPreview: null
+    });
+
+    // Debounce Search
     useEffect(() => {
-        fetchDeposits();
-    }, []);
+        const timer = setTimeout(() => {
+            if (searchQuery.length >= 3 && !selectedUser) {
+                handleSearch();
+            } else if (searchQuery.length < 3) {
+                setUserResults([]);
+            }
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [searchQuery]);
 
-    const fetchDeposits = async () => {
-        setLoading(true);
-        const res = await getAllDepositsApi();
+    const handleSearch = async () => {
+        setIsSearching(true);
+        const res = await searchUserApi(searchQuery);
         if (res.success) {
-            setData(res.data);
+            setUserResults(res.data);
         } else {
-            toast.error(res.message);
+            setUserResults([]);
         }
-        setLoading(false);
+        setIsSearching(false);
     };
 
-    const handleAction = (tx, action) => {
-        setSelectedTx(tx);
-        if (action === "Confirm") {
-            setShowConfirmModal(true);
-        } else if (action === "Cancel") {
-            setRejectReason("");
-            setShowCancelModal(true);
-        }
+    const handleSelectUser = (user) => {
+        setSelectedUser(user);
+        setSearchQuery(''); // Clear search query to hide results
+        setUserResults([]);
     };
 
-    const submitProcess = async (status) => {
-        if (!selectedTx) return;
+    const handleClearUser = () => {
+        setSelectedUser(null);
+        setSearchQuery('');
+    };
 
-        if (status === "Cancelled" && !rejectReason.trim()) {
-            return toast.warning("Please enter a reason for cancellation.");
+    const handleFileChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const preview = URL.createObjectURL(file);
+        setFormData(prev => ({
+            ...prev,
+            screenshot: file,
+            screenshotPreview: preview
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!selectedUser) {
+            toast.error("Please search and select a user first");
+            return;
+        }
+        if (!formData.amount || Number(formData.amount) <= 0) {
+            toast.error("Please enter a valid amount");
+            return;
         }
 
         setLoading(true);
-        const payload = {
-            id: selectedTx._id,
-            status: status,
-            remarks: status === "Cancelled" ? rejectReason : "Confirmed by Admin"
-        };
+        try {
+            // Upload Screenshot if exists
+            let screenshotUrl = null;
+            if (formData.screenshot) {
+                const base64 = await convertToBase64(formData.screenshot);
+                screenshotUrl = await uploadFile(base64, "deposits");
+                if (!screenshotUrl) throw new Error("Screenshot upload failed");
+            }
 
-        const res = await processDepositApi(payload);
-        if (res.success) {
-            toast.success(res.message);
-            setShowConfirmModal(false);
-            setShowCancelModal(false);
-            fetchDeposits(); // Refresh data
-        } else {
-            toast.error(res.message);
+            // Submit Deposit
+            const payload = {
+                userId: selectedUser._id,
+                amount: formData.amount,
+                type: formData.type, // Send type (DEPOSIT/WITHDRAWAL)
+                paymentMode: formData.paymentMode,
+                transactionId: formData.transactionId || `ADMIN-${Date.now()}`,
+                remarks: formData.remarks,
+                screenShot: screenshotUrl
+            };
+
+            const res = await depositFundApi(payload);
+            if (res.success) {
+                toast.success(res.message);
+                navigate('/deposit-requests'); // Redirect to list
+            } else {
+                toast.error(res.message || "Failed to process transaction");
+            }
+
+        } catch (error) {
+            console.error("Deposit Error", error);
+            toast.error(error.message || "Something went wrong");
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
     };
-
-    // Pagination Logic
-    const totalPages = Math.ceil(data.length / rowsPerPage);
-    const paginatedData = data.slice(
-        (currentPage - 1) * rowsPerPage,
-        currentPage * rowsPerPage
-    );
-
-    const columns = [
-        {
-            name: "Date",
-            selector: (row) => new Date(row.createdAt).toLocaleDateString(),
-            sortable: true,
-            width: "120px"
-        },
-        {
-            name: "User",
-            selector: (row) => row.user?.username || row.user?.email || "N/A",
-            sortable: true,
-        },
-        {
-            name: "Amount",
-            selector: (row) => `₹${row.investment}`,
-            sortable: true,
-            width: "100px"
-        },
-        {
-            name: "Tx ID",
-            selector: (row) => row.transactionId || "N/A",
-            sortable: true,
-        },
-        {
-            name: "Mode",
-            selector: (row) => row.details?.paymentMode || "Manual",
-            sortable: true,
-            width: "100px"
-        },
-        {
-            name: "Screenshot",
-            cell: (row) => (
-                row.file ? (
-                    <button onClick={() => setPreviewImage(row.file)} className="text-blue-500 hover:text-blue-700">
-                        <Eye size={18} />
-                    </button>
-                ) : <span className="text-gray-400">-</span>
-            ),
-            center: true,
-            width: "80px"
-        },
-        {
-            name: "Status",
-            cell: (row) => {
-                let color = "bg-yellow-100 text-yellow-700";
-                if (row.status === "Confirmed") color = "bg-green-100 text-green-700";
-                if (row.status === "Cancelled") color = "bg-red-100 text-red-700";
-                return (
-                    <span className={`px-2 py-1 rounded-full text-xs font-semibold ${color}`}>
-                        {row.status}
-                    </span>
-                );
-            },
-            sortable: true,
-            width: "120px"
-        },
-        {
-            name: "Actions",
-            cell: (row) => (
-                row.status === "Pending" ? (
-                    <div className="flex gap-2">
-                        <button
-                            onClick={() => handleAction(row, "Confirm")}
-                            className="text-green-500 hover:text-green-700 p-1 bg-green-50 rounded-full"
-                            title="Confirm"
-                        >
-                            <CheckCircle size={18} />
-                        </button>
-                        <button
-                            onClick={() => handleAction(row, "Cancel")}
-                            className="text-red-500 hover:text-red-700 p-1 bg-red-50 rounded-full"
-                            title="Cancel"
-                        >
-                            <XCircle size={18} />
-                        </button>
-                    </div>
-                ) : (
-                    <span className="text-gray-400 text-xs">-</span>
-                )
-            ),
-            width: "100px",
-            center: true
-        },
-    ];
 
     return (
-
-        <>
-        <div className="flex justify-between items-center mb-5">
-                <MainHeading
-                    title={"Deposit Requests"}
-                    subtitle={"Manage all user deposit requests"}
-                />
-                <button onClick={fetchDeposits} className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition text-gray-600" title="Refresh Data">
-                    <RefreshCw size={18} className={loading ? "animate-spin" : ""} />
-                </button>
-            </div>
-        <div className="card w-full bg-white rounded-xl shadow-sm p-4 h-full flex flex-col">
-            <div className="flex-1 overflow-hidden">
-                {loading && <Loader />}
-                <CommonDataTable
-                    columns={columns}
-                    data={paginatedData}
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={setCurrentPage}
-                    rowsPerPage={rowsPerPage}
-                    selectable={true}
-                    showSearch={true}
-                />
-            </div>
-
-            {/* Confirm Modal */}
-            {showConfirmModal && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl animate-in fade-in zoom-in duration-200">
-                        <h3 className="text-lg font-bold mb-2">Confirm Deposit?</h3>
-                        <p className="text-gray-600 mb-6 text-sm">
-                            Are you sure you want to approve the deposit of <b>₹{selectedTx?.investment}</b> for {selectedTx?.user?.username}?
-                        </p>
-                        <div className="flex justify-end gap-3">
-                            <button
-                                onClick={() => setShowConfirmModal(false)}
-                                className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 text-sm font-medium"
-                            >
-                                No, Go Back
-                            </button>
-                            <button
-                                onClick={() => submitProcess("Confirmed")}
-                                className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 text-sm font-medium"
-                            >
-                                Yes, Approve
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* Cancel Modal */}
-            {showCancelModal && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl animate-in fade-in zoom-in duration-200">
-                        <h3 className="text-lg font-bold mb-2 text-red-600">Reject Deposit</h3>
-                        <p className="text-gray-600 mb-4 text-sm">
-                            Please provide a reason for rejecting this deposit.
-                        </p>
-                        <textarea
-                            className="w-full border border-gray-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-red-200 outline-none resize-none"
-                            rows="3"
-                            placeholder="Enter reason (e.g., Transaction ID mismatch, Invalid screenshot)..."
-                            value={rejectReason}
-                            onChange={(e) => setRejectReason(e.target.value)}
-                        ></textarea>
-                        <div className="flex justify-end gap-3 mt-4">
-                            <button
-                                onClick={() => setShowCancelModal(false)}
-                                className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 text-sm font-medium"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={() => submitProcess("Cancelled")}
-                                className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 text-sm font-medium"
-                            >
-                                Reject Deposit
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* Image Preview Modal */}
-            {previewImage && (
-                <div
-                    className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4"
-                    onClick={() => setPreviewImage(null)}
-                >
-                    <img
-                        src={previewImage}
-                        alt="Proof"
-                        className="max-w-full max-h-[90vh] rounded-lg shadow-2xl"
-                    />
-                    <button
-                        className="absolute top-4 right-4 text-white bg-black/50 p-2 rounded-full hover:bg-black/70"
-                        onClick={() => setPreviewImage(null)}
-                    >
-                        <XCircle size={24} />
+        <div className="pb-20 relative min-h-screen bg-[var(--bg-main)]">
+            {/* Header */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                <div className="flex items-center gap-3">
+                    <button onClick={() => navigate('/deposit-requests')} className="p-2 hover:bg-gray-100 rounded-lg transition-colors text-[var(--text-second)]">
+                        <FiArrowLeft size={22} />
                     </button>
+                    <div>
+                        <h1 className="text-2xl font-bold text-[var(--text-main)]">Add Manual Deposit</h1>
+                        <p className="text-[var(--text-second)] text-sm mt-0.5">Credit funds to user wallet manually.</p>
+                    </div>
                 </div>
-            )}
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                {/* Form Section */}
+                <div className="lg:col-span-2 space-y-6">
+
+                    {/* User Selection */}
+                    <div className="bg-[var(--bg-box)] rounded-2xl p-6 shadow-sm border border-[var(--bs-border)] relative">
+                        <Heading title="Select User" titleSize="text-lg font-bold text-[var(--text-main)] mb-4 flex items-center gap-2" icon={<FiUser />} />
+
+                        {!selectedUser ? (
+                            <div className="relative">
+                                <label className="block text-sm font-medium text-[var(--text-second)] mb-1">Search User (Username / ID / Email)</label>
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        className="w-full pl-10 pr-4 py-3 bg-[var(--bg-main)] border border-[var(--bs-border)] rounded-xl focus:ring-2 focus:ring-[var(--bs-primary)] outline-none text-[var(--text-main)] transition-all"
+                                        placeholder="Type to search..."
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        autoComplete="off"
+                                    />
+                                    <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-second)]" size={18} />
+                                    {isSearching && <div className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>}
+                                </div>
+
+                                {/* Search Results Dropdown */}
+                                {userResults.length > 0 && (
+                                    <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-[var(--bs-border)] rounded-xl shadow-lg z-20 max-h-60 overflow-y-auto">
+                                        {userResults.map(user => (
+                                            <div
+                                                key={user._id}
+                                                onClick={() => handleSelectUser(user)}
+                                                className="p-3 hover:bg-gray-50 cursor-pointer flex items-center gap-3 border-b border-gray-100 last:border-0 transition"
+                                            >
+                                                <img src={user.picture || "https://img.icons8.com/color/48/user-male--v2.png"} alt="" className="w-10 h-10 rounded-full object-cover bg-gray-100" />
+                                                <div>
+                                                    <p className="text-sm font-bold text-[var(--text-main)]">{user.username}</p>
+                                                    <p className="text-xs text-[var(--text-second)]">{user.email} • {user.id}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            /* Selected User Card */
+                            <div className="bg-blue-50/50 border border-blue-100 rounded-xl p-4 flex items-center justify-between">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 rounded-full border-2 border-white shadow-sm overflow-hidden bg-gray-200">
+                                        <img src={selectedUser.picture || "https://img.icons8.com/color/48/user-male--v2.png"} alt="" className="w-full h-full object-cover" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-bold text-[var(--text-main)]">{selectedUser.username}</p>
+                                        <p className="text-xs text-[var(--text-second)]">{selectedUser.email}</p>
+                                        <span className="text-[10px] bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded font-mono mt-1 inline-block">{selectedUser.id}</span>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={handleClearUser}
+                                    className="p-2 hover:bg-white rounded-lg text-red-500 transition shadow-sm border border-transparent hover:border-gray-200"
+                                    title="Remove User"
+                                >
+                                    <FiX size={18} />
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="bg-[var(--bg-box)] rounded-2xl p-6 shadow-sm border border-[var(--bs-border)]">
+                        <Heading title="Deposit Details" titleSize="text-lg font-bold text-[var(--text-main)] mb-4 flex items-center gap-2" icon={<FiCreditCard />} />
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label className="block text-sm font-medium text-[var(--text-second)] mb-1">Amount (₹) <span className="text-red-500">*</span></label>
+                                <div className="relative">
+                                    <FaIndianRupeeSign className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-second)]" />
+                                    <input
+                                        type="number"
+                                        className="w-full pl-10 pr-4 py-3 bg-[var(--bg-main)] border border-[var(--bs-border)] rounded-xl focus:ring-2 focus:ring-[var(--bs-primary)] outline-none text-[var(--text-main)]"
+                                        placeholder="0.00"
+                                        value={formData.amount}
+                                        onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                                        required
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-[var(--text-second)] mb-1">Transaction Type</label>
+                                <select
+                                    className="w-full px-4 py-3 bg-[var(--bg-main)] border border-[var(--bs-border)] rounded-xl focus:ring-2 focus:ring-[var(--bs-primary)] outline-none text-[var(--text-main)] appearance-none"
+                                    value={formData.type}
+                                    onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                                >
+                                    <option value="DEPOSIT">Deposit (Credit)</option>
+                                    <option value="WITHDRAWAL">Withdrawal (Debit)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-[var(--text-second)] mb-1">Payment Mode</label>
+                                <select
+                                    className="w-full px-4 py-3 bg-[var(--bg-main)] border border-[var(--bs-border)] rounded-xl focus:ring-2 focus:ring-[var(--bs-primary)] outline-none text-[var(--text-main)] appearance-none"
+                                    value={formData.paymentMode}
+                                    onChange={(e) => setFormData({ ...formData, paymentMode: e.target.value })}
+                                >
+                                    <option value="CASH">CASH</option>
+                                    <option value="BANK_TRANSFER">BANK TRANSFER</option>
+                                    <option value="UPI">UPI</option>
+                                    <option value="MANUAL">MANUAL ADJUSTMENT</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-[var(--text-second)] mb-1">Transaction ID (Optional)</label>
+                                <input
+                                    type="text"
+                                    className="w-full px-4 py-3 bg-[var(--bg-main)] border border-[var(--bs-border)] rounded-xl focus:ring-2 focus:ring-[var(--bs-primary)] outline-none text-[var(--text-main)]"
+                                    placeholder="Enter Tx ID or Leave Blank"
+                                    value={formData.transactionId}
+                                    onChange={(e) => setFormData({ ...formData, transactionId: e.target.value })}
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-[var(--text-second)] mb-1">Remarks (Optional)</label>
+                                <input
+                                    type="text"
+                                    className="w-full px-4 py-3 bg-[var(--bg-main)] border border-[var(--bs-border)] rounded-xl focus:ring-2 focus:ring-[var(--bs-primary)] outline-none text-[var(--text-main)]"
+                                    placeholder="Any notes..."
+                                    value={formData.remarks}
+                                    onChange={(e) => setFormData({ ...formData, remarks: e.target.value })}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Screenshot Upload */}
+                        <div>
+                            <label className="block text-sm font-medium text-[var(--text-second)] mb-2">Screenshot (Optional)</label>
+                            <div className="border-2 border-dashed border-[var(--bs-border)] rounded-xl p-4 text-center hover:bg-[var(--bg-main)] transition cursor-pointer relative overflow-hidden h-40 flex items-center justify-center bg-[var(--bg-box)]">
+                                {formData.screenshotPreview ? (
+                                    <>
+                                        <img src={formData.screenshotPreview} alt="Screenshot" className="absolute inset-0 w-full h-full object-contain p-2" />
+                                        <button
+                                            type="button"
+                                            onClick={() => setFormData({ ...formData, screenshot: null, screenshotPreview: null })}
+                                            className="absolute top-2 right-2 bg-red-500 text-white p-1.5 rounded-lg shadow-sm z-10 hover:bg-red-600 transition"
+                                        >
+                                            <FiTrash2 size={14} />
+                                        </button>
+                                    </>
+                                ) : (
+                                    <div className="flex flex-col items-center">
+                                        <div className="bg-blue-50 p-3 rounded-full mb-2">
+                                            <FiUploadCloud className="text-blue-500" size={24} />
+                                        </div>
+                                        <span className="text-sm font-medium text-[var(--text-main)]">Click to Upload Proof</span>
+                                        <span className="text-xs text-[var(--text-second)] mt-1">JPG, PNG (Max 5MB)</span>
+                                        <input
+                                            type="file"
+                                            className="absolute inset-0 opacity-0 cursor-pointer"
+                                            accept="image/*"
+                                            onChange={handleFileChange}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Submit Section */}
+                <div className="lg:col-span-1">
+                    <div className="bg-[var(--bg-box)] rounded-2xl p-6 shadow-sm border border-[var(--bs-border)] sticky top-6">
+                        <Heading title="Action" titleSize="text-lg font-bold text-[var(--text-main)] mb-4" />
+                        <p className="text-sm text-[var(--text-second)] mb-6">
+                            By clicking submit, the funds will be <strong>immediately credited</strong> to the user's wallet.
+                        </p>
+
+                        <button
+                            onClick={handleSubmit}
+                            disabled={loading}
+                            className="w-full py-3 bg-(--btn-hover) hover:opacity-90 text-white rounded-xl font-bold transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex justify-center items-center gap-2"
+                        >
+                            {loading ? (
+                                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                            ) : (
+                                <>
+                                    <FiCheckCircle size={18} /> Submit & Credit
+                                </>
+                            )}
+                        </button>
+
+                        <button
+                            onClick={() => navigate('/deposit-requests')}
+                            disabled={loading}
+                            className="w-full mt-3 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-bold transition-all flex justify-center items-center gap-2"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
-        </>
     );
 };
 

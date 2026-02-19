@@ -166,7 +166,7 @@ const KycDetailsPage = () => {
                             <button
                                 onClick={triggerApprove}
                                 disabled={actionLoading}
-                                className="w-full py-3.5 bg-[var(--bs-btn-forth)] hover:opacity-90 text-white rounded-xl font-bold transition shadow-lg shadow-blue-500/20 flex justify-center items-center gap-2"
+                                className="w-full py-3.5 bg-(--btn-hover) hover:opacity-90 text-white rounded-xl font-bold transition shadow-lg shadow-blue-500/20 flex justify-center items-center gap-2"
                             >
                                 <FiCheckCircle size={18} /> Approve Request
                             </button>

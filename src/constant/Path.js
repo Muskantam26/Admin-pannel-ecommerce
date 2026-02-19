@@ -1,6 +1,8 @@
 export const PathRoutes = {
     HOME_PAGE: "/",
-    DEPOSITS: "/deposits",
+    DEPOSITS: "/deposits", // Keeping for backward compatibility if needed, but prefer DEPOSIT_REQUESTS
+    DEPOSIT_REQUESTS: "/deposit-requests",
+    ADD_DEPOSIT: "/add-deposit",
     ADMIN_LOGIN: "/admin-login",
     ADMIN_DASHBOARD: "/dashboard",
     SITE_MANAGER: "/site-manager",
@@ -30,7 +32,10 @@ export const PathRoutes = {
     ADD_KYC: "/add-kyc",
     BANK_REQUESTS: "/bank-requests",
     BANK_DETAILS: "/bank-details/:id",
-    ADD_BANK: "/add-bank"
+    ADD_BANK: "/add-bank",
+    ADDRESS_REQUESTS: "/address-requests",
+    ADD_ADDRESS: "/add-address",
+    ADDRESS_DETAILS: "/address-details/:id"
 
 
 

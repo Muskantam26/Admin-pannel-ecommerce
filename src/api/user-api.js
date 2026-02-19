@@ -67,3 +67,13 @@ export const searchUserApi = async (query) => {
         return { success: false, message: error.response?.data?.message || "Error searching user" };
     }
 };
+
+// Change User Password
+export const changePasswordApi = async (data) => {
+    try {
+        const res = await Axios.put(`/admin/change-user-password`, data);
+        return res.data;
+    } catch (error) {
+        return { success: false, message: error.response?.data?.message || "Failed to change password" };
+    }
+};

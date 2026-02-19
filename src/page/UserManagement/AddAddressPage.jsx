@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Heading } from '../../Component/Heading';
-import { FiArrowLeft, FiCheckCircle, FiUser, FiSearch, FiX, FiCreditCard } from 'react-icons/fi';
-import { createBankByAdminApi } from '../../api/bank-api';
+import { FiArrowLeft, FiCheckCircle, FiUser, FiSearch, FiX, FiMapPin } from 'react-icons/fi';
+import { createAddressByAdminApi } from '../../api/address-api';
 import { searchUserApi } from '../../api/user-api';
 import { toast } from 'react-toastify';
 
-const AddBankPage = () => {
+const AddAddressPage = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
@@ -17,18 +17,17 @@ const AddBankPage = () => {
     const [isSearching, setIsSearching] = useState(false);
 
     const [formData, setFormData] = useState({
-        bankName: '',
-        accountNumber: '',
-        ifscCode: '',
-        accountHolderName: '',
-        branchName: '',
-        upiId: ''
+        name: '',
+        mobile: '',
+        pincode: '',
+        locality: '',
+        address: '',
+        city: '',
+        state: '',
+        landmark: '',
+        alternatePhone: '',
+        addressType: 'HOME'
     });
-
-    const [ifscLoading, setIfscLoading] = useState(false);
-
-    const [verifyingAccount, setVerifyingAccount] = useState(false);
-    const [verifyingUpi, setVerifyingUpi] = useState(false);
 
     // Debounce Search
     useEffect(() => {
@@ -41,103 +40,6 @@ const AddBankPage = () => {
         }, 500);
         return () => clearTimeout(timer);
     }, [searchQuery]);
-
-    // IFSC Auto-fill
-    useEffect(() => {
-        const fetchBankDetails = async () => {
-            const ifsc = formData.ifscCode.toUpperCase();
-            if (ifsc.length === 11) {
-                setIfscLoading(true);
-                try {
-                    // Use a direct fetch or axios without the base URL interceptor if possible
-                    // Or just use fetch to avoid axios instance issues
-                    const response = await fetch(`https://ifsc.razorpay.com/${ifsc}`);
-                    if (response.ok) {
-                        const data = await response.json();
-                        setFormData(prev => ({
-                            ...prev,
-                            bankName: data.BANK,
-                            branchName: data.BRANCH
-                        }));
-                        toast.success("Bank Details Found!");
-                    } else {
-                        toast.error("Invalid IFSC Code");
-                        setFormData(prev => ({
-                            ...prev,
-                            bankName: '',
-                            branchName: ''
-                        }));
-                    }
-                } catch (error) {
-                    console.error("IFSC Error", error);
-                    toast.error("Error fetching bank details");
-                } finally {
-                    setIfscLoading(false);
-                }
-            }
-        };
-
-        const timeout = setTimeout(() => {
-            if (formData.ifscCode.length === 11) {
-                fetchBankDetails();
-            }
-        }, 500); // 500ms debounce for IFSC
-
-        return () => clearTimeout(timeout);
-    }, [formData.ifscCode]);
-
-    // Mock Account Number Verification
-    useEffect(() => {
-        const verifyAccount = () => {
-            if (formData.accountNumber.length > 8) {
-                setVerifyingAccount(true);
-                setTimeout(() => {
-                    setVerifyingAccount(false);
-                    if (selectedUser) {
-                        setFormData(prev => ({ ...prev, accountHolderName: selectedUser.username }));
-                        toast.success("Account Holder Verified");
-                    } else {
-                        toast.error("Please select a user to verify account");
-                    }
-                }, 1500);
-            }
-        };
-
-        const timeout = setTimeout(() => {
-            if (formData.accountNumber.length > 8) {
-                verifyAccount();
-            }
-        }, 1000);
-
-        return () => clearTimeout(timeout);
-    }, [formData.accountNumber, selectedUser]); // Removed formData.accountHolderName to allow overwrite
-
-    // Mock UPI Verification
-    useEffect(() => {
-        const verifyUpi = () => {
-            if (formData.upiId.length > 5 && formData.upiId.includes('@')) {
-                setVerifyingUpi(true);
-                setTimeout(() => {
-                    setVerifyingUpi(false);
-                    if (selectedUser) {
-                        setFormData(prev => ({ ...prev, accountHolderName: selectedUser.username }));
-                        toast.success("UPI ID Verified");
-                    } else {
-                        toast.error("Please select a user to verify UPI");
-                    }
-                }, 1500);
-            }
-        };
-
-        const timeout = setTimeout(() => {
-            if (formData.upiId.length > 5 && formData.upiId.includes('@')) {
-                verifyUpi();
-            }
-        }, 1000);
-
-        return () => clearTimeout(timeout);
-    }, [formData.upiId, selectedUser]);
-
 
     const handleSearch = async () => {
         setIsSearching(true);
@@ -152,7 +54,7 @@ const AddBankPage = () => {
 
     const handleSelectUser = (user) => {
         setSelectedUser(user);
-        // setFormData(prev => ({ ...prev, accountHolderName: user.username })); // Removed auto-fill on select to simulate fetch
+        setFormData(prev => ({ ...prev, name: user.fullName || user.username, mobile: user.mobile }));
         setSearchQuery('');
         setUserResults([]);
     };
@@ -173,7 +75,7 @@ const AddBankPage = () => {
             toast.error("Please search and select a user first");
             return;
         }
-        if (!formData.bankName || !formData.accountNumber || !formData.ifscCode || !formData.accountHolderName) {
+        if (!formData.name || !formData.mobile || !formData.pincode || !formData.locality || !formData.address || !formData.city || !formData.state) {
             toast.error("Please fill all required fields");
             return;
         }
@@ -185,15 +87,15 @@ const AddBankPage = () => {
                 ...formData
             };
 
-            const res = await createBankByAdminApi(payload);
+            const res = await createAddressByAdminApi(payload);
             if (res.success) {
-                toast.success("Bank Details Added Successfully");
-                navigate('/bank-requests');
+                toast.success("Address Added Successfully");
+                navigate('/address-requests');
             } else {
-                toast.error(res.message || "Failed to add bank details");
+                toast.error(res.message || "Failed to add address");
             }
         } catch (error) {
-            console.error("Add Bank Error", error);
+            console.error("Add Address Error", error);
             toast.error("Something went wrong");
         } finally {
             setLoading(false);
@@ -205,12 +107,12 @@ const AddBankPage = () => {
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                 <div className="flex items-center gap-3">
-                    <button onClick={() => navigate('/bank-requests')} className="p-2 hover:bg-gray-100 rounded-lg transition-colors text-[var(--text-second)]">
+                    <button onClick={() => navigate('/address-requests')} className="p-2 hover:bg-gray-100 rounded-lg transition-colors text-[var(--text-second)]">
                         <FiArrowLeft size={22} />
                     </button>
                     <div>
-                        <h1 className="text-2xl font-bold text-[var(--text-main)]">Add Bank Details</h1>
-                        <p className="text-[var(--text-second)] text-sm mt-0.5">Manually add bank account for a user.</p>
+                        <h1 className="text-2xl font-bold text-[var(--text-main)]">Add Address</h1>
+                        <p className="text-[var(--text-second)] text-sm mt-0.5">Manually add address for a user.</p>
                     </div>
                 </div>
             </div>
@@ -283,90 +185,118 @@ const AddBankPage = () => {
                     </div>
 
                     <div className="bg-[var(--bg-box)] rounded-2xl p-6 shadow-sm border border-[var(--bs-border)]">
-                        <Heading title="Bank Information" titleSize="text-lg font-bold text-[var(--text-main)] mb-4 flex items-center gap-2" icon={<FiCreditCard />} />
+                        <Heading title="Address Information" titleSize="text-lg font-bold text-[var(--text-main)] mb-4 flex items-center gap-2" icon={<FiMapPin />} />
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text-second)] mb-1">Bank Name <span className="text-red-500">*</span></label>
+                                <label className="block text-sm font-medium text-[var(--text-second)] mb-1">Name <span className="text-red-500">*</span></label>
                                 <input
                                     type="text"
-                                    name="bankName"
+                                    name="name"
                                     className="w-full px-4 py-3 bg-[var(--bg-main)] border border-[var(--bs-border)] rounded-xl focus:ring-2 focus:ring-[var(--bs-primary)] outline-none text-[var(--text-main)]"
-                                    placeholder="Enter Bank Name"
-                                    value={formData.bankName}
+                                    placeholder="Enter Name"
+                                    value={formData.name}
                                     onChange={handleChange}
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text-second)] mb-1">Branch Name</label>
+                                <label className="block text-sm font-medium text-[var(--text-second)] mb-1">Mobile <span className="text-red-500">*</span></label>
                                 <input
                                     type="text"
-                                    name="branchName"
+                                    name="mobile"
                                     className="w-full px-4 py-3 bg-[var(--bg-main)] border border-[var(--bs-border)] rounded-xl focus:ring-2 focus:ring-[var(--bs-primary)] outline-none text-[var(--text-main)]"
-                                    placeholder="Enter Branch Name"
-                                    value={formData.branchName}
+                                    placeholder="Enter Mobile No"
+                                    value={formData.mobile}
                                     onChange={handleChange}
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text-second)] mb-1">Account Holder Name <span className="text-red-500">*</span></label>
+                                <label className="block text-sm font-medium text-[var(--text-second)] mb-1">Pincode <span className="text-red-500">*</span></label>
                                 <input
                                     type="text"
-                                    name="accountHolderName"
+                                    name="pincode"
                                     className="w-full px-4 py-3 bg-[var(--bg-main)] border border-[var(--bs-border)] rounded-xl focus:ring-2 focus:ring-[var(--bs-primary)] outline-none text-[var(--text-main)]"
-                                    placeholder="Enter Account Holder Name"
-                                    value={formData.accountHolderName}
+                                    placeholder="Enter Pincode"
+                                    value={formData.pincode}
                                     onChange={handleChange}
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text-second)] mb-1">Account Number <span className="text-red-500">*</span></label>
-                                <div className="relative">
-                                    <input
-                                        type="text"
-                                        name="accountNumber"
-                                        className="w-full px-4 py-3 bg-[var(--bg-main)] border border-[var(--bs-border)] rounded-xl focus:ring-2 focus:ring-[var(--bs-primary)] outline-none text-[var(--text-main)] pr-10"
-                                        placeholder="Enter Account Number"
-                                        value={formData.accountNumber}
-                                        onChange={handleChange}
-                                    />
-                                    {verifyingAccount && (
-                                        <div className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                                    )}
-                                </div>
+                                <label className="block text-sm font-medium text-[var(--text-second)] mb-1">Locality <span className="text-red-500">*</span></label>
+                                <input
+                                    type="text"
+                                    name="locality"
+                                    className="w-full px-4 py-3 bg-[var(--bg-main)] border border-[var(--bs-border)] rounded-xl focus:ring-2 focus:ring-[var(--bs-primary)] outline-none text-[var(--text-main)]"
+                                    placeholder="Enter Locality"
+                                    value={formData.locality}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className="md:col-span-2">
+                                <label className="block text-sm font-medium text-[var(--text-second)] mb-1">Address Area/Street <span className="text-red-500">*</span></label>
+                                <textarea
+                                    name="address"
+                                    className="w-full px-4 py-3 bg-[var(--bg-main)] border border-[var(--bs-border)] rounded-xl focus:ring-2 focus:ring-[var(--bs-primary)] outline-none text-[var(--text-main)] min-h-[100px]"
+                                    placeholder="Enter Address"
+                                    value={formData.address}
+                                    onChange={handleChange}
+                                />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text-second)] mb-1">IFSC Code <span className="text-red-500">*</span></label>
-                                <div className="relative">
-                                    <input
-                                        type="text"
-                                        name="ifscCode"
-                                        className="w-full px-4 py-3 bg-[var(--bg-main)] border border-[var(--bs-border)] rounded-xl focus:ring-2 focus:ring-[var(--bs-primary)] outline-none text-[var(--text-main)] uppercase pr-10"
-                                        placeholder="Enter IFSC Code"
-                                        value={formData.ifscCode}
-                                        onChange={handleChange}
-                                        maxLength={11}
-                                    />
-                                    {ifscLoading && (
-                                        <div className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                                    )}
-                                </div>
+                                <label className="block text-sm font-medium text-[var(--text-second)] mb-1">City <span className="text-red-500">*</span></label>
+                                <input
+                                    type="text"
+                                    name="city"
+                                    className="w-full px-4 py-3 bg-[var(--bg-main)] border border-[var(--bs-border)] rounded-xl focus:ring-2 focus:ring-[var(--bs-primary)] outline-none text-[var(--text-main)]"
+                                    placeholder="Enter City"
+                                    value={formData.city}
+                                    onChange={handleChange}
+                                />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text-second)] mb-1">UPI ID (Optional)</label>
-                                <div className="relative">
-                                    <input
-                                        type="text"
-                                        name="upiId"
-                                        className="w-full px-4 py-3 bg-[var(--bg-main)] border border-[var(--bs-border)] rounded-xl focus:ring-2 focus:ring-[var(--bs-primary)] outline-none text-[var(--text-main)] pr-10"
-                                        placeholder="Enter UPI ID"
-                                        value={formData.upiId}
-                                        onChange={handleChange}
-                                    />
-                                    {verifyingUpi && (
-                                        <div className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                                    )}
-                                </div>
+                                <label className="block text-sm font-medium text-[var(--text-second)] mb-1">State <span className="text-red-500">*</span></label>
+                                <input
+                                    type="text"
+                                    name="state"
+                                    className="w-full px-4 py-3 bg-[var(--bg-main)] border border-[var(--bs-border)] rounded-xl focus:ring-2 focus:ring-[var(--bs-primary)] outline-none text-[var(--text-main)]"
+                                    placeholder="Enter State"
+                                    value={formData.state}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-[var(--text-second)] mb-1">Landmark</label>
+                                <input
+                                    type="text"
+                                    name="landmark"
+                                    className="w-full px-4 py-3 bg-[var(--bg-main)] border border-[var(--bs-border)] rounded-xl focus:ring-2 focus:ring-[var(--bs-primary)] outline-none text-[var(--text-main)]"
+                                    placeholder="Enter Landmark"
+                                    value={formData.landmark}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-[var(--text-second)] mb-1">Alternate Phone</label>
+                                <input
+                                    type="text"
+                                    name="alternatePhone"
+                                    className="w-full px-4 py-3 bg-[var(--bg-main)] border border-[var(--bs-border)] rounded-xl focus:ring-2 focus:ring-[var(--bs-primary)] outline-none text-[var(--text-main)]"
+                                    placeholder="Enter Alt Phone"
+                                    value={formData.alternatePhone}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-[var(--text-second)] mb-1">Address Type</label>
+                                <select
+                                    name="addressType"
+                                    className="w-full px-4 py-3 bg-[var(--bg-main)] border border-[var(--bs-border)] rounded-xl focus:ring-2 focus:ring-[var(--bs-primary)] outline-none text-[var(--text-main)]"
+                                    value={formData.addressType}
+                                    onChange={handleChange}
+                                >
+                                    <option value="HOME">HOME</option>
+                                    <option value="WORK">WORK</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -377,7 +307,7 @@ const AddBankPage = () => {
                     <div className="bg-[var(--bg-box)] rounded-2xl p-6 shadow-sm border border-[var(--bs-border)] sticky top-6">
                         <Heading title="Action" titleSize="text-lg font-bold text-[var(--text-main)] mb-4" />
                         <p className="text-sm text-[var(--text-second)] mb-6">
-                            The bank details will be added and automatically marked as <strong>Verified</strong>.
+                            The address details will be added and automatically marked as <strong>Verified</strong>.
                         </p>
 
                         <button
@@ -389,13 +319,13 @@ const AddBankPage = () => {
                                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                             ) : (
                                 <>
-                                    <FiCheckCircle size={18} /> Add Bank
+                                    <FiCheckCircle size={18} /> Add Address
                                 </>
                             )}
                         </button>
 
                         <button
-                            onClick={() => navigate('/bank-requests')}
+                            onClick={() => navigate('/address-requests')}
                             disabled={loading}
                             className="w-full mt-3 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-bold transition-all flex justify-center items-center gap-2"
                         >
@@ -408,4 +338,4 @@ const AddBankPage = () => {
     );
 };
 
-export default AddBankPage;
+export default AddAddressPage;

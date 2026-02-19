@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import { Heading, MainHeading } from '../Component/Heading'
+import { MainContent } from '../constant/MainContent';
 import InputBox from '../Component/InputBox';
 import UserCards from '../Component/UserCards'
 import { CgProfile } from 'react-icons/cg'
 import CommonDataTable from '../Component/CommonDataTable'
-import { Eye, Pencil, User, Lock, Unlock } from 'lucide-react'
+import { Eye, Pencil, User, Lock, Unlock, LogIn, Key } from 'lucide-react'
 import { RiDeleteBin6Line, RiProfileFill } from 'react-icons/ri'
 import Button, { ActionButton } from '../Component/Btn'
 import Modal from '../Component/Model/Modal'
 import AddMember from './AddMember'
-import { getAllUsersApi, toggleUserBlockApi, toggleUserWithdrawalApi } from "../api/user-api";
-import { toast } from "react-toastify";
+import ChangePassword from './ChangePassword'
 import { useNavigate } from 'react-router-dom';
 import ConfirmationModal from '../Component/Model/ConfirmationModal';
+import { getAllUsersApi, toggleUserBlockApi, toggleUserWithdrawalApi, loginAsUserApi } from "../api/user-api";
+import { toast } from "react-toastify";
+
 
 const UserManagement = () => {
   const navigate = useNavigate();
@@ -20,6 +23,8 @@ const UserManagement = () => {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [isAddUserOpen, setIsAddUserOpen] = useState(false);
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
+  const [selectedUserForPassword, setSelectedUserForPassword] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [modalConfig, setModalConfig] = useState({ isOpen: false, type: '', data: null });
   const rowsPerPage = 10;
@@ -54,13 +59,20 @@ const UserManagement = () => {
       case 'withdrawal':
         res = await toggleUserWithdrawalApi(data.id);
         break;
+      case 'login':
+        res = await loginAsUserApi(data.id);
+        break;
       default:
         return;
     }
 
     if (res?.success) {
       toast.success(res.message);
-      fetchUsers();
+      if (type === 'login') {
+        window.open(`${MainContent.appURL}/login`, '_blank');
+      } else {
+        fetchUsers();
+      }
     } else {
       toast.error(res?.message || "Action Failed");
     }
@@ -112,7 +124,7 @@ const UserManagement = () => {
       name: "Status",
       cell: (row) => (
         <div className="flex gap-1">
-          {row.active?.isBlocked ? (
+          {row.active?.isActive ? (
             <span className="px-2 py-1 rounded-full text-xs bg-red-100 text-red-600 font-medium">Blocked</span>
           ) : (
             <span className="px-2 py-1 rounded-full text-xs bg-green-100 text-green-600 font-medium">Active</span>
@@ -169,16 +181,33 @@ const UserManagement = () => {
         <div className="flex gap-2">
           <button
             onClick={() => navigate(`/user-profile/${row._id || row.id}`)}
-            className="p-2 rounded-lg bg-blue-100 text-blue-600"
+            className="p-2 rounded-lg cursor-pointer bg-blue-100 text-blue-600"
             title="View Details">
             <Eye size={14} />
           </button>
           <button
             onClick={() => handleAction('block', { id: row._id || row.id, status: row.active?.isBlocked })}
-            className={`p-2 rounded-lg ${row.active?.isBlocked ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}
+            className={`p-2 rounded-lg cursor-pointer ${row.active?.isBlocked ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}
             title={row.active?.isBlocked ? "Unblock User" : "Block User"}
           >
             {row.active?.isBlocked ? <Unlock size={14} /> : <Lock size={14} />}
+          </button>
+          <button
+            onClick={() => handleAction('login', { id: row._id || row.id, username: row.username })}
+            className="p-2 rounded-lg cursor-pointer bg-indigo-100 text-indigo-600"
+            title="Login as User"
+          >
+            <LogIn size={14} />
+          </button>
+          <button
+            onClick={() => {
+              setSelectedUserForPassword(row._id || row.id);
+              setIsChangePasswordOpen(true);
+            }}
+            className="p-2 rounded-lg cursor-pointer bg-purple-100 text-purple-600"
+            title="Change Password"
+          >
+            <Key size={14} />
           </button>
         </div>
       ),
@@ -188,7 +217,7 @@ const UserManagement = () => {
 
 
   // Filter users based on search
-  const filteredUsers = users.filter((user) => 
+  const filteredUsers = users.filter((user) =>
     (user.fullName || user.username || "").toLowerCase().includes(search.toLowerCase()) ||
     (user.email || "").toLowerCase().includes(search.toLowerCase()) ||
     (user.mobile || "").toLowerCase().includes(search.toLowerCase())
@@ -227,6 +256,14 @@ const UserManagement = () => {
             fetchUsers();
           }} />
         </Modal>
+
+        <Modal isOpen={isChangePasswordOpen}>
+          <ChangePassword
+            onClose={() => setIsChangePasswordOpen(false)}
+            userId={selectedUserForPassword}
+            onSuccess={() => { }}
+          />
+        </Modal>
       </div>
 
       <div className="bg-(--bg-box) rounded-2xl p-5 shadow-sm border border-gray-100">
@@ -261,17 +298,17 @@ const UserManagement = () => {
 
       <div className='bg-(--bg-box) rounded-2xl p-5 mt-5 shadow-sm border border-gray-100'>
         <div className='flex justify-between'>
-        <Heading title={"User List"} />
-        <div className="mb-4 mt-4 ">
+          <Heading title={"User List"} />
+          <div className="mb-4 mt-4 ">
             <InputBox
-                placeholder="Search User"
-                value={search}
-                onChange={(e) => {
-                    setSearch(e.target.value);
-                    setCurrentPage(1); 
-                }}
+              placeholder="Search User"
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setCurrentPage(1);
+              }}
             />
-        </div>
+          </div>
         </div>
         {loading ? (
           <div className="p-10 text-center">Loading users...</div>
@@ -293,12 +330,14 @@ const UserManagement = () => {
         onConfirm={confirmAction}
         title={
           modalConfig.type === 'block' ? (modalConfig.data?.status ? "Unblock User" : "Block User") :
-            modalConfig.type === 'withdrawal' ? (modalConfig.data?.status ? "Disable Withdrawal" : "Enable Withdrawal") : "Confirm Action"
+            modalConfig.type === 'withdrawal' ? (modalConfig.data?.status ? "Disable Withdrawal" : "Enable Withdrawal") :
+              modalConfig.type === 'login' ? "Login as User" : "Confirm Action"
         }
         message={
           modalConfig.type === 'block' ? `Are you sure you want to ${modalConfig.data?.status ? "unblock" : "block"} this user?` :
             modalConfig.type === 'withdrawal' ? `Are you sure you want to ${modalConfig.data?.status ? "disable" : "enable"} withdrawal for this user?` :
-              "Are you sure you want to proceed?"
+              modalConfig.type === 'login' ? `Are you sure you want to login as ${modalConfig.data?.username}?` :
+                "Are you sure you want to proceed?"
         }
         isDanger={
           (modalConfig.type === 'block' && !modalConfig.data?.status) ||
@@ -306,7 +345,8 @@ const UserManagement = () => {
         }
         confirmText={
           modalConfig.type === 'block' ? (modalConfig.data?.status ? "Unblock" : "Block") :
-            modalConfig.type === 'withdrawal' ? (modalConfig.data?.status ? "Disable" : "Enable") : "Confirm"
+            modalConfig.type === 'withdrawal' ? (modalConfig.data?.status ? "Disable" : "Enable") :
+              modalConfig.type === 'login' ? "Login" : "Confirm"
         }
       />
     </div>

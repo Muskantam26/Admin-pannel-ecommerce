@@ -12,6 +12,7 @@ import Modal from '../Component/Model/Modal';
 import { FiFileText, FiDownload, FiShield, FiXCircle } from 'react-icons/fi';
 import { PathRoutes } from '../constant/Path';
 import IdentityCard from '../Component/IdentityCard';
+import ChangePassword from './ChangePassword';
 
 const UserProfileDetails = () => {
     const { id } = useParams();
@@ -22,6 +23,7 @@ const UserProfileDetails = () => {
     // Modal States
     const [modalConfig, setModalConfig] = useState({ isOpen: false, type: '', data: null });
     const [isEditOpen, setIsEditOpen] = useState(false);
+    const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState(null);
 
 
@@ -123,6 +125,12 @@ const UserProfileDetails = () => {
                         className="flex items-center gap-2 px-4 py-2 bg-(--bs-btn) text-(--text-white) rounded-lg hover:opacity-90 transition-opacity shadow-sm font-medium text-sm"
                     >
                         <FaSignInAlt /> Login as User
+                    </button>
+                    <button
+                        onClick={() => setIsChangePasswordOpen(true)}
+                        className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors shadow-sm font-medium text-sm"
+                    >
+                        <FaLock /> Change Password
                     </button>
                     <button
                         onClick={() => navigate(`/user-profile/edit/${user._id || user.id}`)}
@@ -401,6 +409,15 @@ const UserProfileDetails = () => {
                             "Login"
                 }
             />
+
+            {/* Change Password Modal */}
+            <Modal isOpen={isChangePasswordOpen}>
+                <ChangePassword
+                    onClose={() => setIsChangePasswordOpen(false)}
+                    userId={user?._id || user?.id}
+                    onSuccess={() => { }}
+                />
+            </Modal>
 
             {/* Image Preview Modal */}
             <Modal isOpen={!!previewImage}>

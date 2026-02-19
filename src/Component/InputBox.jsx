@@ -35,6 +35,7 @@ export const InputField = ({
   type = "text",
   label,
   name,
+  RightIcon,
   ...props
 }) => {
   return (
@@ -45,7 +46,7 @@ export const InputField = ({
         </label>
       )}
 
-      <div className={`px-3 py-2 rounded-md ${border} ${className}`}>
+      <div className={`px-3 py-2 rounded-md ${border} ${className} flex items-center gap-2`}>
         <input
           type={type}
           name={name}
@@ -55,6 +56,7 @@ export const InputField = ({
           className="w-full outline-none text-xs bg-transparent"
           {...props}
         />
+        {RightIcon && RightIcon}
       </div>
     </div>
   );

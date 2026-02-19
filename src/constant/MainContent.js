@@ -8,7 +8,7 @@ export const MainContent = {
   appFullName: "VEDANZO",
   appLogo: appLogo,
   appFavicon: appFavicon,
-  appURL: "https://www.psnft.space/",
+  appURL: "https://www.psnft.space",
   contactNo: "+919876543210",
   email: "info@psnft.space",
   address: "North Oak , Sanjauli , Shimla (HP) 171006",

@@ -26,7 +26,7 @@ const ConfirmationModal = ({
                     <div className="flex w-full gap-4 mt-4">
                         <button
                             onClick={onClose}
-                            className="flex-1 px-4 py-2 rounded-lg border border-(--bs-border) text-(--text-second) bg-(--bg-box) hover:bg-(--bs-btn-hover) transition-colors font-medium"
+                            className="flex-1 px-4 py-2 rounded-lg cursor-pointer border border-(--bs-border) text-(--text-second) bg-(--bg-box) hover:bg-(--bs-btn-hover) transition-colors font-medium"
                         >
                             {cancelText}
                         </button>
@@ -35,7 +35,7 @@ const ConfirmationModal = ({
                                 onConfirm();
                                 onClose();
                             }}
-                            className={`flex-1 px-4 py-2 rounded-lg text-white font-medium transition-opacity hover:opacity-90 shadow-sm
+                            className={`flex-1 px-4 py-2 rounded-lg cursor-pointer text-white font-medium transition-opacity hover:opacity-90 shadow-sm
                                 ${isDanger ? 'bg-red-600' : 'bg-(--bs-btn)'}
                             `}
                         >

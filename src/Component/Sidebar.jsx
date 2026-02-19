@@ -68,9 +68,21 @@ const manuItems = [
     label: "Order Management",
   },
   {
-    id: PathRoutes.DEPOSITS,
+    id: PathRoutes.DEPOSIT_REQUESTS,
     icon: FaBoxOpen,
-    label: "Deposit Requests",
+    label: "Deposit Management",
+    subItems: [
+      {
+        id: PathRoutes.ADD_DEPOSIT,
+        label: "Manual Deposit",
+        icon: FiCreditCard
+      },
+      {
+        id: PathRoutes.DEPOSIT_REQUESTS,
+        label: "Deposit Requests",
+        icon: FaBoxOpen
+      }
+    ]
   },
 
   {
@@ -91,6 +103,11 @@ const manuItems = [
       {
         id: PathRoutes.BANK_REQUESTS,
         label: "Bank Requests",
+        icon: TbBrandOffice
+      },
+      {
+        id: PathRoutes.ADDRESS_REQUESTS,
+        label: "Address Requests", // Added Address Requests
         icon: TbBrandOffice
       }
     ]
