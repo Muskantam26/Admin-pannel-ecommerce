@@ -43,6 +43,7 @@ import CartDetailsPage from "../page/orderManagement/CartDetailsPage";
 import AdminPage from "../page/AdminManagement/AdminPage";
 import AdminAddPage from "../page/AdminManagement/AdminAddPage";
 import AdminDetailsPage from "../page/AdminManagement/AdminDetailsPage";
+import InvoicePage from "../page/ordermanagement/InvoicePage";
 import { useSelector } from "react-redux";
 
 
@@ -63,6 +64,7 @@ const AppRoutes = () => {
             {/* <Route path="/product/edit" element={<EditProduct />} /> */}
             <Route path={PathRoutes.ORDER_MANAGEMENT} element={<OrderManagement />} />
             <Route path={`${PathRoutes.ORDERS_DETAILS}/:id`} element={<ViewOrdersDetails />} />
+            <Route path={PathRoutes.INVOICE} element={<InvoicePage />} />
             <Route path={PathRoutes.ALL_CARTS} element={<CartPage />} />
             <Route path={PathRoutes.CART_DETAILS} element={<CartDetailsPage />} />
             <Route path={PathRoutes.ADD_MEMBER} element={<AddMember />} />

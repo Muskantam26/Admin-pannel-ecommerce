@@ -116,132 +116,155 @@ const ViewOrdersDetails = () => {
 
                 <div className="flex justify-between items-center">
                     <Heading title={`Order Details (#${order.orderId || order._id.slice(-6).toUpperCase()})`} />
-                    <span className={`px-3 py-1 rounded-full text-sm font-semibold ${order.orderStatus === 'DELIVERED' ? 'bg-green-100 text-green-700' :
+                    <div className="flex items-center gap-3">
+                        <Button
+                            title={"Invoice"}
+                            className='bg-gray-800 text-white px-3 py-1 rounded text-sm hover:bg-gray-900 transition-colors shadow-sm'
+                            onClick={() => window.open(`/invoice/${id}`, '_blank')}
+                        />
+                        <span className={`px-3 py-1 rounded-full text-sm font-semibold ${order.orderStatus === 'DELIVERED' ? 'bg-green-100 text-green-700' :
                             order.orderStatus === 'CANCELLED' ? 'bg-red-100 text-red-700' :
                                 order.orderStatus === 'RETURNED' ? 'bg-gray-100 text-gray-700' :
                                     order.orderStatus === 'CONFIRMED' ? 'bg-blue-100 text-blue-700' :
                                         order.orderStatus === 'SHIPPED' ? 'bg-purple-100 text-purple-700' :
                                             order.orderStatus === 'PLACED' ? 'bg-indigo-100 text-indigo-700' :
-                                                'bg-yellow-100 text-yellow-700'
-                        }`}>
-                        {order.orderStatus}
-                    </span>
+                                                order.orderStatus === 'PROCESSING' ? 'bg-orange-100 text-orange-700' :
+                                                    'bg-yellow-100 text-yellow-700'
+                            }`}>
+                            {order.orderStatus}
+                        </span>
+                    </div>
+
+                    <p className='text-xs font-medium mt-10'>Basic Info</p>
+
+                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-5 p-3 space-y-4'>
+                        <InputField
+                            label={"Order Id"}
+                            value={order.orderId || "N/A"}
+                            readOnly
+                        />
+
+                        <InputField
+                            label={"Client Name"}
+                            value={order.userId?.fullName || order.userId?.username || "N/A"}
+                            readOnly
+                        />
+
+                        <InputField
+                            label={"Contact Info"}
+                            value={`${order.userId?.email || ''} / ${order.userId?.mobile || ''}`}
+                            readOnly
+                        />
+
+                        <InputField
+                            label={"Total Amount"}
+                            value={`₹${order.totalPrice}`}
+                            readOnly
+                        />
+
+                        <InputField
+                            label={"Order Date"}
+                            value={new Date(order.createdAt).toLocaleDateString()}
+                            readOnly
+                        />
+                        <InputField
+                            label={"Payment Method"}
+                            value={order.paymentMethod}
+                            readOnly
+                        />
+                    </div>
+
+                    <p className='text-xs font-medium mt-5'>Shipping Address</p>
+                    <div className="p-4 bg-gray-50 rounded-lg mt-2 border border-gray-100">
+                        <p className="font-semibold text-sm">{order.shippingAddress?.name}</p>
+                        <p className="text-sm text-gray-600">{order.shippingAddress?.address}, {order.shippingAddress?.city}</p>
+                        <p className="text-sm text-gray-600">{order.shippingAddress?.state} - {order.shippingAddress?.zip}</p>
+                        <p className="text-sm text-gray-600">Phone: {order.shippingAddress?.phone}</p>
+                    </div>
+
                 </div>
 
-                <p className='text-xs font-medium mt-10'>Basic Info</p>
 
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-5 p-3 space-y-4'>
-                    <InputField
-                        label={"Order Id"}
-                        value={order.orderId || "N/A"}
-                        readOnly
-                    />
 
-                    <InputField
-                        label={"Client Name"}
-                        value={order.userId?.fullName || order.userId?.username || "N/A"}
-                        readOnly
-                    />
+                <div className='bg-(--bg-box)  rounded-2xl p-5 mt-5 shadow-2xl  '>
+                    <Heading
+                        title={"Order Items"} />
 
-                    <InputField
-                        label={"Contact Info"}
-                        value={`${order.userId?.email || ''} / ${order.userId?.mobile || ''}`}
-                        readOnly
-                    />
-
-                    <InputField
-                        label={"Total Amount"}
-                        value={`₹${order.totalPrice}`}
-                        readOnly
-                    />
-
-                    <InputField
-                        label={"Order Date"}
-                        value={new Date(order.createdAt).toLocaleDateString()}
-                        readOnly
-                    />
-                    <InputField
-                        label={"Payment Method"}
-                        value={order.paymentMethod}
-                        readOnly
+                    <CommonDataTable
+                        columns={columns}
+                        data={order.items || []}
+                        pagination={false} // Usually few items, no need for pagination
                     />
                 </div>
 
-                <p className='text-xs font-medium mt-5'>Shipping Address</p>
-                <div className="p-4 bg-gray-50 rounded-lg mt-2 border border-gray-100">
-                    <p className="font-semibold text-sm">{order.shippingAddress?.name}</p>
-                    <p className="text-sm text-gray-600">{order.shippingAddress?.address}, {order.shippingAddress?.city}</p>
-                    <p className="text-sm text-gray-600">{order.shippingAddress?.state} - {order.shippingAddress?.zip}</p>
-                    <p className="text-sm text-gray-600">Phone: {order.shippingAddress?.phone}</p>
+
+                <div className='bg-(--bg-box)  rounded-2xl p-5 mt-5 shadow-2xl '>
+                    <Heading
+                        title={"Order Progress"} />
+
+                    <OrderProgressBar status={order.orderStatus} trackHistory={order.history} />
+
+                    <div className='flex justify-center gap-3 mt-7'>
+                        {order.orderStatus !== 'CANCELLED' && order.orderStatus !== 'DELIVERED' && (
+                            <Button
+                                title={"Cancel Order"}
+                                className='p-2 text-xs px-4 rounded-sm shadow-xl bg-red-500 hover:bg-red-600 text-white'
+                                onClick={() => handleUpdateStatus('CANCELLED')}
+                            />
+                        )}
+
+                        {/* Admin Actions for moving status forward manually if needed */}
+                        {order.orderStatus === 'PENDING' && (
+                            <Button
+                                title={"Confirm Order"}
+                                className='p-2 text-xs px-4 rounded-sm shadow-xl bg-blue-500 hover:bg-blue-600 text-white'
+                                onClick={() => handleUpdateStatus('PROCESSING')}
+                            />
+                        )}
+                        {order.orderStatus === 'PROCESSING' && (
+                            <Button
+                                title={"Confirm Order"}
+                                className='p-2 text-xs px-4 rounded-sm shadow-xl bg-blue-500 hover:bg-blue-600 text-white'
+                                onClick={() => handleUpdateStatus('PLACED')}
+                            />
+                        )}
+
+                        {order.orderStatus === 'PLACED' && (
+                            <Button
+                                title={"Confirm Order"}
+                                className='p-2 text-xs px-4 rounded-sm shadow-xl bg-blue-500 hover:bg-blue-600 text-white'
+                                onClick={() => handleUpdateStatus('CONFIRMED')}
+                            />
+                        )}
+                        {order.orderStatus === 'CONFIRMED' && (
+                            <Button
+                                title={"Mark as Shipped"}
+                                className='p-2 text-xs px-4 rounded-sm shadow-xl bg-purple-500 hover:bg-purple-600 text-white'
+                                onClick={() => handleUpdateStatus('SHIPPED')}
+                            />
+                        )}
+                        {order.orderStatus === 'SHIPPED' && (
+                            <Button
+                                title={"Mark as Delivered"}
+                                className='p-2 text-xs px-4 rounded-sm shadow-xl bg-green-500 hover:bg-green-600 text-white'
+                                onClick={() => handleUpdateStatus('DELIVERED')}
+                            />
+                        )}
+
+                    </div>
+
+
                 </div>
 
-            </div>
-
-
-
-            <div className='bg-(--bg-box)  rounded-2xl p-5 mt-5 shadow-2xl  '>
-                <Heading
-                    title={"Order Items"} />
-
-                <CommonDataTable
-                    columns={columns}
-                    data={order.items || []}
-                    pagination={false} // Usually few items, no need for pagination
+                <ConfirmationModal
+                    isOpen={confirmation.isOpen}
+                    onClose={closeConfirmation}
+                    onConfirm={confirmation.onConfirm}
+                    title={confirmation.title}
+                    message={confirmation.message}
+                    isDanger={confirmation.isDanger}
                 />
             </div>
-
-
-            <div className='bg-(--bg-box)  rounded-2xl p-5 mt-5 shadow-2xl '>
-                <Heading
-                    title={"Order Progress"} />
-
-                <OrderProgressBar status={order.orderStatus} trackHistory={order.history} />
-
-                <div className='flex justify-center gap-3 mt-7'>
-                    {order.orderStatus !== 'CANCELLED' && order.orderStatus !== 'DELIVERED' && (
-                        <Button
-                            title={"Cancel Order"}
-                            className='p-2 text-xs px-4 rounded-sm shadow-xl bg-red-500 hover:bg-red-600 text-white'
-                            onClick={() => handleUpdateStatus('CANCELLED')}
-                        />
-                    )}
-
-                    {/* Admin Actions for moving status forward manually if needed */}
-                    {order.orderStatus === 'PENDING' && (
-                        <Button
-                            title={"Confirm Order"}
-                            className='p-2 text-xs px-4 rounded-sm shadow-xl bg-blue-500 hover:bg-blue-600 text-white'
-                            onClick={() => handleUpdateStatus('CONFIRMED')}
-                        />
-                    )}
-                    {order.orderStatus === 'CONFIRMED' && (
-                        <Button
-                            title={"Mark as Shipped"}
-                            className='p-2 text-xs px-4 rounded-sm shadow-xl bg-purple-500 hover:bg-purple-600 text-white'
-                            onClick={() => handleUpdateStatus('SHIPPED')}
-                        />
-                    )}
-                    {order.orderStatus === 'SHIPPED' && (
-                        <Button
-                            title={"Mark as Delivered"}
-                            className='p-2 text-xs px-4 rounded-sm shadow-xl bg-green-500 hover:bg-green-600 text-white'
-                            onClick={() => handleUpdateStatus('DELIVERED')}
-                        />
-                    )}
-
-                </div>
-
-
-            </div>
-
-            <ConfirmationModal
-                isOpen={confirmation.isOpen}
-                onClose={closeConfirmation}
-                onConfirm={confirmation.onConfirm}
-                title={confirmation.title}
-                message={confirmation.message}
-                isDanger={confirmation.isDanger}
-            />
         </div>
     )
 }

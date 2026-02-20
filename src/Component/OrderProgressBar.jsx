@@ -5,6 +5,7 @@ const OrderProgressBar = ({ status, trackHistory = [] }) => {
   // Define standard order steps
   const steps = [
     { label: 'Pending', value: 'PENDING' },
+    { label: 'Processing', value: 'PROCESSING' },
     { label: 'Placed', value: 'PLACED' },
     { label: 'Confirmed', value: 'CONFIRMED' },
     { label: 'Shipped', value: 'SHIPPED' },
@@ -14,7 +15,7 @@ const OrderProgressBar = ({ status, trackHistory = [] }) => {
 
   // Helper to determine step status
   const getStepStatus = (stepValue, index) => {
-    const statusOrder = ['PENDING', 'PLACED', 'PROCESSING', 'CONFIRMED', 'SHIPPED', 'DELIVERED', 'RETURNED'];
+    const statusOrder = ['PENDING', 'PROCESSING', 'PLACED', 'CONFIRMED', 'SHIPPED', 'DELIVERED', 'RETURNED'];
     const currentStatusIndex = statusOrder.indexOf(status);
     const stepIndex = statusOrder.indexOf(stepValue);
 
@@ -30,7 +31,7 @@ const OrderProgressBar = ({ status, trackHistory = [] }) => {
     // So if current is RETURNED, everything before it (index < current) is completed.
 
     if (stepIndex < currentStatusIndex) return 'completed';
-    if (stepIndex === currentStatusIndex) return 'completed'; // Current step is also completed state (Green tick)
+    if (stepIndex === currentStatusIndex) return 'current'; // Current step (Orange)
 
     return 'pending';
   };
@@ -48,7 +49,7 @@ const OrderProgressBar = ({ status, trackHistory = [] }) => {
     <div className="mt-8 px-4">
       <div className="relative flex justify-between items-start">
         {/* The Connector Lines (Background Layer) */}
-        <div className="absolute top-3 left-0 w-full h-1 flex px-10 -z-0">
+        <div className="absolute top-3 left-0 w-full h-1 flex px-10 z-0">
           {steps.map((step, index) => (
             index < steps.length - 1 && (
               <div
