@@ -8,72 +8,7 @@ import { FiSave, FiArrowLeft, FiUser, FiMail, FiPhone, FiLock, FiShield, FiCheck
 import Button from '../../Component/Btn';
 import OtpModal from '../../Component/Model/OtpModal';
 
-const ROLES = ['SUPER-ADMIN', 'ADMIN', 'MANAGER', 'STAFF'];
-const PERMISSIONS_TREE = [
-    {
-        label: "Dashboard",
-        value: "MANAGE_DASHBOARD",
-        children: []
-    },
-    {
-        label: "Admin Management",
-        value: "MANAGE_ADMIN",
-        children: [
-            { label: "All Admins", value: "VIEW_ADMINS" },
-            { label: "Add Admin", value: "CREATE_ADMIN" }
-        ]
-    },
-    {
-        label: "Product Management",
-        value: "MANAGE_PRODUCTS",
-        children: [
-            { label: "All Products", value: "VIEW_PRODUCTS" },
-            { label: "Categories", value: "MANAGE_CATEGORIES" },
-            { label: "Sub Categories", value: "MANAGE_SUB_CATEGORIES" }
-        ]
-    },
-    {
-        label: "Packages",
-        value: "MANAGE_PACKAGES",
-        children: []
-    },
-    {
-        label: "Order Management",
-        value: "MANAGE_ORDERS",
-        children: [
-            { label: "All Orders", value: "VIEW_ORDERS" },
-            { label: "All Carts", value: "VIEW_CARTS" }
-        ]
-    },
-    {
-        label: "User Management",
-        value: "MANAGE_USERS",
-        children: [
-            { label: "All Users", value: "VIEW_USERS" },
-            { label: "KYC Requests", value: "MANAGE_KYC" },
-            { label: "Bank Requests", value: "MANAGE_BANK" },
-            { label: "Address Requests", value: "MANAGE_ADDRESS" }
-        ]
-    },
-    {
-        label: "Deposit Management",
-        value: "MANAGE_PAYMENTS",
-        children: [
-            { label: "Manual Deposit", value: "CREATE_DEPOSIT" },
-            { label: "Deposit Requests", value: "VIEW_DEPOSIT_REQUESTS" }
-        ]
-    },
-    {
-        label: "Company Details",
-        value: "MANAGE_SETTINGS",
-        children: []
-    },
-    {
-        label: "Site Manager",
-        value: "MANAGE_SIDEBAR",
-        children: []
-    }
-];
+import { PERMISSIONS_TREE, ROLES } from '../../constant/SidebarData';
 
 const AdminAddPage = () => {
     const navigate = useNavigate();
@@ -415,7 +350,7 @@ const AdminAddPage = () => {
                             <span className="p-2 rounded-lg bg-purple-50 text-purple-600"><FiCheckCircle /></span>
                             Access Permissions
                         </h2>
-                        <div className="space-y-4 md:space-x-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                        <div className="gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                             {PERMISSIONS_TREE.map((group) => (
                                 <div key={group.value} className="border border-gray-200 rounded-xl p-4 bg-gray-50/50">
                                     {/* Parent Permission */}
