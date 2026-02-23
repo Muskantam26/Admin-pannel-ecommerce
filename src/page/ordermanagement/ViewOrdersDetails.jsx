@@ -4,12 +4,28 @@ import { InputField } from '../../Component/InputBox'
 import CommonDataTable from '../../Component/CommonDataTable'
 import OrderProgressBar from '../../Component/OrderProgressBar'
 import Button from '../../Component/Btn'
+import { 
+    FiPackage, FiUser, FiMail, FiPhone, FiMapPin, 
+    FiCreditCard, FiCalendar, FiDollarSign, FiClock,
+    FiTruck, FiCheckCircle, FiFileText
+} from 'react-icons/fi'
 import { useParams } from 'react-router-dom'
 import { getOrderByIdApi, updateOrderStatusApi } from '../../api/order-api'
 import { toast } from 'react-toastify'
 import { useDispatch } from 'react-redux'
 import { hideLoader, showLoader } from '../../redux/slice/loadingSlice'
 import ConfirmationModal from '../../Component/Model/ConfirmationModal'
+
+const ORDER_STATUS_OPTIONS = [
+    'PENDING',
+    'PLACED',
+    'PROCESSING',
+    'CONFIRMED',
+    'SHIPPED',
+    'DELIVERED',
+    'CANCELLED',
+    'RETURNED'
+];
 
 const ViewOrdersDetails = () => {
     const { id } = useParams();
@@ -29,12 +45,10 @@ const ViewOrdersDetails = () => {
             const response = await getOrderByIdApi(id);
             if (response.success) {
                 setOrder(response.data);
-                dispatch(hideLoader());
             }
         } catch (error) {
             console.error("Error fetching order details:", error);
             toast.error("Failed to fetch order details");
-            dispatch(hideLoader());
         } finally {
             dispatch(hideLoader());
         }
@@ -107,166 +121,269 @@ const ViewOrdersDetails = () => {
     if (!order) return <div className="p-10 text-center">Order not found</div>;
 
     return (
-        <div>
-            <MainHeading
-                title={"Order Management"} />
+        <div className="p-2 md:p-6 lg:p-8 space-y-6">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div>
+                    <MainHeading title={"Order Management"} />
+                    <p className="text-gray-500 text-sm mt-1">Manage and track order details efficiently</p>
+                </div>
+                
+                <div className="flex flex-wrap items-center gap-3">
+                    <button
+                        onClick={() => window.open(`/invoice/${id}`, '_blank')}
+                        className="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-black transition-all shadow-md active:scale-95"
+                    >
+                        <FiFileText size={16} />
+                        Invoice
+                    </button>
+                    
+                    <InteractiveStatusBadge
+                        currentStatus={order.orderStatus}
+                        onStatusChange={handleUpdateStatus}
+                    />
+                </div>
+            </div>
 
-
-            <div className='bg-(--bg-box)  rounded-2xl p-5 mt-5 shadow-2xl'>
-
-                <div className="flex justify-between items-center">
-                    <Heading title={`Order Details (#${order.orderId || order._id.slice(-6).toUpperCase()})`} />
-                    <div className="flex items-center gap-3">
-                        <Button
-                            title={"Invoice"}
-                            className='bg-gray-800 text-white px-3 py-1 rounded text-sm hover:bg-gray-900 transition-colors shadow-sm'
-                            onClick={() => window.open(`/invoice/${id}`, '_blank')}
-                        />
-                        <span className={`px-3 py-1 rounded-full text-sm font-semibold ${order.orderStatus === 'DELIVERED' ? 'bg-green-100 text-green-700' :
-                            order.orderStatus === 'CANCELLED' ? 'bg-red-100 text-red-700' :
-                                order.orderStatus === 'RETURNED' ? 'bg-gray-100 text-gray-700' :
-                                    order.orderStatus === 'CONFIRMED' ? 'bg-blue-100 text-blue-700' :
-                                        order.orderStatus === 'SHIPPED' ? 'bg-purple-100 text-purple-700' :
-                                            order.orderStatus === 'PLACED' ? 'bg-indigo-100 text-indigo-700' :
-                                                order.orderStatus === 'PROCESSING' ? 'bg-orange-100 text-orange-700' :
-                                                    'bg-yellow-100 text-yellow-700'
-                            }`}>
-                            {order.orderStatus}
-                        </span>
+            {/* Order Header Card */}
+            <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+                <div className="bg-linear-to-r from-gray-900 via-gray-800 to-gray-900 p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div className="flex items-center gap-4">
+                        <div className="p-3 bg-white/10 rounded-xl backdrop-blur-sm">
+                            <FiPackage className="text-white text-2xl" />
+                        </div>
+                        <div>
+                            <h2 className="text-white text-xl font-bold">Order #{order.orderId || order._id.slice(-6).toUpperCase()}</h2>
+                            <p className="text-gray-400 text-sm">Placed on {new Date(order.createdAt).toLocaleString()}</p>
+                        </div>
                     </div>
-
-                    <p className='text-xs font-medium mt-10'>Basic Info</p>
-
-                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-5 p-3 space-y-4'>
-                        <InputField
-                            label={"Order Id"}
-                            value={order.orderId || "N/A"}
-                            readOnly
-                        />
-
-                        <InputField
-                            label={"Client Name"}
-                            value={order.userId?.fullName || order.userId?.username || "N/A"}
-                            readOnly
-                        />
-
-                        <InputField
-                            label={"Contact Info"}
-                            value={`${order.userId?.email || ''} / ${order.userId?.mobile || ''}`}
-                            readOnly
-                        />
-
-                        <InputField
-                            label={"Total Amount"}
-                            value={`₹${order.totalPrice}`}
-                            readOnly
-                        />
-
-                        <InputField
-                            label={"Order Date"}
-                            value={new Date(order.createdAt).toLocaleDateString()}
-                            readOnly
-                        />
-                        <InputField
-                            label={"Payment Method"}
-                            value={order.paymentMethod}
-                            readOnly
-                        />
+                    <div className="flex items-center gap-6 text-white">
+                        <div className="text-right">
+                            <p className="text-gray-400 text-xs uppercase tracking-wider font-bold">Total Amount</p>
+                            <p className="text-2xl font-black text-indigo-400">₹{order.totalPrice}</p>
+                        </div>
                     </div>
-
-                    <p className='text-xs font-medium mt-5'>Shipping Address</p>
-                    <div className="p-4 bg-gray-50 rounded-lg mt-2 border border-gray-100">
-                        <p className="font-semibold text-sm">{order.shippingAddress?.name}</p>
-                        <p className="text-sm text-gray-600">{order.shippingAddress?.address}, {order.shippingAddress?.city}</p>
-                        <p className="text-sm text-gray-600">{order.shippingAddress?.state} - {order.shippingAddress?.zip}</p>
-                        <p className="text-sm text-gray-600">Phone: {order.shippingAddress?.phone}</p>
-                    </div>
-
                 </div>
 
+                <div className="p-6 md:p-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {/* Column 1: Customer Info */}
+                        <div className="space-y-6">
+                            <div>
+                                <h3 className="flex items-center gap-2 text-sm font-bold text-gray-900 mb-4 border-b pb-2">
+                                    <FiUser className="text-indigo-600" />
+                                    Customer Information
+                                </h3>
+                                <div className="space-y-4">
+                                    <DataRow 
+                                        label="Full Name" 
+                                        value={order.userId?.fullName || order.userId?.username || "N/A"} 
+                                        icon={<FiUser />}
+                                    />
+                                    <DataRow 
+                                        label="Email" 
+                                        value={order.userId?.email || "N/A"} 
+                                        icon={<FiMail />}
+                                    />
+                                    <DataRow 
+                                        label="Phone" 
+                                        value={order.userId?.mobile || "N/A"} 
+                                        icon={<FiPhone />}
+                                    />
+                                </div>
+                            </div>
+                        </div>
 
+                        {/* Column 2: Payment info */}
+                        <div className="space-y-6">
+                            <div>
+                                <h3 className="flex items-center gap-2 text-sm font-bold text-gray-900 mb-4 border-b pb-2">
+                                    <FiCreditCard className="text-indigo-600" />
+                                    Payment Details
+                                </h3>
+                                <div className="space-y-4">
+                                    <DataRow 
+                                        label="Method" 
+                                        value={order.paymentMethod} 
+                                        icon={<FiCreditCard />}
+                                    />
+                                    <DataRow 
+                                        label="Status" 
+                                        value={order.paymentStatus} 
+                                        badge={order.paymentStatus === 'PAID' ? 'success' : 'danger'}
+                                        icon={<FiCheckCircle />}
+                                    />
+                                    <DataRow 
+                                        label="Order Type" 
+                                        value={order.orderType || 'REPURCHASE'} 
+                                        icon={<FiClock />}
+                                    />
+                                </div>
+                            </div>
+                        </div>
 
-                <div className='bg-(--bg-box)  rounded-2xl p-5 mt-5 shadow-2xl  '>
-                    <Heading
-                        title={"Order Items"} />
+                        {/* Column 3: Shipping Address */}
+                        <div className="space-y-6">
+                            <div>
+                                <h3 className="flex items-center gap-2 text-sm font-bold text-gray-900 mb-4 border-b pb-2">
+                                    <FiMapPin className="text-indigo-600" />
+                                    Shipping Address
+                                </h3>
+                                <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 flex gap-3">
+                                    <FiMapPin className="text-gray-400 mt-1 shrink-0" />
+                                    <div>
+                                        <p className="font-bold text-sm text-gray-900">{order.shippingAddress?.name}</p>
+                                        <p className="text-sm text-gray-600 leading-relaxed">
+                                            {order.shippingAddress?.address},<br />
+                                            {order.shippingAddress?.city}, {order.shippingAddress?.state} - {order.shippingAddress?.zip}
+                                        </p>
+                                        <p className="text-sm text-indigo-600 font-medium mt-2">{order.shippingAddress?.phone}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <div className='bg-white rounded-2xl p-6 md:p-8 shadow-xl border border-gray-100 overflow-hidden'>
+                <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
+                        <FiPackage size={20} />
+                    </div>
+                    <Heading title={"Order Items"} />
+                </div>
+
+                <div className="overflow-x-auto">
                     <CommonDataTable
                         columns={columns}
                         data={order.items || []}
-                        pagination={false} // Usually few items, no need for pagination
+                        pagination={false}
                     />
                 </div>
+            </div>
 
 
-                <div className='bg-(--bg-box)  rounded-2xl p-5 mt-5 shadow-2xl '>
-                    <Heading
-                        title={"Order Progress"} />
-
-                    <OrderProgressBar status={order.orderStatus} trackHistory={order.history} />
-
-                    <div className='flex justify-center gap-3 mt-7'>
-                        {order.orderStatus !== 'CANCELLED' && order.orderStatus !== 'DELIVERED' && (
-                            <Button
-                                title={"Cancel Order"}
-                                className='p-2 text-xs px-4 rounded-sm shadow-xl bg-red-500 hover:bg-red-600 text-white'
-                                onClick={() => handleUpdateStatus('CANCELLED')}
-                            />
-                        )}
-
-                        {/* Admin Actions for moving status forward manually if needed */}
-                        {order.orderStatus === 'PENDING' && (
-                            <Button
-                                title={"Confirm Order"}
-                                className='p-2 text-xs px-4 rounded-sm shadow-xl bg-blue-500 hover:bg-blue-600 text-white'
-                                onClick={() => handleUpdateStatus('PROCESSING')}
-                            />
-                        )}
-                        {order.orderStatus === 'PROCESSING' && (
-                            <Button
-                                title={"Confirm Order"}
-                                className='p-2 text-xs px-4 rounded-sm shadow-xl bg-blue-500 hover:bg-blue-600 text-white'
-                                onClick={() => handleUpdateStatus('PLACED')}
-                            />
-                        )}
-
-                        {order.orderStatus === 'PLACED' && (
-                            <Button
-                                title={"Confirm Order"}
-                                className='p-2 text-xs px-4 rounded-sm shadow-xl bg-blue-500 hover:bg-blue-600 text-white'
-                                onClick={() => handleUpdateStatus('CONFIRMED')}
-                            />
-                        )}
-                        {order.orderStatus === 'CONFIRMED' && (
-                            <Button
-                                title={"Mark as Shipped"}
-                                className='p-2 text-xs px-4 rounded-sm shadow-xl bg-purple-500 hover:bg-purple-600 text-white'
-                                onClick={() => handleUpdateStatus('SHIPPED')}
-                            />
-                        )}
-                        {order.orderStatus === 'SHIPPED' && (
-                            <Button
-                                title={"Mark as Delivered"}
-                                className='p-2 text-xs px-4 rounded-sm shadow-xl bg-green-500 hover:bg-green-600 text-white'
-                                onClick={() => handleUpdateStatus('DELIVERED')}
-                            />
-                        )}
-
+            <div className='bg-white rounded-2xl p-6 md:p-8 shadow-xl border border-gray-100'>
+                <div className="flex items-center gap-3 mb-8">
+                    <div className="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
+                        <FiTruck size={20} />
                     </div>
-
-
+                    <Heading title={"Order Progress"} />
                 </div>
 
-                <ConfirmationModal
-                    isOpen={confirmation.isOpen}
-                    onClose={closeConfirmation}
-                    onConfirm={confirmation.onConfirm}
-                    title={confirmation.title}
-                    message={confirmation.message}
-                    isDanger={confirmation.isDanger}
-                />
+                <div className="max-w-3xl mx-auto py-4">
+                    <OrderProgressBar status={order.orderStatus} trackHistory={order.history} />
+                </div>
+
+                <div className='flex flex-wrap justify-center gap-4 mt-10 p-4 border-t border-gray-50'>
+                    {order.orderStatus !== 'CANCELLED' && order.orderStatus !== 'DELIVERED' && (
+                        <button
+                            className='px-6 py-2.5 rounded-xl bg-red-50 text-red-600 font-bold text-sm hover:bg-red-100 transition-all shadow-sm border border-red-100 active:scale-95'
+                            onClick={() => handleUpdateStatus('CANCELLED')}
+                        >
+                            Cancel Order
+                        </button>
+                    )}
+
+                    {order.orderStatus === 'PENDING' && (
+                        <QuickActionBtn title="Confirm Order" color="blue" onClick={() => handleUpdateStatus('PROCESSING')} icon={<FiCheckCircle />} />
+                    )}
+                    {order.orderStatus === 'PROCESSING' && (
+                        <QuickActionBtn title="Place Order" color="indigo" onClick={() => handleUpdateStatus('PLACED')} icon={<FiPackage />} />
+                    )}
+                    {order.orderStatus === 'PLACED' && (
+                        <QuickActionBtn title="Confirm Order" color="blue" onClick={() => handleUpdateStatus('CONFIRMED')} icon={<FiCheckCircle />} />
+                    )}
+                    {order.orderStatus === 'CONFIRMED' && (
+                        <QuickActionBtn title="Mark Shipped" color="purple" onClick={() => handleUpdateStatus('SHIPPED')} icon={<FiTruck />} />
+                    )}
+                    {order.orderStatus === 'SHIPPED' && (
+                        <QuickActionBtn title="Mark Delivered" color="green" onClick={() => handleUpdateStatus('DELIVERED')} icon={<FiCheckCircle />} />
+                    )}
+                </div>
             </div>
+
+            <ConfirmationModal
+                isOpen={confirmation.isOpen}
+                onClose={closeConfirmation}
+                onConfirm={confirmation.onConfirm}
+                title={confirmation.title}
+                message={confirmation.message}
+                isDanger={confirmation.isDanger}
+            />
         </div>
     )
 }
+
+const DataRow = ({ label, value, icon, badge }) => (
+    <div className="flex items-center justify-between group">
+        <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-colors">
+                {React.cloneElement(icon, { size: 14 })}
+            </div>
+            <span className="text-xs font-bold text-gray-500 uppercase tracking-tight">{label}</span>
+        </div>
+        {badge ? (
+            <span className={`px-2 py-0.5 rounded text-[10px] font-black tracking-wider uppercase ${
+                badge === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+            }`}>
+                {value}
+            </span>
+        ) : (
+            <span className="text-sm font-bold text-gray-900">{value}</span>
+        )}
+    </div>
+);
+
+const QuickActionBtn = ({ title, color, onClick, icon }) => {
+    const colors = {
+        blue: "bg-blue-600 text-white hover:bg-blue-700 shadow-blue-200",
+        indigo: "bg-indigo-600 text-white hover:bg-indigo-700 shadow-indigo-200",
+        purple: "bg-purple-600 text-white hover:bg-purple-700 shadow-purple-200",
+        green: "bg-green-600 text-white hover:bg-green-700 shadow-green-200",
+    };
+
+    return (
+        <button
+            onClick={onClick}
+            className={`flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-sm transition-all shadow-lg active:scale-95 ${colors[color]}`}
+        >
+            {icon && React.cloneElement(icon, { size: 16 })}
+            {title}
+        </button>
+    );
+};
+
+const InteractiveStatusBadge = ({ currentStatus, onStatusChange }) => {
+    const colorMap = {
+        PENDING: "bg-yellow-100 text-yellow-700 border-yellow-200 ring-yellow-500",
+        PLACED: "bg-indigo-100 text-indigo-700 border-indigo-200 ring-indigo-500",
+        PROCESSING: "bg-orange-100 text-orange-700 border-orange-200 ring-orange-500",
+        CONFIRMED: "bg-blue-100 text-blue-700 border-blue-200 ring-blue-500",
+        SHIPPED: "bg-purple-100 text-purple-700 border-purple-200 ring-purple-500",
+        DELIVERED: "bg-green-100 text-green-700 border-green-200 ring-green-500",
+        CANCELLED: "bg-red-100 text-red-700 border-red-200 ring-red-500",
+        RETURNED: "bg-gray-100 text-gray-700 border-gray-200 ring-gray-500",
+    };
+
+    return (
+        <div className="relative group min-w-[140px]">
+            <select
+                className={`w-full appearance-none px-4 py-2 rounded-full text-xs font-bold border shadow-sm transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 ${colorMap[currentStatus] || 'bg-gray-100 text-gray-700 border-gray-200'}`}
+                value={currentStatus}
+                onChange={(e) => onStatusChange(e.target.value)}
+            >
+                {ORDER_STATUS_OPTIONS.map(status => (
+                    <option key={status} value={status} className="bg-white text-gray-900">{status}</option>
+                ))}
+            </select>
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
+                </svg>
+            </div>
+        </div>
+    );
+};
 
 export default ViewOrdersDetails

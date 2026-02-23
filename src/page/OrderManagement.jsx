@@ -9,11 +9,22 @@ import OrderChart from '../Component/chart/Orderchart';
 import AlertCard from '../Component/AlertCard';
 import { useNavigate } from 'react-router-dom';
 import { PathRoutes } from '../constant/Path';
-import { getAllOrdersApi } from '../api/order-api';
+import { getAllOrdersApi, updateOrderStatusApi } from '../api/order-api';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { hideLoader, showLoader } from '../redux/slice/loadingSlice';
 import DateTime from '../Component/DateTime';
+
+const ORDER_STATUS_OPTIONS = [
+  'PENDING',
+  'PLACED',
+  'PROCESSING',
+  'CONFIRMED',
+  'SHIPPED',
+  'DELIVERED',
+  'CANCELLED',
+  'RETURNED'
+];
 
 const OrderManagement = () => {
   const navigate = useNavigate();
@@ -56,6 +67,22 @@ const OrderManagement = () => {
   useEffect(() => {
     fetchOrders();
   }, [currentPage]);
+
+  const handleStatusChange = async (orderId, newStatus) => {
+    dispatch(showLoader());
+    try {
+      const response = await updateOrderStatusApi(orderId, { status: newStatus });
+      if (response.success) {
+        toast.success(`Order status updated to ${newStatus}`);
+        fetchOrders();
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+      toast.error(error.response?.data?.message || "Failed to update status");
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
 
 
   const columns = [
@@ -100,7 +127,8 @@ const OrderManagement = () => {
     },
     {
       name: "Status",
-      cell: (row) => <StatusBadge status={row.orderStatus} />,
+      grow: 2,
+      cell: (row) => <InteractiveStatusBadge orderId={row._id} currentStatus={row.orderStatus} onStatusChange={handleStatusChange} />,
     },
     {
       name: "Action",
@@ -119,22 +147,34 @@ const OrderManagement = () => {
   ];
 
 
-  const StatusBadge = ({ status }) => {
+  const InteractiveStatusBadge = ({ orderId, currentStatus, onStatusChange }) => {
     const colorMap = {
-      PENDING: "bg-yellow-400",
-      PLACED: "bg-indigo-400",
-      PROCESSING: "bg-orange-400",
-      CONFIRMED: "bg-blue-400",
-      SHIPPED: "bg-purple-400",
-      DELIVERED: "bg-green-500",
-      CANCELLED: "bg-red-500",
-      RETURNED: "bg-gray-500",
+      PENDING: "bg-yellow-100 text-yellow-700 border-yellow-200",
+      PLACED: "bg-indigo-100 text-indigo-700 border-indigo-200",
+      PROCESSING: "bg-orange-100 text-orange-700 border-orange-200",
+      CONFIRMED: "bg-blue-100 text-blue-700 border-blue-200",
+      SHIPPED: "bg-purple-100 text-purple-700 border-purple-200",
+      DELIVERED: "bg-green-100 text-green-700 border-green-200",
+      CANCELLED: "bg-red-100 text-red-700 border-red-200",
+      RETURNED: "bg-gray-100 text-gray-700 border-gray-200",
     };
 
     return (
-      <div className="flex items-center gap-2">
-        <span className={`h-2 w-2 rounded-full ${colorMap[status] || 'bg-gray-400'}`} />
-        <span className="text-sm font-medium">{status}</span>
+      <div className="relative group min-w-[120px]">
+        <select
+          className={`w-full appearance-none px-3 py-1.5 rounded-full text-xs font-bold border transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-1 ${colorMap[currentStatus] || 'bg-gray-100 text-gray-700 border-gray-200'}`}
+          value={currentStatus}
+          onChange={(e) => onStatusChange(orderId, e.target.value)}
+        >
+          {ORDER_STATUS_OPTIONS.map(status => (
+            <option key={status} value={status} className="bg-white text-gray-900">{status}</option>
+          ))}
+        </select>
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity">
+          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
       </div>
     );
   };
