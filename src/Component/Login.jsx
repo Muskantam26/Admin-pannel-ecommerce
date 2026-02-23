@@ -36,16 +36,23 @@ const Login = () => {
    
     dispatch(showLoader());
     try {
-      const response = await adminLoginApi(formData);
-      dispatch(
-        loginUser({
-          token: response?.data?.token,
-          userId: response?.data?.id,
-          role: response?.data?.role,
-          name: response?.data?.name,
-          email: response?.data?.email,
+      loginUser({
+          token: "1234567890",
+          userId: "1",
+          role: "SUPER_ADMIN",
+          name: "admin",
+          email: "[EMAIL_ADDRESS]",
         }),
-      );
+      // const response = await adminLoginApi(formData);
+      // dispatch(
+      //   loginUser({
+      //     token: response?.data?.token,
+      //     userId: response?.data?.id,
+      //     role: response?.data?.role,
+      //     name: response?.data?.name,
+      //     email: response?.data?.email,
+      //   }),
+      // );
       toast.success("Welcome Back Admin!")
       navigate("/dashboard");
     } catch (error) {
