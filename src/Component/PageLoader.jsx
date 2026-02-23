@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 const PageLoader = () => {
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/10 backdrop-blur-sm">
       <div className="relative flex items-center justify-center">
         {/* Outer Ring */}
         <motion.div
@@ -26,6 +26,9 @@ const PageLoader = () => {
           transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
         />
       </div>
+        
+    
+               
     </div>
   );
 };

@@ -66,7 +66,7 @@ const AddBanner = () => {
 
             <div className='rounded-xl shadow-2xl mt-5 bg-(--bg-box) p-5 space-y-5 animate-fade-in-up'>
                 
-                <div className='flex justify-between items-center'>
+                <div className='flex flex-row justify-between items-center'>
                     <Heading title={"Banner Details"} />
                     <button
                         className="text-(--bs-btn-second)"

@@ -421,7 +421,7 @@ const AddProduct = () => {
 
               <div className="md:col-span-2 pt-4 border-t border-gray-100">
                 <label className="text-sm text-gray-500 font-medium mb-3 block">Business Points</label>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <InputField label="PV" name="pv" type="number" value={formData.pv} onChange={handleChange} placeholder="0" />
                   <InputField label="DP" name="dp" type="number" value={formData.dp} onChange={handleChange} placeholder="0" />
                   <InputField label="BP" name="bp" type="number" value={formData.bp} onChange={handleChange} placeholder="0" />

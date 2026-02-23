@@ -112,7 +112,7 @@ const AddNewPackage = ({ onClose, onSaveClick, initialData }) => {
           {/* Section 2: Pricing & Values */}
           <section className="bg-gray-50 p-5 rounded-xl border border-gray-100">
             <h3 className="text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide">Pricing & Values</h3>
-            <div className="grid grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <InputField
                 label={"Price (₹)"}
                 type="number"

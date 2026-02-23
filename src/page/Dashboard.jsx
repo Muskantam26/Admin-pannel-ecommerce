@@ -473,17 +473,17 @@ const Dashboard = () => {
         {/* Order list */}
 
         <div className="bg-(--bg-box) rounded-4xl p-5 mt-5">
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <Heading title="Order List" />
 
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2 items-center w-full sm:w-auto">
               <input
                 type="text"
                 placeholder="Search Here"
-                className="border border-(--input-border) text-(--text-third) rounded-sm w-35 p-1 text-xs outline-none"
+                className="border border-(--input-border) text-(--text-third) rounded-sm w-full sm:w-35 p-1 text-xs outline-none"
               />
-              <button className="bg-(--bg-green) text-(--text-white) px-2 items-center font-extralight  rounded-sm text-xs flex">
-                Sort By <FaAngleDown className="text-xs font-extralight" />
+              <button className="bg-(--bg-green) text-(--text-white) px-2 items-center font-extralight py-1 rounded-sm text-xs flex whitespace-nowrap">
+                Sort By <FaAngleDown className="text-xs font-extralight ml-1" />
               </button>
             </div>
           </div>

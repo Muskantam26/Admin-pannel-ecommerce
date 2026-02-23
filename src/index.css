@@ -167,3 +167,9 @@ body {
 .custom-scroll::-webkit-scrollbar-thumb:hover {
   background: transparent;
 }
+
+@layer base {
+  button {
+    cursor: pointer;
+  }
+}

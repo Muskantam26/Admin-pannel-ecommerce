@@ -150,12 +150,12 @@ const SiteManager = () => {
       />
 
       <div className="bg-(--bg-box) rounded-xl shadow-xl p-4 mt-5">
-        <div className="flex justify-between">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
           <Heading title={"User Panel Banner List"} subtitle={"Content"} />
 
           <Button
           title={"Add Banner"}
-          className="rounded-sm text-xs px-3 h-7 shadow-2xl"
+          className="rounded-sm text-xs px-3 h-7 shadow-2xl w-full sm:w-auto"
           onClick={() => navigate("/add-banner")}
           />
         </div>

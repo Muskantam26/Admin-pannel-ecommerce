@@ -158,20 +158,20 @@ const CategoryPage = () => {
 
     return (
         <div className="p-5">
-            <div className="flex justify-between items-center mb-5">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5">
                 <MainHeading
                     title={"Category Management"}
                     subtitle={"Manage your product categories here"}
                 />
                 <Button
                     title={" + Add Category"}
-                    className='p-2 text-xs rounded-sm'
+                    className='p-2 text-xs rounded-sm w-full sm:w-auto'
                     onClick={handleAdd}
                 />
             </div>
 
             <div className="bg-(--bg-box) p-5 rounded-xl shadow-md">
-                <div className="mb-4 w-96">
+                <div className="mb-4 w-full sm:w-96">
                     <InputBox
                         placeholder="Search Categories..."
                         value={search}

@@ -239,7 +239,7 @@ const UserManagement = () => {
 
   return (
     <div>
-      <div className='flex justify-between items-center mb-6'>
+      <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6'>
         <MainHeading
           title={"User Management"}
           subtitle={"Real-time overview of users & operations"}
@@ -248,7 +248,7 @@ const UserManagement = () => {
         <ActionButton
           title='Add User'
           icon={<User size={15} />}
-          className='flex h-8 text-(--text-second) px-4 items-center gap-2'
+          className='flex h-8 text-(--text-second) px-4 items-center gap-2 w-full sm:w-auto justify-center'
           onClick={() => setIsAddUserOpen(true)}
         />
 
@@ -299,9 +299,9 @@ const UserManagement = () => {
       </div>
 
       <div className='bg-(--bg-box) rounded-2xl p-5 mt-5 shadow-sm border border-gray-100'>
-        <div className='flex justify-between'>
+        <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4'>
           <Heading title={"User List"} />
-          <div className="mb-4 mt-4 ">
+          <div className="w-full sm:w-auto">
             <InputBox
               placeholder="Search User"
               value={search}
@@ -309,6 +309,7 @@ const UserManagement = () => {
                 setSearch(e.target.value);
                 setCurrentPage(1);
               }}
+              className="w-full"
             />
           </div>
         </div>

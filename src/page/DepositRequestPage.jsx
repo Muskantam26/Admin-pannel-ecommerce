@@ -182,12 +182,12 @@ const DepositPage = () => {
     return (
 
         <>
-            <div className="flex justify-between items-center mb-5">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5">
                 <MainHeading
                     title={"Deposit Requests"}
                     subtitle={"Manage all user deposit requests"}
                 />
-                <button onClick={fetchDeposits} className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition text-gray-600" title="Refresh Data">
+                <button onClick={fetchDeposits} className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition text-gray-600 self-end sm:self-auto" title="Refresh Data">
                     <RefreshCw size={18} className={loading ? "animate-spin" : ""} />
                 </button>
             </div>

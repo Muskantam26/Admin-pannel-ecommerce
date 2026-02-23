@@ -250,9 +250,9 @@ const chartData = [
 
 
 <div className='bg-(--bg-box) rounded-2xl p-5 mt-5 shadow-2xl'>
-  <div className="flex justify-between items-center">
+  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
     <Heading title={"Order Chat"} />
-    <select className=" text-xs">
+    <select className="text-xs border border-gray-200 rounded p-1 outline-none">
       <option>This Week</option>
       <option>This Month</option>
       <option>This Year</option>
@@ -265,7 +265,7 @@ const chartData = [
 </div>
 
 
-<div className='bg-(--bg-box)  rounded-2xl p-5 mt-5 shadow-2xl'>
+<div className='bg-(--bg-box) rounded-2xl p-5 mt-5 shadow-2xl'>
   <Heading
   title={"Order Status"}/>
 

@@ -59,12 +59,12 @@ const Notification = () => {
 
   return (
     <div className='space-y-6 animate-fade-in-up'>
-       <div className='flex justify-between items-center'>
+       <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4'>
             <MainHeading
                 title={"Notifications"}
                 subtitle={"Stay updated with system alerts"}
             />
-            <button className='text-xs font-medium text-(--text-second) hover:text-(--text-main) cursor-pointer'>
+            <button className='text-xs font-medium text-(--text-second) hover:text-(--text-main) cursor-pointer self-end sm:self-auto'>
                 Mark all as read
             </button>
         </div>

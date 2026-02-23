@@ -102,14 +102,14 @@ const Packages = () => {
         <div className='space-y-6'>
             {!isAddPackageOpen ? (
                 <>
-                    <div className='flex justify-between items-center'>
+                    <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4'>
                         <MainHeading
                             title={"Membership Packages"}
                             subtitle={"Choose the best plan for your needs"}
                         />
                         <button
                             onClick={openAdd}
-                            className='bg-(--bs-btn) text-(--text-white) px-4 py-2 rounded-lg text-sm font-medium cursor-pointer'>
+                            className='bg-(--bs-btn) text-(--text-white) px-4 py-2 rounded-lg text-sm font-medium cursor-pointer w-full sm:w-auto'>
                             Add New Package
                         </button>
                     </div>
