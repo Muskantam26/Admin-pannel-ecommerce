@@ -1,161 +1,14 @@
-import React, { useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom';
+import { SIDEBAR_ITEMS } from '../constant/SidebarData';
 import { useDispatch, useSelector } from 'react-redux';
-import { logoutUser } from '../redux/slice/authSlice';
 import { hideLoader, showLoader } from '../redux/slice/loadingSlice';
-
-import { FiHome, FiX, FiChevronDown, FiChevronRight, FiCreditCard } from "react-icons/fi";
-import { FaBoxOpen } from "react-icons/fa";
-import { FaUserGroup } from "react-icons/fa6";
-import { TbBrandOffice } from "react-icons/tb";
-import { MdEmail } from "react-icons/md";
-import { FaMailBulk, FaLayerGroup } from "react-icons/fa";
-import { GoBell } from "react-icons/go";
-import { RiMailSendLine } from "react-icons/ri";
-import { BiCategory, BiLogOut } from "react-icons/bi";
-
-import { useNavigate, useLocation } from "react-router-dom";
+import { logoutUser } from '../redux/slice/authSlice';
+import { useState } from 'react';
+import { FiChevronDown, FiX } from 'react-icons/fi';
 import { MainContent } from '../constant/MainContent';
-import { PathRoutes } from '../constant/Path';
+import { BiLogOut } from 'react-icons/bi';
 
-
-const manuItems = [
-  {
-    label: "MAIN"
-  },
-  {
-    id: PathRoutes.ADMIN_DASHBOARD,
-    icon: FiHome,
-    label: "Dashboard",
-
-  },
-  {
-    id: PathRoutes.PACKAGES,
-    icon: FaLayerGroup,
-    label: "Packages",
-  },
-  {
-    id: PathRoutes.PRODUCT_MANAGEMENT,
-    icon: FaBoxOpen,
-    label: "Product Management",
-    subItems: [
-      {
-        id: PathRoutes.PRODUCT_MANAGEMENT,
-        label: "All Products",
-        icon: FaBoxOpen
-      },
-      {
-        id: PathRoutes.ADD_CATEGORY,
-        label: "Categories",
-        icon: BiCategory
-      },
-      {
-        id: PathRoutes.SUB_CATEGORY,
-        label: "Sub Category",
-        icon: BiCategory
-      }
-    ]
-
-  },
-  {
-    label: "Company Details",
-    icon: TbBrandOffice,
-    id: PathRoutes.COMPANY_SETTINGS,
-  },
-
-  {
-    id: PathRoutes.ORDER_MANAGEMENT,
-    icon: FaUserGroup,
-    label: "Order Management",
-    subItems: [
-      {
-        id: PathRoutes.ORDER_MANAGEMENT,
-        label: "All Orders",
-        icon: FaUserGroup
-      },
-      {
-        id: PathRoutes.ALL_CARTS,
-        label: "All Carts",
-        icon: FaBoxOpen
-      }
-    ]
-  },
-  {
-    id: PathRoutes.DEPOSIT_REQUESTS,
-    icon: FaBoxOpen,
-    label: "Deposit Management",
-    subItems: [
-      {
-        id: PathRoutes.ADD_DEPOSIT,
-        label: "Manual Deposit",
-        icon: FiCreditCard
-      },
-      {
-        id: PathRoutes.DEPOSIT_REQUESTS,
-        label: "Deposit Requests",
-        icon: FaBoxOpen
-      }
-    ]
-  },
-
-  {
-    id: PathRoutes.USER_MANAGEMENT,
-    icon: TbBrandOffice,
-    label: "User Management",
-    subItems: [
-      {
-        id: PathRoutes.USER_MANAGEMENT,
-        label: "All Users",
-        icon: FaUserGroup
-      },
-      {
-        id: PathRoutes.KYC_REQUESTS,
-        label: "KYC Requests",
-        icon: TbBrandOffice
-      },
-      {
-        id: PathRoutes.BANK_REQUESTS,
-        label: "Bank Requests",
-        icon: TbBrandOffice
-      },
-      {
-        id: PathRoutes.ADDRESS_REQUESTS,
-        label: "Address Requests", // Added Address Requests
-        icon: TbBrandOffice
-      }
-    ]
-
-  },
-  {
-    id: PathRoutes.REWARDS,
-    icon: MdEmail,
-    label: "Rewards",
-  },
-  {
-    id: PathRoutes.SITE_MANAGER,
-    icon: FaMailBulk,
-    label: "Site Manager",
-
-  },
-  {
-    label: "OTHRES"
-  },
-
-  {
-    id: PathRoutes.NOTIFICATION,
-    icon: GoBell,
-    label: "Notification",
-  },
-  {
-    id: PathRoutes.MESSAGE,
-    icon: RiMailSendLine,
-    label: "Message",
-  },
-  {
-    id: "logout",
-    icon: BiLogOut,
-    label: "Logout",
-  },
-]
+const manuItems = SIDEBAR_ITEMS;
 const Sidebar = ({ open, setOpen }) => {
 
   const navigate = useNavigate();
@@ -171,7 +24,7 @@ const Sidebar = ({ open, setOpen }) => {
     }));
   };
 
-  const { name, email, profileImage } = useSelector((state) => state.auth);
+  const { name, email, profileImage, role, permissions } = useSelector((state) => state.auth);
 
   // Dynamic Avatar based on name
   const userImage = `https://ui-avatars.com/api/?name=${encodeURIComponent(name || "User")}&background=random&color=fff`;
@@ -192,6 +45,28 @@ const Sidebar = ({ open, setOpen }) => {
       }, 500);
     }
     setOpen(false); // Close mobile menu if open
+  };
+
+  // Check if user has access to this menu item
+  const hasAccess = (item) => {
+    if (!role) return false;
+
+    // Super Admin has access to everything
+    if (role === 'SUPER-ADMIN') return true;
+
+    // Check Role Access
+    if (item.allowedRoles && !item.allowedRoles.includes(role)) {
+      return false;
+    }
+
+    // Check Permission Access (if item has specific permissions required)
+    if (item.allowedPermissions && item.allowedPermissions.length > 0) {
+      if (!permissions || !permissions.some(p => item.allowedPermissions.includes(p))) {
+        return false;
+      }
+    }
+
+    return true;
   };
 
   return (
@@ -239,6 +114,9 @@ const Sidebar = ({ open, setOpen }) => {
 
 
             {manuItems.map((item, index) => {
+
+              // Check access permissions
+              if (!hasAccess(item)) return null;
 
               const Icon = item.icon;
               const hasSubItems = item.subItems && item.subItems.length > 0;
@@ -297,23 +175,26 @@ const Sidebar = ({ open, setOpen }) => {
                                 ${isExpanded ? "max-h-96 opacity-100 mt-1" : "max-h-0 opacity-0"}
                             `}
                       >
-                        {hasSubItems && item.subItems.map((subItem, subIndex) => (
-                          <div
-                            key={subIndex}
-                            className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer text-[12px] transition-colors mb-1
+                        {hasSubItems && item.subItems.map((subItem, subIndex) => {
+                          if (!hasAccess(subItem)) return null; // Check nested permission
+                          return (
+                            <div
+                              key={subIndex}
+                              className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer text-[12px] transition-colors mb-1
                                         ${location.pathname === subItem.id
-                                ? 'bg-(--btn-hover) text-(--text-hover) font-semibold'
-                                : 'text-(--text-second) hover:text-(--text-main) hover:bg-(--bs-btn-hover)'}
+                                  ? 'bg-(--btn-hover) text-(--text-hover) font-semibold'
+                                  : 'text-(--text-second) hover:text-(--text-main) hover:bg-(--bs-btn-hover)'}
                                     `}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleNavigation(subItem.id);
-                            }}
-                          >
-                            <span className={`w-1.5 h-1.5 rounded-full ${location.pathname === subItem.id ? 'bg-(--text-hover)' : 'bg-gray-300'}`}></span>
-                            <span>{subItem.label}</span>
-                          </div>
-                        ))}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleNavigation(subItem.id);
+                              }}
+                            >
+                              <span className={`w-1.5 h-1.5 rounded-full ${location.pathname === subItem.id ? 'bg-(--text-hover)' : 'bg-gray-300'}`}></span>
+                              <span>{subItem.label}</span>
+                            </div>
+                          )
+                        })}
                       </div>
 
 

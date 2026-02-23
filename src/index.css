@@ -50,7 +50,9 @@ body {
   animation: slideUp 0.8s ease forwards;
 }
 
-
+button{
+  cursor: pointer;
+}
 
 
 :root {

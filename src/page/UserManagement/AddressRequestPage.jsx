@@ -33,9 +33,11 @@ const AddressRequestPage = () => {
                 limit: rowsPerPage,
                 status: statusFilter
             });
-            if (res.addresses) {
-                setAddressList(res.addresses);
-                setTotalPages(res.pagination?.totalPages || 0);
+            if (res.success) {
+                setAddressList(res.data.addresses);
+                setTotalPages(res.data.pagination?.totalPages || 0);
+            }else{
+                toast.error(res.message);
             }
         } catch (error) {
             console.error("Error fetching Address requests", error);

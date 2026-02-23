@@ -12,7 +12,7 @@ export const addAddressApi = async (data) => {
 
 export const getMyAddressesApi = async () => {
     try {
-        const res = await Axios.get('/address/get_my_address');
+        const res = await Axios.get('/admin/address/get');
         return res.data;
     } catch (error) {
         return { success: false, message: error.response?.data?.message || "Failed to fetch addresses" };
@@ -21,7 +21,7 @@ export const getMyAddressesApi = async () => {
 
 export const updateAddressApi = async (id, data) => {
     try {
-        const res = await Axios.put(`/address/update/${id}`, data);
+        const res = await Axios.put(`/admin/address/update/${id}`, data);
         return res.data;
     } catch (error) {
         return { success: false, message: error.response?.data?.message || "Failed to update address" };
@@ -30,7 +30,7 @@ export const updateAddressApi = async (id, data) => {
 
 export const deleteAddressApi = async (id) => {
     try {
-        const res = await Axios.delete(`/address/delete/${id}`);
+        const res = await Axios.delete(`/admin/address/delete/${id}`);
         return res.data;
     } catch (error) {
         return { success: false, message: error.response?.data?.message || "Failed to delete address" };
@@ -40,7 +40,7 @@ export const deleteAddressApi = async (id) => {
 // Admin APIs
 export const getAllAddressesApi = async (params) => {
     try {
-        const res = await Axios.get(`/address/admin/all-addresses`, { params });
+        const res = await Axios.get(`/admin/address/admin/all-addresses`, { params });
         return res.data;
     } catch (error) {
         return { success: false, message: error.response?.data?.message || "Failed to fetch all addresses" };
@@ -49,7 +49,7 @@ export const getAllAddressesApi = async (params) => {
 
 export const getAddressByIdApi = async (id) => {
     try {
-        const res = await Axios.get(`/address/admin/${id}`);
+        const res = await Axios.get(`/admin/address/admin/${id}`);
         return res.data;
     } catch (error) {
         return { success: false, message: error.response?.data?.message || "Failed to fetch address details" };
@@ -58,7 +58,7 @@ export const getAddressByIdApi = async (id) => {
 
 export const createAddressByAdminApi = async (data) => {
     try {
-        const res = await Axios.post('/address/admin/add', data);
+        const res = await Axios.post('/admin/address/admin/add', data);
         return res.data;
     } catch (error) {
         return { success: false, message: error.response?.data?.message || "Failed to create address" };
@@ -67,7 +67,7 @@ export const createAddressByAdminApi = async (data) => {
 
 export const verifyAddressApi = async (data) => {
     try {
-        const res = await Axios.put('/address/admin/verify', data);
+        const res = await Axios.put('/admin/address/admin/verify', data);
         return res.data;
     } catch (error) {
         return { success: false, message: error.response?.data?.message || "Failed to verify address" };

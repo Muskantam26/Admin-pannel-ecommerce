@@ -98,13 +98,13 @@ const CompanyPage = () => {
                     title="Organization Profile"
                     subtitle="Manage your company's identity and configurations"
                 />
-                <button
+                {/* <button
                     onClick={() => navigate(PathRoutes.COMPANY_FORM)}
                     className="flex items-center gap-2 bg-(--bs-btn-third) text-white px-6 py-2.5 rounded-xl font-medium shadow-sm hover:opacity-90 transition active:scale-95"
                 >
                     <Edit size={16} />
                     <span>Edit Profile</span>
-                </button>
+                </button> */}
             </div>
 
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">

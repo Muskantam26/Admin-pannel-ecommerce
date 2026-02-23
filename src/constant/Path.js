@@ -4,6 +4,9 @@ export const PathRoutes = {
     DEPOSIT_REQUESTS: "/deposit-requests",
     ADD_DEPOSIT: "/add-deposit",
     ADMIN_LOGIN: "/admin-login",
+    ADMIN_MANAGEMENT: "/admin-management",
+    ADD_ADMIN: "/add-admin",
+    ADMIN_DETAILS: "/admin-details",
     ADMIN_DASHBOARD: "/dashboard",
     SITE_MANAGER: "/site-manager",
     ADD_BANNER: "/add-banner",
@@ -44,6 +47,7 @@ export const PathRoutes = {
     ALL_CARTS: "/all-carts",
     CART_DETAILS: "/cart-details/:id",
     PRODUCT_VIEW_ID: "/product/view/:id",
+    INVOICE: "/invoice/:id",
 
 
 
