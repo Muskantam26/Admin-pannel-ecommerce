@@ -15,13 +15,10 @@ const Sidebar = ({ open, setOpen }) => {
   const dispatch = useDispatch();
   const location = useLocation();
 
-  const [expandedMenu, setExpandedMenu] = useState({});
+  const [expandedMenu, setExpandedMenu] = useState(null);
 
   const toggleSubMenu = (label) => {
-    setExpandedMenu(prev => ({
-      ...prev,
-      [label]: !prev[label]
-    }));
+    setExpandedMenu(prev => prev === label ? null : label);
   };
 
   const { name, email, profileImage, role, permissions } = useSelector((state) => state.auth);
@@ -105,8 +102,9 @@ const Sidebar = ({ open, setOpen }) => {
         <div className="flex flex-col h-full">
 
           {/* Logo Area */}
-          <div className="p-5 flex items-center justify-center border-b border-dashed border-(--bs-border)">
+          <div className="p-5 flex items-center gap-2 justify-center border-b border-dashed border-(--bs-border)">
             <img src={MainContent.appLogo} alt="logo" className="h-12 w-auto object-contain transition-transform hover:scale-105 duration-300" />
+            <p className='font-bold text-2xl text-gray-700'>{MainContent.appFullName}</p>
           </div>
 
           {/* Scrollable Menu Area */}
@@ -120,7 +118,7 @@ const Sidebar = ({ open, setOpen }) => {
 
               const Icon = item.icon;
               const hasSubItems = item.subItems && item.subItems.length > 0;
-              const isExpanded = expandedMenu[item.label];
+              const isExpanded = expandedMenu === item.label;
               const isActive = location.pathname === item.id || (item.subItems && item.subItems.some(sub => sub.id === location.pathname));
 
               return (

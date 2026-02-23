@@ -11,6 +11,7 @@ import { getAllCategoryApi, deleteCategoryApi } from "../../api/category-api";
 import ConfirmationModal from "../../Component/Model/ConfirmationModal";
 import ImagePreviewModal from "../../Component/Model/ImagePreviewModal";
 import PageLoader from "../../Component/PageLoader";
+import { FiEdit, FiTrash } from "react-icons/fi";
 
 const CategoryPage = () => {
     const [categories, setCategories] = useState([]);
@@ -75,7 +76,7 @@ const CategoryPage = () => {
     };
 
     const handleAdd = () => {
-        navigate('/category/create');
+        navigate('/category/create', { state: { mode: "category" } });
     };
 
     // Filter categories
@@ -116,11 +117,6 @@ const CategoryPage = () => {
             sortable: true,
         },
         {
-            name: "Parent Category",
-            selector: (row) => row.parentId?.name || "None",
-            sortable: true,
-        },
-        {
             name: "Slug",
             selector: (row) => row.slug,
             sortable: true,
@@ -138,17 +134,17 @@ const CategoryPage = () => {
                 <div className="flex gap-2">
                     <button
                         onClick={() => handleEdit(row._id)}
-                        className="text-blue-500 cursor-pointer hover:text-blue-700 p-2 cursor-pointer"
+                        className="p-2 rounded-lg cursor-pointer bg-indigo-100 text-indigo-600"
                         title="Edit"
                     >
-                        <FaEdit size={16} />
+                        <FiEdit  size={14} />
                     </button>
                     <button
                         onClick={() => handleDelete(row._id)}
-                        className="text-red-500 cursor-pointer hover:text-red-700 p-2 cursor-pointer"
+                        className="p-2 rounded-lg cursor-pointer bg-red-100 text-red-600"
                         title="Delete"
                     >
-                        <FaTrash size={16} />
+                        <FiTrash size={14} />
                     </button>
                 </div>
             ),
@@ -170,7 +166,7 @@ const CategoryPage = () => {
                 />
             </div>
 
-            <div className="bg-(--bg-box) p-5 rounded-xl shadow-md">
+            <div className="bg-[var(--bg-box)] p-5 rounded-xl shadow-md">
                 <div className="mb-4 w-full sm:w-96">
                     <InputBox
                         placeholder="Search Categories..."
@@ -185,14 +181,16 @@ const CategoryPage = () => {
                 {loading ? (
                     <PageLoader/>
                 ) : (
-                    <CommonDataTable
-                        columns={columns}
-                        data={paginatedData}
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        onPageChange={setCurrentPage}
-                        rowsPerPage={rowsPerPage}
-                    />
+                    <div className="overflow-x-auto w-full">
+                        <CommonDataTable
+                            columns={columns}
+                            data={paginatedData}
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={setCurrentPage}
+                            rowsPerPage={rowsPerPage}
+                        />
+                    </div>
                 )}
             </div>
 
@@ -212,6 +210,7 @@ const CategoryPage = () => {
             />
         </div>
     );
+
 };
 
 export default CategoryPage;

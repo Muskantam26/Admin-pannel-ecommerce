@@ -42,7 +42,7 @@ const AddressDetailsPage = () => {
             <div className="flex items-center gap-4 mb-8">
                 <button
                     onClick={() => navigate(-1)}
-                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors text-(--text-second) bg-white border border-(--bs-border) shadow-sm"
+                    className="p-2 hover:bg-[var(--bg-main)] rounded-lg transition-colors text-(--text-second) bg-[var(--bg-box)] border border-(--bs-border) shadow-sm"
                 >
                     <FiArrowLeft size={22} />
                 </button>
@@ -76,12 +76,12 @@ const AddressDetailsPage = () => {
                         <div className="flex flex-col items-center mb-6">
                             <img
                                 src={address.userId?.picture || "https://img.icons8.com/color/96/user-male--v2.png"}
-                                className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md bg-gray-100 mb-4"
+                                className="w-24 h-24 rounded-full object-cover border-4 border-[var(--bg-box)] shadow-md bg-[var(--bg-main)] mb-4"
                                 alt=""
                             />
                             <h2 className="text-xl font-bold text-(--text-main)">{address.userId?.username}</h2>
                             <p className="text-sm text-(--text-second)">{address.userId?.email}</p>
-                            <span className="mt-2 px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-mono border border-gray-200">
+                            <span className="mt-2 px-3 py-1 bg-[var(--bg-main)] text-(--text-second) rounded-full text-xs font-mono border border-[var(--bs-border)]">
                                 ID: {address.userId?.id}
                             </span>
                         </div>
@@ -109,7 +109,7 @@ const AddressDetailsPage = () => {
                         </div>
 
                         <div className="flex items-center gap-2 mb-8 text-(--text-main) relative z-10">
-                            <div className="p-3 bg-blue-50 text-blue-600 rounded-xl">
+                            <div className="p-3 bg-[var(--bg-main)] text-[var(--bs-primary)] rounded-xl border border-[var(--bs-border)]">
                                 <FiMapPin size={24} />
                             </div>
                             <div>
@@ -127,20 +127,20 @@ const AddressDetailsPage = () => {
                             <div>
                                 <span className="text-xs font-bold text-(--text-second) uppercase tracking-wider block mb-1.5">Mobile Number</span>
                                 <p className="text-lg font-mono font-medium text-(--text-main) flex items-center gap-2">
-                                    <FiPhone className="text-gray-400" size={16} /> {address.mobile}
+                                    <FiPhone className="text-[var(--icon-color)]" size={16} /> {address.mobile}
                                 </p>
                             </div>
 
-                            <div className="md:col-span-2 p-5 bg-gray-50 rounded-2xl border border-gray-100">
+                            <div className="md:col-span-2 p-5 bg-[var(--bg-main)] rounded-2xl border border-[var(--bs-border)]">
                                 <span className="text-xs font-bold text-(--text-second) uppercase tracking-wider block mb-2">Full Address</span>
                                 <p className="text-base text-(--text-main) leading-relaxed">
                                     {address.locality}, {address.address}
                                 </p>
                                 <p className="text-base text-(--text-main) mt-1 font-medium">
-                                    {address.city}, {address.state} - <span className="font-mono text-blue-600">{address.pincode}</span>
+                                    {address.city}, {address.state} - <span className="font-mono text-[var(--bs-primary)]">{address.pincode}</span>
                                 </p>
                                 {address.landmark && (
-                                    <p className="text-sm text-(--text-second) mt-3 pt-3 border-t border-gray-200 flex items-center gap-2">
+                                    <p className="text-sm text-(--text-second) mt-3 pt-3 border-t border-[var(--bs-border)] flex items-center gap-2">
                                         <span className="font-semibold">Landmark:</span> {address.landmark}
                                     </p>
                                 )}
@@ -149,7 +149,7 @@ const AddressDetailsPage = () => {
                             <div>
                                 <span className="text-xs font-bold text-(--text-second) uppercase tracking-wider block mb-1.5">Address Type</span>
                                 <span className={`px-3 py-1.5 rounded-lg text-xs font-bold border inline-block
-                                     ${address.addressType === 'HOME' ? 'bg-indigo-50 text-indigo-700 border-indigo-100' : 'bg-orange-50 text-orange-700 border-orange-100'}`}>
+                                     ${address.addressType === 'HOME' ? 'bg-[var(--bg-main)] text-[var(--text-main)] border-[var(--bs-border)]' : 'bg-[var(--bg-main)] text-[var(--text-second)] border-[var(--bs-border)]'}`}>
                                     {address.addressType}
                                 </span>
                             </div>
@@ -163,7 +163,7 @@ const AddressDetailsPage = () => {
 
                             <div>
                                 <span className="text-xs font-bold text-(--text-second) uppercase tracking-wider block mb-1.5">Default Address</span>
-                                <p className={`font-medium ${address.isDefault ? 'text-green-600' : 'text-gray-500'}`}>
+                                <p className={`font-medium ${address.isDefault ? 'text-green-600' : 'text-[var(--text-second)]'}`}>
                                     {address.isDefault ? "Yes" : "No"}
                                 </p>
                             </div>
@@ -171,7 +171,7 @@ const AddressDetailsPage = () => {
                             <div>
                                 <span className="text-xs font-bold text-(--text-second) uppercase tracking-wider block mb-1.5">Created On</span>
                                 <p className="font-mono text-(--text-main) flex items-center gap-2">
-                                    <FiCalendar className="text-gray-400" /> {new Date(address?.createdAt).toLocaleString()}
+                                    <FiCalendar className="text-[var(--icon-color)]" /> {new Date(address?.createdAt).toLocaleString()}
                                 </p>
                             </div>
                         </div>

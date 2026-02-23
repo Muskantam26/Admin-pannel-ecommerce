@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 
 import ConfirmationModal from "../Component/Model/ConfirmationModal";
 import PageLoader from '../Component/PageLoader';
+import Button from '../Component/Btn';
 
 
 
@@ -107,11 +108,11 @@ const Packages = () => {
                             title={"Membership Packages"}
                             subtitle={"Choose the best plan for your needs"}
                         />
-                        <button
+                        <Button
                             onClick={openAdd}
-                            className='bg-(--bs-btn) text-(--text-white) px-4 py-2 rounded-lg text-sm font-medium cursor-pointer w-full sm:w-auto'>
+                            className='bg-(--bs-btn) text-(--text-white) px-4 py-2 rounded-lg text-sm font-medium cursor-pointer w-full sm:w-auto  transform hover:translate-y-1'>
                             Add New Package
-                        </button>
+                        </Button>
                     </div>
 
                     {loading ? <PageLoader/> : (
@@ -122,7 +123,7 @@ const Packages = () => {
                                     className={`relative rounded-3xl p-6 transition-all duration-300 hover:scale-105 hover:shadow-2xl flex flex-col items-center text-center
                          ${pkg.theme === 'dark'
                                             ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white border border-gray-700 shadow-xl'
-                                            : 'bg-white text-gray-800 border border-gray-100 shadow-lg'
+                                            : 'bg-[var(--bg-box)] text-[var(--text-main)] border border-[var(--bs-border)] shadow-lg'
                                         }
                      `}
                                 >
@@ -135,12 +136,12 @@ const Packages = () => {
 
                                     {/* Icon Circle */}
                                     <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-4 shadow-lg
-                         ${pkg.theme === 'dark' ? 'bg-gray-800 border border-gray-600' : 'bg-gray-50 border border-gray-100'}
+                         ${pkg.theme === 'dark' ? 'bg-gray-800 border border-gray-600' : 'bg-[var(--bg-main)] border border-[var(--bs-border)]'}
                      `}>
                                         {getIcon(pkg)}
                                     </div>
 
-                                    <h2 className={`text-2xl font-bold mb-2 ${pkg.theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                                    <h2 className={`text-2xl font-bold mb-2 ${pkg.theme === 'dark' ? 'text-white' : 'text-[var(--text-main)]'}`}>
                                         {pkg.name}
                                     </h2>
 
@@ -149,7 +150,7 @@ const Packages = () => {
                                             ₹{pkg.price?.toLocaleString()}
                                         </span>
                                         {pkg.mrp && pkg.mrp > pkg.price && (
-                                            <span className={`text-sm decoration-line-through ${pkg.theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
+                                            <span className={`text-sm decoration-line-through ${pkg.theme === 'dark' ? 'text-gray-500' : 'text-[var(--text-second)]'}`}>
                                                 ₹{pkg.mrp?.toLocaleString()}
                                             </span>
                                         )}
@@ -158,13 +159,13 @@ const Packages = () => {
 
                                     {/* Stats Grid */}
                                     <div className={`w-full grid grid-cols-2 gap-3 mb-6 p-4 rounded-xl
-                         ${pkg.theme === 'dark' ? 'bg-gray-800/50' : 'bg-gray-50'}
+                         ${pkg.theme === 'dark' ? 'bg-gray-800/50' : 'bg-[var(--bg-main)]'}
                      `}>
                                         <div className="text-center">
                                             <p className="text-[10px] uppercase tracking-wider opacity-70">C.T.O Limit</p>
                                             <p className="font-bold text-sm">{pkg.cto}</p>
                                         </div>
-                                        <div className="text-center border-l border-gray-200/20">
+                                        <div className="text-center border-l border-[var(--bs-border)]">
                                             <p className="text-[10px] uppercase tracking-wider opacity-70">Point Value</p>
                                             <p className="font-bold text-sm">{pkg.pv}</p>
                                         </div>
@@ -188,17 +189,17 @@ const Packages = () => {
                                     <div className="flex gap-2 w-full mt-auto">
                                         <button
                                             onClick={() => openEdit(pkg)}
-                                            className={`flex-1 py-2 rounded-lg font-bold text-xs transition-all duration-300 flex items-center justify-center gap-1
+                                            className={`flex-1 py-2 rounded-lg font-bold text-xs transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer
                                 ${pkg.theme === 'dark'
                                                     ? 'bg-indigo-600 hover:bg-indigo-500 text-white'
-                                                    : 'bg-gray-900 hover:bg-gray-800 text-white'
+                                                    : 'bg-[var(--bs-btn)] hover:bg-[var(--btn-hover)] text-white'
                                                 }
                             `}>
                                             <FaEdit /> Edit
                                         </button>
                                         <button
                                             onClick={() => handleDelete(pkg._id)}
-                                            className={`px-3 py-2 rounded-lg font-bold text-xs transition-all duration-300 flex items-center justify-center
+                                            className={`px-3 py-2 rounded-lg font-bold text-xs transition-all duration-300 flex items-center justify-center cursor-pointer
                                 ${pkg.theme === 'dark'
                                                     ? 'bg-red-900/50 text-red-400 hover:bg-red-900'
                                                     : 'bg-red-50 text-red-500 hover:bg-red-100'

@@ -93,12 +93,12 @@ const KycRequestPage = () => {
                     <img
                         src={row.user?.picture || "https://img.icons8.com/color/48/user-male--v2.png"}
                         alt=""
-                        className="w-9 h-9 rounded-full border border-(--bs-border) object-cover bg-gray-50"
+                        className="w-9 h-9 rounded-full border border-[var(--bs-border)] object-cover bg-[var(--bg-box)]"
                     />
                     <div>
                         <div className="flex items-center gap-2">
-                            <p className="text-sm font-semibold text-(--text-main) hover:text-blue-600 transition-colors cursor-pointer">{row.user?.username || "Unknown"}</p>
-                            {row.user?.id && <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded border border-blue-100 font-mono">{row.user.id}</span>}
+                            <p className="text-sm font-semibold text-(--text-main) hover:text-(--bs-primary) transition-colors cursor-pointer">{row.user?.username || "Unknown"}</p>
+                            {row.user?.id && <span className="text-[10px] bg-[var(--bg-main)] text-(--bs-primary) px-1.5 py-0.5 rounded border border-[var(--bs-border)] font-mono">{row.user.id}</span>}
                         </div>
                         <p className="text-xs text-(--text-second)">{row.user?.email}</p>
                     </div>
@@ -110,17 +110,17 @@ const KycRequestPage = () => {
             name: "Status",
             selector: (row) => row.status,
             cell: (row) => {
-                let statusColor = "bg-gray-100 text-gray-600";
+                let statusColor = "bg-[var(--bg-box)] text-[var(--text-second)] border border-[var(--bs-border)]";
                 let Icon = Clock;
 
                 if (row.status === 'APPROVED') {
-                    statusColor = "bg-green-50 text-green-700 border border-green-200";
+                    statusColor = "bg-[var(--bg-main)] text-green-700 border border-green-200";
                     Icon = CheckCircle;
                 } else if (row.status === 'REJECTED') {
-                    statusColor = "bg-red-50 text-red-700 border border-red-200";
+                    statusColor = "bg-[var(--bg-main)] text-red-700 border border-red-200";
                     Icon = XCircle;
                 } else if (row.status === 'PENDING') {
-                    statusColor = "bg-amber-50 text-amber-700 border border-amber-200";
+                    statusColor = "bg-[var(--bg-main)] text-amber-700 border border-amber-200";
                     Icon = Clock;
                 }
 
@@ -158,35 +158,35 @@ const KycRequestPage = () => {
         {
             name: "Action",
             cell: (row) => (
-                <div className="flex items-center gap-2">
+                <div className="flex gap-2">
+                    <button
+                        onClick={() => navigate(`/kyc-details/${row._id}`)}
+                        className="p-2 rounded-lg cursor-pointer bg-blue-100 text-blue-600"
+                        title="View Details"
+                    >
+                        <Eye size={14} />
+                    </button>
                     {row.status === 'PENDING' && (
                         <>
                             <button
                                 onClick={() => handleAction('approve', row)}
-                                className="h-8 px-3 flex items-center gap-1 whitespace-nowrap justify-center bg-green-50 text-green-600 rounded-lg hover:bg-green-500 hover:text-white transition-all active:scale-95 border border-green-200 shadow-sm"
+                                className="p-2 rounded-lg cursor-pointer bg-green-100 text-green-600"
                                 title="Approve Request"
                             >
-                                <Check size={16} strokeWidth={2.5} /> Approved
+                                <Check size={14} />
                             </button>
                             <button
                                 onClick={() => handleAction('reject', row)}
-                                className="h-8 px-3 flex items-center gap-1 whitespace-nowrap justify-center bg-red-50 text-red-600 rounded-lg hover:bg-red-500 hover:text-white transition-all active:scale-95 border border-red-200 shadow-sm"
+                                className="p-2 rounded-lg cursor-pointer bg-red-100 text-red-600"
                                 title="Reject Request"
                             >
-                                <X size={16} strokeWidth={2.5} /> Rejected
+                                <X size={14} />
                             </button>
                         </>
                     )}
-                    <button
-                        onClick={() => navigate(`/kyc-details/${row._id}`)}
-                        className="h-8 px-3 whitespace-nowrap bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition-all active:scale-95 flex items-center gap-2 text-xs font-bold border border-blue-200 shadow-sm ml-auto cursor-pointer"
-                        title="View Details"
-                    >
-                        <Eye size={14} /> View
-                    </button>
                 </div>
             ),
-            width: "350px"
+            width: "150px"
         }
     ];
 
@@ -200,7 +200,7 @@ const KycRequestPage = () => {
                 <div className="flex gap-3">
                     <div className="relative">
                         <select
-                            className="pl-3 pr-8 py-2.5 bg-white border border-(--bs-border) rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 shadow-sm transition-all appearance-none cursor-pointer text-(--text-main)"
+                            className="pl-3 pr-8 py-2.5 bg-[var(--bg-main)] border border-(--bs-border) rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-[var(--bs-primary)]/20 focus:border-[var(--bs-primary)] shadow-sm transition-all appearance-none cursor-pointer text-(--text-main)"
                             value={statusFilter}
                             onChange={(e) => {
                                 setStatusFilter(e.target.value);
@@ -230,14 +230,16 @@ const KycRequestPage = () => {
                 {loading ? (
                     <PageLoader/>
                 ) : (
-                    <CommonDataTable
-                        columns={columns}
-                        data={kycList}
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        onPageChange={setCurrentPage}
-                        pagination
-                    />
+                    <div className="overflow-x-auto w-full">
+                        <CommonDataTable
+                            columns={columns}
+                            data={kycList}
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={setCurrentPage}
+                            pagination
+                        />
+                    </div>
                 )}
             </div>
 

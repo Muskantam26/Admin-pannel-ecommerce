@@ -1,18 +1,18 @@
-import appLogo from "../assets/appLogo.png";
-import appFavicon from "../assets/appFavicon.png";
+import appLogo from "../assetS/AYUCARELOGO.PNG";
+import appFavicon from "../assetS/AYUCARELOGO.PNG";
 import axios from "axios";
 import store from "../redux/store";
 
 export const MainContent = {
-  appName: "VEDANZO",
-  appFullName: "VEDANZO",
+  appName: "Ayucare-Admin",
+  appFullName: "Ayucare",
   appLogo: appLogo,
   appFavicon: appFavicon,
   appURL: "https://www.psnft.space",
   contactNo: "+919876543210",
   email: "info@psnft.space",
   address: "North Oak , Sanjauli , Shimla (HP) 171006",
-  appDescription: "VEDANZO Marketplace",
+  appDescription: "Ayucare-Admin",
 };
 
 export const backendConfig = {

@@ -107,7 +107,7 @@ const AddAddressPage = () => {
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                 <div className="flex items-center gap-3">
-                    <button onClick={() => navigate('/address-requests')} className="p-2 hover:bg-gray-100 rounded-lg transition-colors text-[var(--text-second)]">
+                    <button onClick={() => navigate('/address-requests')} className="p-2 hover:bg-[var(--bg-box)] rounded-lg transition-colors text-[var(--text-second)] cursor-pointer">
                         <FiArrowLeft size={22} />
                     </button>
                     <div>
@@ -143,14 +143,14 @@ const AddAddressPage = () => {
 
                                 {/* Search Results Dropdown */}
                                 {userResults.length > 0 && (
-                                    <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-[var(--bs-border)] rounded-xl shadow-lg z-20 max-h-60 overflow-y-auto">
+                                    <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--bg-main)] border border-[var(--bs-border)] rounded-xl shadow-lg z-20 max-h-60 overflow-y-auto">
                                         {userResults.map(user => (
                                             <div
                                                 key={user._id}
                                                 onClick={() => handleSelectUser(user)}
-                                                className="p-3 hover:bg-gray-50 cursor-pointer flex items-center gap-3 border-b border-gray-100 last:border-0 transition"
+                                                className="p-3 hover:bg-[var(--bg-box)] cursor-pointer flex items-center gap-3 border-b border-[var(--bs-border)] last:border-0 transition"
                                             >
-                                                <img src={user.picture || "https://img.icons8.com/color/48/user-male--v2.png"} alt="" className="w-10 h-10 rounded-full object-cover bg-gray-100" />
+                                                <img src={user.picture || "https://img.icons8.com/color/48/user-male--v2.png"} alt="" className="w-10 h-10 rounded-full object-cover bg-[var(--bg-main)]" />
                                                 <div>
                                                     <p className="text-sm font-bold text-[var(--text-main)]">{user.username}</p>
                                                     <p className="text-xs text-[var(--text-second)]">{user.email} • {user.id}</p>
@@ -162,20 +162,20 @@ const AddAddressPage = () => {
                             </div>
                         ) : (
                             /* Selected User Card */
-                            <div className="bg-blue-50/50 border border-blue-100 rounded-xl p-4 flex items-center justify-between">
+                            <div className="bg-[var(--bg-main)] border border-[var(--bs-border)] rounded-xl p-4 flex items-center justify-between">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-full border-2 border-white shadow-sm overflow-hidden bg-gray-200">
+                                    <div className="w-12 h-12 rounded-full border-2 border-[var(--bg-main)] shadow-sm overflow-hidden bg-[var(--bg-box)]">
                                         <img src={selectedUser.picture || "https://img.icons8.com/color/48/user-male--v2.png"} alt="" className="w-full h-full object-cover" />
                                     </div>
                                     <div>
                                         <p className="text-sm font-bold text-[var(--text-main)]">{selectedUser.username}</p>
                                         <p className="text-xs text-[var(--text-second)]">{selectedUser.email}</p>
-                                        <span className="text-[10px] bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded font-mono mt-1 inline-block">{selectedUser.id}</span>
+                                        <span className="text-[10px] bg-[var(--bg-main)] border border-[var(--bs-border)] text-[var(--bs-primary)] px-1.5 py-0.5 rounded font-mono mt-1 inline-block">{selectedUser.id}</span>
                                     </div>
                                 </div>
                                 <button
                                     onClick={handleClearUser}
-                                    className="p-2 hover:bg-white rounded-lg text-red-500 transition shadow-sm border border-transparent hover:border-gray-200"
+                                    className="p-2 hover:bg-[var(--bg-box)] rounded-lg text-red-500 transition shadow-sm border border-transparent hover:border-(--bs-border) cursor-pointer"
                                     title="Remove User"
                                 >
                                     <FiX size={18} />
@@ -327,7 +327,7 @@ const AddAddressPage = () => {
                         <button
                             onClick={() => navigate('/address-requests')}
                             disabled={loading}
-                            className="w-full mt-3 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-bold transition-all flex justify-center items-center gap-2"
+                            className="w-full mt-3 py-3 bg-[var(--bg-main)] hover:bg-[var(--bg-box)] border border-[var(--bs-border)] text-[var(--text-second)] rounded-xl font-bold transition-all flex justify-center items-center gap-2 cursor-pointer"
                         >
                             Cancel
                         </button>

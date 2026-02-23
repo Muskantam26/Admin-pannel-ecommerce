@@ -58,12 +58,12 @@ const ProductList = () => {
   const columns = [
     {
       name: "#",
-      cell: (row, index) => <span className="text-gray-500 font-medium">{(currentPage - 1) * rowsPerPage + index + 1}</span>,
+      cell: (row, index) => <span className="text-(--text-second) font-medium">{(currentPage - 1) * rowsPerPage + index + 1}</span>,
       width: "60px"
     },
     {
       name: "ID",
-      cell: (row, index) => <span className="text-gray-500 font-medium">{row?.id}</span>,
+      cell: (row, index) => <span className="text-(--text-second) font-medium">{row?.id}</span>,
       width: "200px"
     },
     {
@@ -72,7 +72,7 @@ const ProductList = () => {
       imageSelector: (row) => row.image || (row.images && row.images.length > 0 ? (typeof row.images[0] === 'string' ? row.images[0] : row.images[0].src) : null),
       cell: (row) => (
         <div className="flex items-center gap-3 py-2">
-          <div className="w-12 h-12 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center overflow-hidden shrink-0">
+          <div className="w-12 h-12 rounded-lg bg-[var(--bg-main)] border border-[var(--bs-border)] flex items-center justify-center overflow-hidden shrink-0">
             <img
               src={row.image || (row.images && row.images.length > 0 ? (typeof row.images[0] === 'string' ? row.images[0] : row.images[0].src) : "https://via.placeholder.com/50")}
               alt={row.name}
@@ -80,8 +80,8 @@ const ProductList = () => {
             />
           </div>
           <div>
-            <p className="font-semibold text-gray-900 text-sm line-clamp-1">{row.name}</p>
-            <p className="text-xs text-gray-500 font-mono">SKU: {row.sku || 'N/A'}</p>
+            <p className="font-semibold text-[var(--text-main)] text-sm line-clamp-1">{row.name}</p>
+            <p className="text-xs text-[var(--text-second)] font-mono">SKU: {row.sku || 'N/A'}</p>
           </div>
         </div>
       ),
@@ -101,7 +101,7 @@ const ProductList = () => {
       name: "Price",
       selector: (row) => row.price,
       sortable: true,
-      cell: (row) => <span className="font-bold text-gray-900">₹{row.price}</span>,
+      cell: (row) => <span className="font-bold text-[var(--text-main)]">₹{row.price}</span>,
       width: "100px"
     },
     {
@@ -109,10 +109,10 @@ const ProductList = () => {
       selector: (row) => row.stock,
       cell: (row) => (
         <div className="flex flex-col">
-          <span className={`text-sm font-semibold ${row.stock > 0 ? 'text-gray-900' : 'text-red-600'}`}>
+          <span className={`text-sm font-semibold ${row.stock > 0 ? 'text-[var(--text-main)]' : 'text-red-600'}`}>
             {row.stock || 0}
           </span>
-          <span className="text-[10px] text-gray-400 uppercase">Units</span>
+          <span className="text-[10px] text-[var(--icon-color)] uppercase">Units</span>
         </div>
       ),
       width: "90px"
@@ -137,30 +137,30 @@ const ProductList = () => {
       cell: (row) => (
         <div className="flex gap-2">
           <button
-            className="p-1.5 rounded-md hover:bg-blue-50 text-gray-500 hover:text-blue-600 transition-colors cursor-pointer"
+            className="p-2 rounded-lg cursor-pointer bg-blue-100 text-blue-600"
             onClick={() => navigate(`/product/view/${row._id}`)}
             title="View Details"
           >
             
-            <Eye size={18} />
+            <Eye size={14} />
           </button>
           <button
-            className="p-1.5 rounded-md hover:bg-purple-50 text-gray-500 hover:text-purple-600 transition-colors cursor-pointer"
+            className="p-2 rounded-lg cursor-pointer bg-indigo-100 text-indigo-600"
             onClick={() => navigate(`/product/edit/${row._id}`)}
             title="Edit Product"
           >
 
-            <Edit size={18} />
+            <Edit size={14} />
           </button>
           <button
-            className="p-1.5 rounded-md hover:bg-red-50 text-gray-500 hover:text-red-600 transition-colors"
+            className="p-2 rounded-lg cursor-pointer bg-red-100 text-red-600"
             onClick={() => {
               setSelectedProduct(row);
               setIsDeleteOpen(true);
             }}
             title="Delete Product"
           >
-            <Trash2 size={18} />
+            <Trash2 size={14} />
           </button>
         </div>
       ),
@@ -189,7 +189,7 @@ const ProductList = () => {
         </button>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden p-3">
+      <div className="bg-[var(--bg-box)] rounded-2xl shadow-sm border border-[var(--bs-border)] overflow-x-auto p-3">
         {loading ? (
          <PageLoader/>
         ) : (

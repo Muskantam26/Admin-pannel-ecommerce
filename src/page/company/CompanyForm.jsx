@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Heading } from "../../Component/Heading";
+import { FiSave, FiCheck } from "react-icons/fi";
 import { InputField } from "../../Component/InputBox";
 import Button from "../../Component/Btn";
 import { Axios } from "../../constant/MainContent";
@@ -111,103 +111,157 @@ const CompanyForm = () => {
     };
 
     return (
-        <div className="card shadow-lg bg-white w-full h-full p-4 rounded-lg mb-10 overflow-y-auto">
-            <Heading title="Company Settings" />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
-
-                {/* Basic Info */}
-                <div className="col-span-2">
-                    <h3 className="font-bold text-lg mb-2">Basic Information</h3>
+        <div className="pb-20 relative min-h-screen bg-(--bg-main)">
+            {/* Header */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 px-4 pt-6">
+                <div className="flex items-center gap-3">
+                    <div>
+                        <h1 className="text-2xl font-bold text-(--text-main)">Company Settings</h1>
+                        <p className="text-(--text-second) text-sm mt-0.5">Manage your company information, configurations, and identity.</p>
+                    </div>
                 </div>
-                <InputField label="Company Name" name="companyName" value={formData.companyName} onChange={handleChange} />
-                <InputField label="Mobile" name="mobile" value={formData.mobile} onChange={handleChange} />
-
-                <div className="col-span-1">
-                    <ImageUpload
-                        label="Company Logo"
-                        onUploadComplete={(url) => handleUploadComplete(url, 'logo')}
-                        previewUrl={logoPreview}
-                        onRemove={() => { setLogoPreview(""); setFormData(p => ({ ...p, logo: "" })) }}
-                        folder="company/logo"
-                    />
+                <div className="flex gap-3 w-full md:w-auto">
+                    <Button
+                        onClick={handleSubmit}
+                        className="flex-1 md:flex-none px-6 py-2.5 bg-(--bs-btn) rounded-lg transition font-medium shadow-sm flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                        <FiCheck /> Save Changes
+                    </Button>
                 </div>
+            </div>
 
-                {/* Address */}
-                <div className="col-span-2 mt-4">
-                    <h3 className="font-bold text-lg mb-2">Address</h3>
-                </div>
-                <InputField label="Street" name="street" value={formData.address.street} onChange={(e) => handleChange(e, 'address')} />
-                <InputField label="City" name="city" value={formData.address.city} onChange={(e) => handleChange(e, 'address')} />
-                <InputField label="State" name="state" value={formData.address.state} onChange={(e) => handleChange(e, 'address')} />
-                <InputField label="Zip Code" name="zipCode" value={formData.address.zipCode} onChange={(e) => handleChange(e, 'address')} />
-                <InputField label="Country" name="country" value={formData.address.country} onChange={(e) => handleChange(e, 'address')} />
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 px-4 w-full">
+                {/* --- LEFT COLUMN: MAIN CONTENT --- */}
+                <div className="lg:col-span-2 space-y-8">
 
-                {/* Email Settings */}
-                <div className="col-span-2 mt-4">
-                    <h3 className="font-bold text-lg mb-2">Email Settings (SMTP)</h3>
-                </div>
-                <InputField label="Email" name="email" value={formData.email.email} onChange={(e) => handleChange(e, 'email')} />
-                <InputField label="Password" name="password" type="password" value={formData.email.password} onChange={(e) => handleChange(e, 'email')} />
-                <InputField label="Host" name="host" value={formData.email.host} onChange={(e) => handleChange(e, 'email')} />
-                <div className="flex gap-4">
-                    <InputField label="Port" name="port" type="number" value={formData.email.port} onChange={(e) => handleChange(e, 'email')} />
-                    <div className="flex items-center gap-2 mt-6">
-                        <input type="checkbox" name="secure" checked={formData.email.secure} onChange={(e) => handleChange(e, 'email')} />
-                        <label>Secure (SSL/TLS)</label>
+                    {/* Basic Info */}
+                    <div className="bg-(--bg-box) p-6 rounded-2xl shadow-sm border border-(--bs-border)">
+                        <div className="flex items-center justify-between mb-6">
+                            <h2 className="text-lg font-bold text-(--text-main)">Basic Information</h2>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="md:col-span-1">
+                                <InputField label="Company Name" name="companyName" value={formData.companyName} onChange={handleChange} />
+                            </div>
+                            <div className="md:col-span-1">
+                                <InputField label="Mobile" name="mobile" value={formData.mobile} onChange={handleChange} />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Address */}
+                    <div className="bg-(--bg-box) p-6 rounded-2xl shadow-sm border border-(--bs-border)">
+                        <h2 className="text-lg font-bold text-(--text-main) mb-6">Address Location</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="md:col-span-2"><InputField label="Street" name="street" value={formData.address.street} onChange={(e) => handleChange(e, 'address')} /></div>
+                            <InputField label="City" name="city" value={formData.address.city} onChange={(e) => handleChange(e, 'address')} />
+                            <InputField label="State" name="state" value={formData.address.state} onChange={(e) => handleChange(e, 'address')} />
+                            <InputField label="Zip Code" name="zipCode" value={formData.address.zipCode} onChange={(e) => handleChange(e, 'address')} />
+                            <InputField label="Country" name="country" value={formData.address.country} onChange={(e) => handleChange(e, 'address')} />
+                        </div>
+                    </div>
+
+                    {/* Email Settings */}
+                    <div className="bg-(--bg-box) p-6 rounded-2xl shadow-sm border border-(--bs-border)">
+                        <h2 className="text-lg font-bold text-(--text-main) mb-6">Email Settings (SMTP)</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <InputField label="Email" name="email" value={formData.email.email} onChange={(e) => handleChange(e, 'email')} />
+                            <InputField label="Password" name="password" type="password" value={formData.email.password} onChange={(e) => handleChange(e, 'email')} />
+                            <InputField label="Host" name="host" value={formData.email.host} onChange={(e) => handleChange(e, 'email')} />
+                            <div className="flex gap-4">
+                                <InputField label="Port" name="port" type="number" value={formData.email.port} onChange={(e) => handleChange(e, 'email')} />
+                                <div className="flex items-center gap-2 mt-6">
+                                    <input type="checkbox" name="secure" checked={formData.email.secure} onChange={(e) => handleChange(e, 'email')} />
+                                    <label className="text-sm font-medium text-(--text-second)">Secure (SSL/TLS)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Bank Details */}
+                    <div className="bg-(--bg-box) p-6 rounded-2xl shadow-sm border border-(--bs-border)">
+                        <h2 className="text-lg font-bold text-(--text-main) mb-6">Bank Details</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <InputField label="Account Name" name="accountName" value={formData.bankDetails.accountName} onChange={(e) => handleChange(e, 'bankDetails')} />
+                            <InputField label="Account Number" name="accountNumber" value={formData.bankDetails.accountNumber} onChange={(e) => handleChange(e, 'bankDetails')} />
+                            <InputField label="Bank Name" name="bankName" value={formData.bankDetails.bankName} onChange={(e) => handleChange(e, 'bankDetails')} />
+                            <InputField label="IFSC Code" name="ifscCode" value={formData.bankDetails.ifscCode} onChange={(e) => handleChange(e, 'bankDetails')} />
+                            <div className="md:col-span-2">
+                                <InputField label="Branch" name="branch" value={formData.bankDetails.branch} onChange={(e) => handleChange(e, 'bankDetails')} />
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                {/* Bank Details */}
-                <div className="col-span-2 mt-4">
-                    <h3 className="font-bold text-lg mb-2">Bank Details</h3>
-                </div>
-                <InputField label="Account Name" name="accountName" value={formData.bankDetails.accountName} onChange={(e) => handleChange(e, 'bankDetails')} />
-                <InputField label="Account Number" name="accountNumber" value={formData.bankDetails.accountNumber} onChange={(e) => handleChange(e, 'bankDetails')} />
-                <InputField label="Bank Name" name="bankName" value={formData.bankDetails.bankName} onChange={(e) => handleChange(e, 'bankDetails')} />
-                <InputField label="IFSC Code" name="ifscCode" value={formData.bankDetails.ifscCode} onChange={(e) => handleChange(e, 'bankDetails')} />
-                <InputField label="Branch" name="branch" value={formData.bankDetails.branch} onChange={(e) => handleChange(e, 'bankDetails')} />
+                {/* --- RIGHT COLUMN: SIDEBAR --- */}
+                <div className="space-y-8">
 
-                {/* UPI Details */}
-                <div className="col-span-2 mt-4">
-                    <h3 className="font-bold text-lg mb-2">UPI Details</h3>
-                </div>
-                <InputField label="UPI ID" name="upiId" value={formData.upiDetails.upiId} onChange={(e) => handleChange(e, 'upiDetails')} />
-                <div className="col-span-1">
-                    <ImageUpload
-                        label="QR Code"
-                        onUploadComplete={(url) => handleUploadComplete(url, 'qr')}
-                        previewUrl={qrPreview}
-                        onRemove={() => { setQrPreview(""); setFormData(p => ({ ...p, upiDetails: { ...p.upiDetails, qrCode: "" } })) }}
-                        folder="company/qr"
-                    />
-                </div>
+                    {/* Media */}
+                    <div className="bg-(--bg-box) p-6 rounded-2xl shadow-sm border border-(--bs-border)">
+                        <h2 className="text-lg font-bold text-(--text-main) mb-6">Company Assets</h2>
+                        <div className="space-y-6">
+                            <div>
+                                <h3 className="text-sm font-semibold text-(--text-second) mb-3">Company Logo</h3>
+                                <ImageUpload
+                                    label="Company Logo"
+                                    onUploadComplete={(url) => handleUploadComplete(url, 'logo')}
+                                    previewUrl={logoPreview}
+                                    onRemove={() => { setLogoPreview(""); setFormData(p => ({ ...p, logo: "" })) }}
+                                    folder="company/logo"
+                                />
+                            </div>
+                        </div>
+                    </div>
 
-                {/* ImageKit Settings */}
-                <div className="col-span-2 mt-4">
-                    <h3 className="font-bold text-lg mb-2">ImageKit Configuration</h3>
+                    {/* UPI Details */}
+                    <div className="bg-(--bg-box) p-6 rounded-2xl shadow-sm border border-(--bs-border)">
+                        <h2 className="text-lg font-bold text-(--text-main) mb-6">UPI Integration</h2>
+                        <div className="space-y-6">
+                            <InputField label="UPI ID" name="upiId" value={formData.upiDetails.upiId} onChange={(e) => handleChange(e, 'upiDetails')} />
+                            
+                            <div>
+                                <h3 className="text-sm font-semibold text-(--text-second) mb-3">UPI QR Code</h3>
+                                <ImageUpload
+                                    label="QR Code"
+                                    onUploadComplete={(url) => handleUploadComplete(url, 'qr')}
+                                    previewUrl={qrPreview}
+                                    onRemove={() => { setQrPreview(""); setFormData(p => ({ ...p, upiDetails: { ...p.upiDetails, qrCode: "" } })) }}
+                                    folder="company/qr"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* External Integrations */}
+                    <div className="bg-(--bg-box) p-6 rounded-2xl shadow-sm border border-(--bs-border)">
+                        <h2 className="text-lg font-bold text-(--text-main) mb-6">External Integrations</h2>
+                        
+                        <div className="space-y-6">
+                            <div>
+                                <h3 className="text-sm font-semibold text-(--text-second) mb-3">ImageKit Specs</h3>
+                                <div className="space-y-4">
+                                    <InputField label="Public Key" name="publicKey" value={formData.imageKit.publicKey} onChange={(e) => handleChange(e, 'imageKit')} />
+                                    <InputField label="Private Key" name="privateKey" type="password" value={formData.imageKit.privateKey} onChange={(e) => handleChange(e, 'imageKit')} />
+                                    <InputField label="URL Endpoint" name="urlEndpoint" value={formData.imageKit.urlEndpoint} onChange={(e) => handleChange(e, 'imageKit')} />
+                                </div>
+                            </div>
+
+                            <hr className="border-(--bs-border)" />
+
+                            <div>
+                                <h3 className="text-sm font-semibold text-(--text-second) mb-3">Social Profiles</h3>
+                                <div className="space-y-4">
+                                    <InputField label="Facebook" name="facebook" value={formData.socialLinks.facebook} onChange={(e) => handleChange(e, 'socialLinks')} />
+                                    <InputField label="Instagram" name="instagram" value={formData.socialLinks.instagram} onChange={(e) => handleChange(e, 'socialLinks')} />
+                                    <InputField label="Twitter" name="twitter" value={formData.socialLinks.twitter} onChange={(e) => handleChange(e, 'socialLinks')} />
+                                    <InputField label="LinkedIn" name="linkedin" value={formData.socialLinks.linkedin} onChange={(e) => handleChange(e, 'socialLinks')} />
+                                    <InputField label="YouTube" name="youtube" value={formData.socialLinks.youtube} onChange={(e) => handleChange(e, 'socialLinks')} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-                <InputField label="Public Key" name="publicKey" value={formData.imageKit.publicKey} onChange={(e) => handleChange(e, 'imageKit')} />
-                <InputField label="Private Key" name="privateKey" type="password" value={formData.imageKit.privateKey} onChange={(e) => handleChange(e, 'imageKit')} />
-                <InputField label="URL Endpoint" name="urlEndpoint" value={formData.imageKit.urlEndpoint} onChange={(e) => handleChange(e, 'imageKit')} />
-
-                {/* Social Links */}
-                <div className="col-span-2 mt-4">
-                    <h3 className="font-bold text-lg mb-2">Social Links</h3>
-                </div>
-                <InputField label="Facebook" name="facebook" value={formData.socialLinks.facebook} onChange={(e) => handleChange(e, 'socialLinks')} />
-                <InputField label="Instagram" name="instagram" value={formData.socialLinks.instagram} onChange={(e) => handleChange(e, 'socialLinks')} />
-                <InputField label="Twitter" name="twitter" value={formData.socialLinks.twitter} onChange={(e) => handleChange(e, 'socialLinks')} />
-                <InputField label="LinkedIn" name="linkedin" value={formData.socialLinks.linkedin} onChange={(e) => handleChange(e, 'socialLinks')} />
-                <InputField label="YouTube" name="youtube" value={formData.socialLinks.youtube} onChange={(e) => handleChange(e, 'socialLinks')} />
-
-            </div>
-
-            <div className="mt-8 flex justify-end">
-                <Button
-                    title="Save Changes"
-                    onClick={handleSubmit}
-                    className="bg-(--bs-btn-third) px-6 py-2 text-white rounded hover:opacity-90"
-                />
             </div>
         </div>
     );

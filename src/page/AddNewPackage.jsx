@@ -1,11 +1,10 @@
 /* eslint-disable react/prop-types */
 import { RxCrossCircled } from "react-icons/rx";
 import { useState, useEffect } from "react";
-import Button from "../Component/Btn";
-import { Heading } from "../Component/Heading";
 import { InputField } from "../Component/InputBox";
-import { FiPlus, FiTrash2 } from "react-icons/fi";
-import { IoArrowBack } from "react-icons/io5";
+import Button from "../Component/Btn";
+import CustomSelect from "../Component/Inputs/CustomSelect";
+import { FiPlus, FiArrowLeft, FiCheck } from "react-icons/fi";
 
 const AddNewPackage = ({ onClose, onSaveClick, initialData }) => {
 
@@ -61,141 +60,161 @@ const AddNewPackage = ({ onClose, onSaveClick, initialData }) => {
   };
 
   return (
-    <div className="rounded-xl shadow-lg mt-5 bg-white p-6 space-y-8 animate-fade-in-up">
-
-      <div className="flex justify-between items-center border-b pb-4 border-gray-100">
+    <div className="pb-10 relative bg-(--bg-main) animate-fade-in-up">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div className="flex items-center gap-3">
-          <button 
-            onClick={onClose} 
-            className="p-2 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors text-gray-600"
-            title="Back to Packages"
-          >
-            <IoArrowBack size={20} />
+          <button onClick={onClose} className="p-2 hover:bg-[var(--bg-box)] rounded-lg transition-colors text-(--text-second) border border-transparent hover:border-[var(--bs-border)] cursor-pointer">
+            <FiArrowLeft size={20} />
           </button>
-          <Heading title={"Add New Package"} className="text-2xl font-bold text-gray-800" />
+          <div>
+            <h1 className="text-2xl font-bold text-(--text-main)">{initialData ? "Edit Package" : "Add New Package"}</h1>
+            <p className="text-(--text-second) text-sm mt-0.5">Manage package details, pricing, and benefits.</p>
+          </div>
         </div>
-        <button onClick={onClose} className="p-2 hover:bg-(--bs-btn-second) hover:text-(--text-white) rounded-full transition-colors cursor-pointer">
-          <RxCrossCircled size={24} className="text-(--text-white) bg-(--bs-btn-second) rounded-full cursor-pointer" />
-        </button>
+      
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-
-        {/* LEFT COLUMN - BASIC INFO & PRICING */}
-        <div className="space-y-6">
-
-          {/* Section 1: Basic Information */}
-          <section className="bg-gray-50 p-5 rounded-xl border border-gray-100">
-            <h3 className="text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide">Package Information</h3>
-            <div className="space-y-4">
-              <InputField
-                label={"Package Name"}
-                placeholder="e.g. Diamond, Gold"
-                value={formData.name}
-                onChange={e => setFormData({ ...formData, name: e.target.value })}
-              />
-
-              <div>
-                <label className="text-xs font-semibold text-gray-600 mb-1 block">Theme</label>
-                <select
-                  value={formData.theme}
-                  onChange={e => setFormData({ ...formData, theme: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg p-2 text-sm outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                >
-                  <option value="light">Light Theme</option>
-                  <option value="dark">Dark Theme (Special)</option>
-                </select>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* --- LEFT COLUMN: MAIN CONTENT --- */}
+        <div className="lg:col-span-2 space-y-8">
+          
+          {/* Basic Info */}
+          <div className="bg-[var(--bg-box)] p-6 rounded-2xl shadow-sm border border-[var(--bs-border)]">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-lg font-bold text-[var(--text-main)]">Basic Information</h2>
+              <span className="text-xs font-medium px-2.5 py-1 bg-[var(--bs-primary)]/10 text-[var(--bs-primary)] rounded-full border border-[var(--bs-primary)]/20">Required</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="md:col-span-2">
+                <InputField
+                  label="Package Name"
+                  placeholder="e.g. Diamond, Gold"
+                  value={formData.name}
+                  onChange={e => setFormData({ ...formData, name: e.target.value })}
+                />
               </div>
             </div>
-          </section>
+          </div>
 
-          {/* Section 2: Pricing & Values */}
-          <section className="bg-gray-50 p-5 rounded-xl border border-gray-100">
-            <h3 className="text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide">Pricing & Values</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          {/* Pricing & Limits */}
+          <div className="bg-[var(--bg-box)] p-6 rounded-2xl shadow-sm border border-[var(--bs-border)]">
+            <h2 className="text-lg font-bold text-[var(--text-main)] mb-6">Pricing & Limits</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <InputField
-                label={"Price (₹)"}
+                label="Price (₹)"
                 type="number"
                 placeholder="0.00"
                 value={formData.price}
                 onChange={e => setFormData({ ...formData, price: e.target.value })}
               />
               <InputField
-                label={"MRP (₹)"}
+                label="MRP (₹)"
                 type="number"
                 placeholder="0.00"
                 value={formData.mrp}
                 onChange={e => setFormData({ ...formData, mrp: e.target.value })}
               />
-              <InputField
-                label={"C.T.O Limit"}
-                placeholder="e.g. 1 Lakh"
-                value={formData.cto}
-                onChange={e => setFormData({ ...formData, cto: e.target.value })}
-              />
-              <InputField
-                label={"Point Value (PV)"}
-                type="number"
-                placeholder="e.g. 15"
-                value={formData.pv}
-                onChange={e => setFormData({ ...formData, pv: e.target.value })}
-              />
+              <div className="md:col-span-2 pt-4 border-t border-[var(--bs-border)]">
+                <label className="text-sm text-(--text-second) font-medium mb-3 block">Package Limits & Values</label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <InputField
+                    label="Point Value (PV)"
+                    type="number"
+                    placeholder="e.g. 15"
+                    value={formData.pv}
+                    onChange={e => setFormData({ ...formData, pv: e.target.value })}
+                  />
+                  <InputField
+                    label="C.T.O Limit"
+                    placeholder="e.g. 1 Lakh"
+                    value={formData.cto}
+                    onChange={e => setFormData({ ...formData, cto: e.target.value })}
+                  />
+                </div>
+              </div>
             </div>
-          </section>
+          </div>
 
         </div>
 
-        {/* RIGHT COLUMN - BENEFITS */}
-        <div className="space-y-6">
+        {/* --- RIGHT COLUMN: SIDEBAR --- */}
+        <div className="space-y-8">
 
-          {/* Section 3: Benefits */}
-          <section className="bg-gray-50 p-5 rounded-xl border border-gray-100 h-full">
-            <h3 className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">Package Benefits</h3>
-            <div className="flex gap-2 mb-4">
-              <input
-                value={benefitInput}
-                onChange={e => setBenefitInput(e.target.value)}
-                className="flex-1 border border-gray-300 p-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Add a benefit (e.g. Priority Support)"
+          {/* Theme / Appearance */}
+          <div className="bg-[var(--bg-box)] p-6 rounded-2xl shadow-sm border border-[var(--bs-border)]">
+            <h2 className="text-lg font-bold text-[var(--text-main)] mb-6">Appearance</h2>
+            <div className="space-y-4">
+              <CustomSelect
+                label="Card Theme"
+                name="theme"
+                value={formData.theme}
+                onChange={e => setFormData({ ...formData, theme: e.target.value })}
+                options={[
+                  { label: "Light Theme (Standard)", value: "light" },
+                  { label: "Dark Theme (Premium)", value: "dark" }
+                ]}
+                searchable={false}
               />
-              <button onClick={addBenefit} className="bg-(--bs-btn) text-white p-2 px-4 rounded-lg hover:bg-blue-700 font-medium cursor-pointer">Add</button>
             </div>
+          </div>
 
-            <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-              {formData.benefits.map((b, i) => (
-                <div key={i} className="flex justify-between items-center bg-white p-3 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-                  <span className="text-sm text-gray-700 font-medium">{b}</span>
-                  <button onClick={() => removeBenefit(i)} className="text-gray-400 hover:text-red-500 p-1 rounded-full hover:bg-red-50 transition-colors cursor-pointer">
-                    <FiTrash2 size={16} />
-                  </button>
+          {/* Benefits */}
+          <div className="bg-[var(--bg-box)] p-6 rounded-2xl shadow-sm border border-[var(--bs-border)]">
+            <h2 className="text-lg font-bold text-[var(--text-main)] mb-6">Package Benefits</h2>
+            <div className="space-y-4">
+              <div className="flex gap-2 mb-4 items-start">
+                <div className="flex-1">
+                  <InputField
+                    value={benefitInput}
+                    onChange={e => setBenefitInput(e.target.value)}
+                    placeholder="e.g. Priority Support"
+                  />
                 </div>
-              ))}
-              {formData.benefits.length === 0 && (
-                <div className="text-center py-8 text-gray-400 italic border-2 border-dashed border-gray-200 rounded-lg">
-                  No benefits added yet.
-                </div>
-              )}
+                <button onClick={addBenefit} className="px-3 py-2.5 bg-[var(--bs-btn)] text-white rounded-lg hover:bg-[var(--btn-hover)] transition cursor-pointer text-sm font-medium"><FiPlus /></button>
+              </div>
+
+              <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                {formData.benefits.map((b, i) => (
+                  <div key={i} className="flex justify-between items-center bg-[var(--bg-main)] p-3 rounded-lg border border-[var(--bs-border)] shadow-sm">
+                    <span className="text-sm text-[var(--text-main)] flex items-center gap-2">
+                       <div className="w-1.5 h-1.5 rounded-full bg-[var(--bs-primary)]"></div>
+                       {b}
+                    </span>
+                    <button onClick={() => removeBenefit(i)} className="text-[var(--icon-color)] hover:text-red-500 p-1 rounded-full transition-colors cursor-pointer">
+                      <RxCrossCircled size={18} />
+                    </button>
+                  </div>
+                ))}
+                {formData.benefits.length === 0 && (
+                  <div className="text-center py-6 text-[var(--text-second)] text-sm italic border-2 border-dashed border-[var(--bs-border)] rounded-lg">
+                    No benefits added yet.
+                  </div>
+                )}
+              </div>
             </div>
-          </section>
+          </div>
+          
 
         </div>
-
+        
       </div>
-
-      {/* FOOTER ACTIONS */}
-      <div className="flex gap-4 items-center justify-end pt-6 border-t border-gray-100">
-        <Button
-          title={"Cancel"}
-          onClick={onClose}
-          className="px-6 py-2.5 rounded-lg border border-gray-300 bg-(--bs-btn-second) text-gray-700 hover:bg-gray-50 font-medium transition-colors cursor-pointer"
-        />
-        <Button
-          title={"Save Package"}
-          className="px-8 py-2.5 rounded-lg bg-(--bs-btn) text-white hover:bg-blue-700 shadow-lg shadow-blue-500/30 font-medium transition-all transform hover:-translate-y-0.5 cursor-pointer"
-          onClick={handleSave}
-        />
-      </div>
-
+        <div className="flex gap-3 w-full md:w-auto justify-end">
+          <Button
+            onClick={onClose}
+            bg="bg-transparent"
+            text="text-[var(--text-main)]"
+            className="flex-1 md:flex-none px-4 py-2 border border-[var(--bs-border)] rounded-lg hover:bg-(--bs-btn) hover:text-(--text-white) font-medium"
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleSave}
+            className="flex-1 md:flex-none px-6 py-2 rounded-lg font-medium shadow-sm flex items-center justify-center gap-2"
+          >
+            <FiCheck /> Save Package
+          </Button>
+        </div>
     </div>
   );
 };

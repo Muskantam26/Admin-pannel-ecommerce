@@ -46,8 +46,8 @@ const OrderProgressBar = ({ status, trackHistory = [] }) => {
   };
 
   return (
-    <div className="mt-8 px-4">
-      <div className="relative flex justify-between items-start">
+    <div className="mt-8 px-4 w-full overflow-x-auto pb-4 custom-scrollbar">
+      <div className="relative flex justify-between items-start min-w-[700px]">
         {/* The Connector Lines (Background Layer) */}
         <div className="absolute top-3 left-0 w-full h-1 flex px-10 z-0">
           {steps.map((step, index) => (

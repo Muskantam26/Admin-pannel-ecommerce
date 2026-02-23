@@ -14,7 +14,7 @@ const Button = ({
 
       onClick={onClick}
       className={`
-        ${bg} ${text} cursor-pointer ${className}`}
+        ${bg} ${text} cursor-pointer transition transform hover:scale-105 ${className}`}
     >
       {children || title}
     </button>

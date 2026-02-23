@@ -97,7 +97,7 @@ const AddMember = ({ onClose }) => {
             <select
               value={formData.role}
               onChange={(e) => handleChange("role", e.target.value)}
-              className="w-full border border-gray-300 rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+              className="w-full border border-(--bs-border) rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500 bg-(--bg-box)"
             >
               <option value="">Select Role</option>
               <option value="Admin">Admin</option>
@@ -111,7 +111,7 @@ const AddMember = ({ onClose }) => {
       </div>
 
       {/* Footer Actions */}
-      <div className="flex justify-end gap-3 p-6 border-t border-gray-100 bg-gray-50/50">
+      <div className="flex justify-end gap-3 p-6 border-t border-(--bs-border) bg-(--bg-main)">
         <Button
           title={"Cancel"}
           onClick={onClose}

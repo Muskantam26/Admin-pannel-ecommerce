@@ -268,7 +268,7 @@ const UserManagement = () => {
         </Modal>
       </div>
 
-      <div className="bg-(--bg-box) rounded-2xl p-5 shadow-sm border border-gray-100">
+      <div className="bg-(--bg-box) rounded-2xl p-5 shadow-sm border border-(--bs-border)">
         <Heading title={"User Statistics"} />
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-5'>
           <UserCards
@@ -298,7 +298,7 @@ const UserManagement = () => {
         </div>
       </div>
 
-      <div className='bg-(--bg-box) rounded-2xl p-5 mt-5 shadow-sm border border-gray-100'>
+      <div className='bg-(--bg-box) rounded-2xl p-5 mt-5 shadow-sm border border-(--bs-border)'>
         <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4'>
           <Heading title={"User List"} />
           <div className="w-full sm:w-auto">
@@ -316,14 +316,16 @@ const UserManagement = () => {
         {loading ? (
           <div className="p-10 text-center">Loading users...</div>
         ) : (
-          <CommonDataTable
-            columns={columns}
-            data={paginatedData}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-            rowsPerPage={rowsPerPage}
-          />
+          <div className="overflow-x-auto w-full">
+            <CommonDataTable
+              columns={columns}
+              data={paginatedData}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+              rowsPerPage={rowsPerPage}
+            />
+          </div>
         )}
       </div>
 

@@ -46,11 +46,11 @@ const CustomSelect = ({
 
     return (
         <div className="w-full relative" ref={dropdownRef}>
-            {label && <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>}
+            {label && <label className="block text-xs font-semibold text-(--text-main) mb-1">{label}</label>}
 
             {/* Trigger Button */}
             <div
-                className={`w-full border rounded-lg px-3 py-2.5 flex justify-between items-center bg-white cursor-pointer transition-all
+                className={`w-full border rounded-lg px-3 py-2 flex justify-between items-center bg-white cursor-pointer transition-all
                     ${isOpen ? 'border-blue-500 ring-1 ring-blue-500' : 'border-gray-300 hover:border-gray-400'}
                     ${disabled ? 'bg-gray-100 cursor-not-allowed opacity-75' : ''}
                 `}
@@ -58,9 +58,9 @@ const CustomSelect = ({
             >
                 <div className="flex items-center gap-2 truncate">
                     {selectedOption ? (
-                        <span className="text-gray-900">{selectedOption.label}</span>
+                        <span className="text-(--text-second) text-xs ">{selectedOption.label}</span>
                     ) : (
-                        <span className="text-gray-400">{placeholder}</span>
+                        <span className="text-(--text-second) text-xs">{placeholder}</span>
                     )}
                 </div>
 

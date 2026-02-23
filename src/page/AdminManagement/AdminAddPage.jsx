@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getAdminByIdApi, createAdminApi, updateAdminFullApi, sendOtpApi, verifyOtpApi } from '../../api/admin-api';
 import { PathRoutes } from '../../constant/Path';
+import { InputField } from '../../Component/InputBox';
 import PageLoader from '../../Component/PageLoader';
 import { toast } from 'react-toastify';
 import { FiSave, FiArrowLeft, FiUser, FiMail, FiPhone, FiLock, FiShield, FiCheckCircle } from 'react-icons/fi';
@@ -193,80 +194,55 @@ const AdminAddPage = () => {
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {/* Username */}
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-semibold text-(--text-second)">Username</label>
-                                        <div className="relative">
-                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                                                <FiUser />
-                                            </div>
-                                            <input
-                                                type="text"
-                                                name="username"
-                                                value={formData.username}
-                                                onChange={handleChange}
-                                                required
-                                                className="w-full pl-10 pr-4 py-3 rounded-xl bg-(--bg-main) border border-(--bs-border) text-(--text-main) focus:ring-2 focus:ring-(--bs-primary)/20 focus:border-(--bs-primary) outline-none transition-all placeholder:text-gray-400"
-                                                placeholder="johndoe"
-                                            />
-                                        </div>
-                                    </div>
+                                    <InputField
+                                        label="Username"
+                                        name="username"
+                                        value={formData.username}
+                                        onChange={handleChange}
+                                        required
+                                        placeholder="johndoe"
+                                    />
 
                                     {/* Email */}
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-semibold text-(--text-second)">Email Address</label>
-                                        <div className="relative">
-                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                                                <FiMail />
-                                            </div>
-                                            <input
-                                                type="email"
-                                                name="email"
-                                                value={formData.email}
-                                                onChange={handleChange}
-                                                required
-                                                className={`w-full pl-10 pr-24 py-3 rounded-xl bg-(--bg-main) border text-(--text-main) focus:ring-2 outline-none transition-all placeholder:text-gray-400 ${isEmailVerified
-                                                    ? 'border-green-500 focus:border-green-500 focus:ring-green-500/20'
-                                                    : 'border-(--bs-border) focus:border-(--bs-primary) focus:ring-(--bs-primary)/20'
-                                                    }`}
-                                                placeholder="john@example.com"
-                                            />
-                                            <div className="absolute inset-y-0 right-1 flex items-center">
-                                                {isEmailVerified ? (
-                                                    <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-md flex items-center gap-1">
-                                                        <FiCheckCircle /> Verified
-                                                    </span>
-                                                ) : (
-                                                    <button
-                                                        type="button"
-                                                        onClick={handleSendOtp}
-                                                        disabled={verifying || !formData.email}
-                                                        className="px-3 py-1.5 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
-                                                    >
-                                                        {verifying ? 'Sending...' : 'Verify'}
-                                                    </button>
-                                                )}
-                                            </div>
+                                    <div className="relative">
+                                        <InputField
+                                            label="Email Address"
+                                            type="email"
+                                            name="email"
+                                            value={formData.email}
+                                            onChange={handleChange}
+                                            required
+                                            placeholder="john@example.com"
+                                            className={`pr-24 py-3 ${isEmailVerified ? 'border-green-500 bg-green-50/10' : ''}`}
+                                        />
+                                        <div className="absolute top-[28px] right-2 flex items-center">
+                                            {isEmailVerified ? (
+                                                <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-md flex items-center gap-1">
+                                                    <FiCheckCircle /> Verified
+                                                </span>
+                                            ) : (
+                                                <button
+                                                    type="button"
+                                                    onClick={handleSendOtp}
+                                                    disabled={verifying || !formData.email}
+                                                    className="px-3 py-1.5 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors cursor-pointer"
+                                                >
+                                                    {verifying ? 'Sending...' : 'Verify'}
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
 
                                     {/* Mobile */}
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-semibold text-(--text-second)">Phone Number</label>
-                                        <div className="relative">
-                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                                                <FiPhone />
-                                            </div>
-                                            <input
-                                                type="text"
-                                                name="mobile"
-                                                value={formData.mobile}
-                                                onChange={handleChange}
-                                                required
-                                                className="w-full pl-10 pr-4 py-3 rounded-xl bg-(--bg-main) border border-(--bs-border) text-(--text-main) focus:ring-2 focus:ring-(--bs-primary)/20 focus:border-(--bs-primary) outline-none transition-all placeholder:text-gray-400"
-                                                placeholder="+1 234 567 8900"
-                                            />
-                                        </div>
-                                    </div>
+                                    <InputField
+                                        label="Phone Number"
+                                        type="text"
+                                        name="mobile"
+                                        value={formData.mobile}
+                                        onChange={handleChange}
+                                        required
+                                        placeholder="+1 234 567 8900"
+                                    />
                                 </div>
                             </div>
 
@@ -278,23 +254,15 @@ const AdminAddPage = () => {
                                 </h2>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div className="space-y-2">
-                                        <label className="text-sm font-semibold text-(--text-second)">
-                                            {adminId ? 'New Password' : 'Password'}
-                                        </label>
-                                        <div className="relative">
-                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                                                <FiLock />
-                                            </div>
-                                            <input
-                                                type="password"
-                                                name="password"
-                                                value={formData.password}
-                                                onChange={handleChange}
-                                                required={!adminId}
-                                                className="w-full pl-10 pr-4 py-3 rounded-xl bg-(--bg-main) border border-(--bs-border) text-(--text-main) focus:ring-2 focus:ring-(--bs-primary)/20 focus:border-(--bs-primary) outline-none transition-all placeholder:text-gray-400"
-                                                placeholder={adminId ? "Leave blank to keep current" : "Create a strong password"}
-                                            />
-                                        </div>
+                                        <InputField
+                                            label={adminId ? 'New Password' : 'Password'}
+                                            type="password"
+                                            name="password"
+                                            value={formData.password}
+                                            onChange={handleChange}
+                                            required={!adminId}
+                                            placeholder={adminId ? "Leave blank to keep current" : "Create a strong password"}
+                                        />
                                         <p className="text-xs text-gray-500">
                                             Must be at least 8 characters with numbers and symbols.
                                         </p>

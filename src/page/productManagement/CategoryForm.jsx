@@ -4,17 +4,20 @@ import { InputField } from "../../Component/InputBox";
 import Button from "../../Component/Btn";
 import { Axios } from "../../constant/MainContent";
 import { toast } from "react-toastify";
-import { useNavigate, useParams } from "react-router-dom";
-import { RxCrossCircled } from "react-icons/rx";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { FiArrowLeft, FiCheck } from "react-icons/fi";
 import ImageUpload from "../../Component/Inputs/ImageUpload";
 import { useDispatch } from "react-redux";
 import { hideLoader, showLoader } from "../../redux/slice/loadingSlice";
 import { createCategoryApi, updateCategoryApi, getCategoryApi, getAllCategoryApi } from "../../api/category-api";
 import PageLoader from "../../Component/PageLoader";
+import CustomSelect from "../../Component/Inputs/CustomSelect";
 
 const CategoryForm = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
+    const mode = location.state?.mode || "category";
 
     const [formData, setFormData] = useState({
         name: "",
@@ -67,13 +70,13 @@ const CategoryForm = () => {
                 // ... logic
                 if (res.success === false) {
                     toast.error(res.message || "Failed to load category data");
-                    navigate("/add-category");
+                    navigate(mode === "subcategory" ? "/sub-category" : "/add-category");
                 }
             }
         } catch (error) {
             console.error("Error fetching category:", error);
             toast.error("Failed to load category data");
-            navigate("/add-category");
+            navigate(mode === "subcategory" ? "/sub-category" : "/add-category");
         } finally {
             setLoading(false);
         }
@@ -102,19 +105,25 @@ const CategoryForm = () => {
         if (!formData.name) {
             return toast.error("Category name is required");
         }
+        
+        if (mode === "subcategory" && !formData.parentId) {
+            return toast.error("Parent category is required for subcategories");
+        }
+
         dispatch(showLoader())
         try {
+            const payload = { ...formData, type: mode };
             let res;
             if (id) {
-                res = await updateCategoryApi(id, formData);
+                res = await updateCategoryApi(id, payload);
             } else {
-                res = await createCategoryApi(formData);
+                res = await createCategoryApi(payload);
             }
 
             if (res.success) {
                 toast.success(res.message);
                 dispatch(hideLoader())
-                navigate("/add-category");
+                navigate(mode === "subcategory" ? "/sub-category" : "/add-category");
             } else {
                 toast.error(res.message || "Something went wrong");
                 dispatch(hideLoader())
@@ -128,87 +137,122 @@ const CategoryForm = () => {
         }
     };
 
-    return (
-        <div className="rounded-xl shadow-2xl mt-5 bg-(--bg-box) p-5 space-y-5">
-            {loading && <PageLoader />}
-            <div className="flex justify-between">
-                <Heading title={id ? "Edit Category" : "Add Category"} />
-                <button
-                    onClick={() => navigate("/add-category")}
-                    className="text-gray-500 hover:text-red-500 transition-colors"
-                >
-                    <RxCrossCircled size={26} />
-                </button>
-            </div>
+    const isEditMode = !!id;
+    const headingTitle = isEditMode
+        ? mode === "subcategory" ? "Edit Sub Category" : "Edit Category"
+        : mode === "subcategory" ? "Add Sub Category" : "Add Category";
+    const subTitle = mode === "subcategory" ? "Manage your sub-category details and media." : "Manage your category details and media.";
+    const backPath = mode === "subcategory" ? "/sub-category" : "/add-category";
 
-            {/* Inputs Grid, matching AddProduct style */}
-            <div className="grid grid-cols-2 gap-4 mt-5">
-                <InputField
-                    label="Category Name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder="Category Name"
-                />
-                <InputField
-                    label="Slug (Auto-generated)"
-                    name="slug"
-                    value={formData.slug}
-                    onChange={handleChange}
-                    placeholder="Category Slug"
-                />
-                {/* Parent Category Select */}
-                <div className="flex flex-col gap-1 col-span-2 md:col-span-1">
-                    <label className="text-xs font-semibold text-gray-600">Parent Category</label>
-                    <select
-                        name="parentId"
-                        value={formData.parentId}
-                        onChange={handleChange}
-                        className="w-full border rounded-md p-2 text-xs bg-transparent outline-none focus:ring-1 focus:ring-(--bs-btn-third)"
+    return (
+        <div className="pb-20 relative min-h-screen bg-(--bg-main) mt-5 md:mt-2">
+            {loading && <PageLoader />}
+            
+            {/* Header */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 px-2 md:px-0">
+                <div className="flex items-center gap-3">
+                    <button onClick={() => navigate(backPath)} className="p-2 hover:bg-[var(--bg-box)] rounded-lg transition-colors text-(--text-second)">
+                        <FiArrowLeft size={20} />
+                    </button>
+                    <div>
+                        <h1 className="text-2xl font-bold text-(--text-main)">{headingTitle}</h1>
+                        <p className="text-(--text-second) text-sm mt-0.5">{subTitle}</p>
+                    </div>
+                </div>
+                <div className="flex gap-3 w-full md:w-auto px-2 md:px-0">
+                    <Button
+                        title="Cancel"
+                        onClick={() => navigate(backPath)}
+                        bg="bg-transparent"
+                        text="text-(--text-second)"
+                        className="flex-1 md:flex-none px-4 py-2 border border-(--bs-border) rounded-lg hover:bg-[var(--bg-main)] transition font-medium cursor-pointer"
+                    />
+                    <Button
+                        onClick={handleSubmit}
+                        bg="bg-(--bs-btn)"
+                        text="text-white"
+                        className={`flex-1 md:flex-none px-4 py-2 rounded-lg transition transform hover:scale-105 font-medium shadow-sm flex items-center justify-center gap-2 ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
                     >
-                        <option value="">None (Top Level)</option>
-                        {categories
-                            .filter(cat => cat._id !== id) // Exclude self
-                            .map((cat) => (
-                                <option key={cat._id} value={cat._id}>
-                                    {cat.name}
-                                </option>
-                            ))}
-                    </select>
+                        {loading ? "Saving..." : <><FiCheck /> {isEditMode ? "Update" : "Save"} {mode === "subcategory" ? "Sub Category" : "Category"}</>}
+                    </Button>
                 </div>
             </div>
 
-            {/* Description */}
-            <Heading title={"Description"} titleSize="text-xs" />
-            <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                rows={3}
-                className="w-full border rounded-md p-2 text-xs bg-transparent outline-none focus:ring-1 focus:ring-(--bs-btn-third)"
-                placeholder="Detailed Description"
-            />
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 px-2 md:px-0">
+                {/* --- LEFT COLUMN: MAIN CONTENT --- */}
+                <div className="lg:col-span-2 space-y-8">
+                    
+                    {/* Basic Info */}
+                    <div className="bg-[var(--bg-box)] p-6 rounded-2xl shadow-sm border border-[var(--bs-border)]">
+                        <div className="flex items-center justify-between mb-6">
+                            <h2 className="text-lg font-bold text-[var(--text-main)]">Basic Information</h2>
+                            <span className="text-xs font-medium px-2.5 py-1 bg-blue-50 text-blue-700 rounded-full">Required</span>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="md:col-span-1">
+                                <InputField
+                                    label="Category Name"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    placeholder="Enter category name"
+                                />
+                            </div>
+                            <div className="md:col-span-1">
+                                <InputField
+                                    label="Slug (Auto-generated)"
+                                    name="slug"
+                                    value={formData.slug}
+                                    onChange={handleChange}
+                                    placeholder="category-slug"
+                                />
+                            </div>
 
-            <ImageUpload
-                label="Category Image"
-                onUploadComplete={handleUploadComplete}
-                previewUrl={imagePreview}
-                onRemove={removeImage}
-                folder="category"
-            />
+                            {mode === "subcategory" && (
+                                <div className="md:col-span-2">
+                                    <CustomSelect
+                                        label="Parent Category"
+                                        name="parentId"
+                                        value={formData.parentId}
+                                        onChange={handleChange}
+                                        options={categories
+                                            .filter(cat => cat._id !== id)
+                                            .map(cat => ({ label: cat.name, value: cat._id }))}
+                                        placeholder="Select Parent Category..."
+                                     
+                                    />
+                                </div>
+                            )}
 
-            {/* Buttons */}
-            <div className="flex gap-3 items-center justify-center mt-10">
-                <Button
-                    title={"Cancel"}
-                    onClick={() => navigate("/add-category")}
-                    className="bg-gray-400 hover:bg-gray-500 px-6 rounded-sm text-xs py-2"
-                />
-                <Button
-                    title={id ? "Update Category" : "Add Category"}
-                    className="bg-(--bs-btn-third) hover:opacity-90 px-6 rounded-sm text-xs py-2"
-                    onClick={handleSubmit}
-                />
+                            <div className="md:col-span-2">
+                                <label className="block text-sm font-medium text-[var(--text-second)] mb-2">Description</label>
+                                <textarea
+                                    name="description"
+                                    value={formData.description}
+                                    onChange={handleChange}
+                                    rows={5}
+                                    className="w-full border border-[var(--bs-border)] rounded-xl p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all resize-y bg-[var(--bg-box)] text-[var(--text-main)]"
+                                    placeholder="Detailed description..."
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* --- RIGHT COLUMN: SIDEBAR --- */}
+                <div className="space-y-8">
+                    {/* Media */}
+                    <div className="bg-[var(--bg-box)] p-6 rounded-2xl shadow-sm border border-[var(--bs-border)]">
+                        <h2 className="text-lg font-bold text-[var(--text-main)] mb-6">Category Image</h2>
+                        <ImageUpload
+                            label="Upload Image"
+                            onUploadComplete={handleUploadComplete}
+                            previewUrl={imagePreview}
+                            onRemove={removeImage}
+                            folder="category"
+                        />
+                    </div>
+                </div>
             </div>
         </div>
     );

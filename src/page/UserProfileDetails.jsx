@@ -102,9 +102,9 @@ const UserProfileDetails = () => {
                         <img
                             src={user.picture || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}
                             alt="Profile"
-                            className="w-16 h-16 rounded-full object-cover border-2 border-indigo-100 shadow-sm"
+                            className="w-16 h-16 rounded-full object-cover border-2 border-[var(--bs-border)] shadow-sm"
                         />
-                        <span className={`absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-white ${user.active?.isActive ? 'bg-green-500' : 'bg-gray-400'}`}></span>
+                        <span className={`absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-[var(--bg-box)] ${user.active?.isActive ? 'bg-green-500' : 'bg-gray-400'}`}></span>
                     </div>
                     <div>
                         <MainHeading title={user.fullName || user.username} subtitle={`User ID: ${user.id || 'N/A'}`} />
@@ -305,9 +305,9 @@ const UserProfileDetails = () => {
                             </div>
                         ))
                     ) : (
-                        <div className="col-span-full py-10 text-center bg-gray-50 rounded-xl border border-dashed border-gray-300">
-                            <FaWallet className="mx-auto text-4xl text-gray-300 mb-2" />
-                            <p className="text-sm text-gray-500 font-medium">No bank details found for this user.</p>
+                        <div className="col-span-full py-10 text-center bg-(--bg-main) rounded-xl border border-dashed border-(--bs-border)">
+                            <FaWallet className="mx-auto text-4xl text-[var(--icon-color)] opacity-50 mb-2" />
+                            <p className="text-sm text-(--text-second) font-medium">No bank details found for this user.</p>
                         </div>
                     )}
                 </div>
@@ -321,7 +321,7 @@ const UserProfileDetails = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {user.addressDetails?.length > 0 ? (
                         user.addressDetails?.map((addr, index) => (
-                            <div key={index} className="relative overflow-hidden group bg-white rounded-xl border border-(--bs-border) p-5 hover:shadow-lg transition-all duration-300">
+                            <div key={index} className="relative overflow-hidden group bg-(--bg-box) rounded-xl border border-(--bs-border) p-5 hover:shadow-lg transition-all duration-300">
 
                                 <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
                                     <FiMapPin size={60} />
@@ -382,9 +382,9 @@ const UserProfileDetails = () => {
                             </div>
                         ))
                     ) : (
-                        <div className="col-span-full py-10 text-center bg-gray-50 rounded-xl border border-dashed border-gray-300">
-                            <FiMapPin className="mx-auto text-4xl text-gray-300 mb-2" />
-                            <p className="text-sm text-gray-500 font-medium">No address details found for this user.</p>
+                        <div className="col-span-full py-10 text-center bg-(--bg-main) rounded-xl border border-dashed border-(--bs-border)">
+                            <FiMapPin className="mx-auto text-4xl text-[var(--icon-color)] opacity-50 mb-2" />
+                            <p className="text-sm text-(--text-second) font-medium">No address details found for this user.</p>
                         </div>
                     )}
                 </div>
@@ -431,11 +431,11 @@ const UserProfileDetails = () => {
                                             <p className="text-xs text-(--text-second) mb-2 font-medium">Front Side</p>
                                             <div
                                                 onClick={() => setPreviewImage(doc.front)}
-                                                className="block w-full aspect-video bg-gray-100 rounded-xl overflow-hidden relative group border border-(--bs-border) cursor-pointer"
+                                                className="block w-full aspect-video bg-(--bg-main) rounded-xl overflow-hidden relative group border border-(--bs-border) cursor-pointer"
                                             >
                                                 <img src={doc.front} alt="Front" className="w-full h-full object-cover" />
                                                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition backdrop-blur-sm">
-                                                    <span className="bg-white/20 text-white px-3 py-1.5 rounded-lg border border-white/40 flex items-center gap-2 text-sm font-medium backdrop-blur-md">
+                                                    <span className="bg-(--bg-box)/20 text-white px-3 py-1.5 rounded-lg border border-white/40 flex items-center gap-2 text-sm font-medium backdrop-blur-md">
                                                         <FiShield size={16} /> View Preview
                                                     </span>
                                                 </div>
@@ -446,11 +446,11 @@ const UserProfileDetails = () => {
                                                 <p className="text-xs text-(--text-second) mb-2 font-medium">Back Side</p>
                                                 <div
                                                     onClick={() => setPreviewImage(doc.back)}
-                                                    className="block w-full aspect-video bg-gray-100 rounded-xl overflow-hidden relative group border border-(--bs-border) cursor-pointer"
+                                                    className="block w-full aspect-video bg-(--bg-main) rounded-xl overflow-hidden relative group border border-(--bs-border) cursor-pointer"
                                                 >
                                                     <img src={doc.back} alt="Back" className="w-full h-full object-cover" />
                                                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition backdrop-blur-sm">
-                                                        <span className="bg-white/20 text-white px-3 py-1.5 rounded-lg border border-white/40 flex items-center gap-2 text-sm font-medium backdrop-blur-md">
+                                                        <span className="bg-(--bg-box)/20 text-white px-3 py-1.5 rounded-lg border border-white/40 flex items-center gap-2 text-sm font-medium backdrop-blur-md">
                                                             <FiShield size={16} /> View Preview
                                                         </span>
                                                     </div>
@@ -502,7 +502,7 @@ const UserProfileDetails = () => {
                 <div className="p-4 relative flex flex-col items-center">
                     <button
                         onClick={() => setPreviewImage(null)}
-                        className="absolute top-0 right-0 p-2 text-gray-400 hover:text-red-500 transition"
+                        className="absolute top-0 right-0 p-2 text-(--text-third) hover:text-red-500 transition cursor-pointer"
                     >
                         <FiXCircle size={28} />
                     </button>
@@ -532,11 +532,11 @@ const UserProfileDetails = () => {
                 <div className="p-6 w-full max-w-lg bg-(--bg-box) rounded-xl">
                     <div className="flex justify-between items-center mb-4">
                         <h3 className="text-xl font-bold text-(--text)">Edit Profile</h3>
-                        <button onClick={() => setIsEditOpen(false)} className="text-gray-500 hover:text-gray-700">
+                        <button onClick={() => setIsEditOpen(false)} className="text-(--text-second) hover:text-[var(--text-main)] cursor-pointer">
                             <FaTimes size={20} />
                         </button>
                     </div>
-                    <div className="py-4 text-center text-(--text-second) bg-gray-50 rounded-lg border border-dashed border-gray-300">
+                    <div className="py-4 text-center text-(--text-second) bg-(--bg-main) rounded-lg border border-dashed border-(--bs-border)">
                         <FaEdit className="mx-auto mb-2 text-3xl opacity-50" />
                         <p>Edit functionality Coming Soon.</p>
                         <p className="text-xs">We can implement the form fields here.</p>

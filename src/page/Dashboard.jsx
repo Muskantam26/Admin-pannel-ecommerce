@@ -1,5 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { IoAlertCircleOutline } from "react-icons/io5";
+import { getAllOrdersApi } from "../api/order-api";
+import { useNavigate } from "react-router-dom";
+import { PathRoutes } from "../constant/Path";
+import { toast } from "react-toastify";
+import DateTime from "../Component/DateTime";
 import Card from "../Component/Cards";
 import Payoutcards from "../Component/Payoutcards";
 
@@ -191,146 +196,98 @@ const Dashboard = () => {
     },
   ];
 
-  const orderList = [
-    {
-      id: 1,
-      order_id: "#1021",
-      client_name: "ABC pharma",
-      product: "Face Serum",
-      stage: "Production",
-      dispatch: "18 jan",
-      priority: "High",
-      status: "Delayed",
-      price: "15000",
-    },
-    {
-      id: 2,
-      order_id: "#2023",
-      client_name: "NeoCare",
-      product: "Shampoo",
-      stage: "Packaging",
-      dispatch: "20 Feb",
-      priority: "Low",
-      status: "At Risk",
-      price: "15000",
-    },
-    {
-      id: 3,
-      order_id: "#5620",
-      client_name: "ZenLabs",
-      product: "Body Lotion",
-      stage: "QC",
-      dispatch: "30 Jan",
-      priority: "High",
-      status: "On Track",
-      price: "15000",
-    },
-    {
-      id: 4,
-      order_id: "#6201",
-      client_name: "DermaPlus",
-      product: "Cream",
-      stage: "Raw Material",
-      dispatch: "12 Feb",
-      priority: "Low",
-      status: "Medium",
-      price: "20000",
-    },
-    {
-      id: 5,
-      order_id: "#8502",
-      client_name: "GlowCo",
-      product: "Face Wash",
-      stage: "Dispatch",
-      dispatch: "25 Jan",
-      priority: "High",
-      status: "Low",
-      price: "15000",
-    },
-    {
-      id: 6,
-      order_id: "#6503",
-      client_name: "NeoCare",
-      product: "Cream",
-      stage: "Packaging",
-      dispatch: "10 Feb",
-      priority: "Low",
-      status: "Medium",
-      price: "25000",
-    },
-  ];
-
+  const navigate = useNavigate();
+  const [orders, setOrders] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 6;
+  const [totalPages, setTotalPages] = useState(0);
+  const limit = 10;
 
-  const totalPages = Math.ceil(orderList.length / rowsPerPage);
+  const fetchOrders = async () => {
+    try {
+      const response = await getAllOrdersApi({ page: currentPage, limit });
+      if (response.success) {
+        setOrders(response.data.orders);
+        setTotalPages(response.data.totalPages);
+      }
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      toast.error("Failed to fetch orders");
+    }
+  };
 
-  const paginatedData = orderList.slice(
-    (currentPage - 1) * rowsPerPage,
-    currentPage * rowsPerPage,
-  );
+  useEffect(() => {
+    fetchOrders();
+  }, [currentPage]);
 
   const StatusBadge = ({ status }) => {
     const colorMap = {
-      Delayed: "bg-red-500",
-      "At Risk": "bg-yellow-400",
-      "On Track": "bg-green-500",
-      Medium: "bg-orange-400",
-      Low: "bg-green-500",
-      High: "bg-red-400",
+      PENDING: "bg-yellow-100 text-yellow-700 border-yellow-200",
+      PLACED: "bg-indigo-100 text-indigo-700 border-indigo-200",
+      PROCESSING: "bg-orange-100 text-orange-700 border-orange-200",
+      CONFIRMED: "bg-blue-100 text-blue-700 border-blue-200",
+      SHIPPED: "bg-purple-100 text-purple-700 border-purple-200",
+      DELIVERED: "bg-green-100 text-green-700 border-green-200",
+      CANCELLED: "bg-red-100 text-red-700 border-red-200",
+      RETURNED: "bg-gray-100 text-gray-700 border-gray-200",
     };
 
     return (
-      <div className="flex items-center gap-2">
-        <span className={`h-2 w-2 rounded-full ${colorMap[status]}`} />
-        <span className="text-sm">{status}</span>
-      </div>
+      <span className={`px-2 py-1 rounded-full text-xs font-semibold border ${colorMap[status] || 'bg-gray-100 text-gray-700 border-gray-200'}`}>
+        {status}
+      </span>
     );
   };
 
   const columns = [
     {
-      name: "Order ID",
-      selector: (row) => row.order_id,
+      name: "Order Id",
+      selector: (row) => row.orderId,
       sortable: true,
     },
     {
+      name: "Client ID",
+      selector: (row) => row?.userId,
+    },
+    {
       name: "Client Name",
-      selector: (row) => row.client_name,
+      selector: (row) => row?.fullName || row?.userId,
     },
     {
-      name: "Product",
-      selector: (row) => row.product,
+      name: "Date",
+      selector: (row) => <DateTime date={row.createdAt} />,
+      sortable: true,
     },
     {
-      name: "Stage",
-      selector: (row) => row.stage,
+      name: "Payment",
+      selector: (row) => row.paymentMethod,
     },
     {
-      name: "Dispatch",
-      selector: (row) => row.dispatch,
+      name: "Amount",
+      selector: (row) => `₹${row.totalPrice}`,
+      sortable: true,
     },
     {
-      name: "Priority",
-      selector: (row) => row.priority,
+      name: "Payment Status",
+      cell: (row) => (
+        <span className={`px-2 py-1 rounded text-xs font-semibold ${row.paymentStatus === 'PAID' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+          {row.paymentStatus}
+        </span>
+      ),
     },
     {
       name: "Status",
-      cell: (row) => <StatusBadge status={row.status} />,
-    },
-    {
-      name: "Price",
-      selector: (row) => `₹${row.price}`,
+      cell: (row) => <StatusBadge status={row.orderStatus} />,
     },
     {
       name: "Action",
-      cell: () => (
+      cell: (row) => (
         <div className="flex gap-2">
-          <button className="p-2 rounded-lg bg-(--icon-btn) text-(--icon-btn-text)">
-            <Eye size={10} />
-          </button>
-          <button className="p-2 rounded-lg bg-(--icon-btn-second) text-(--icon-text-second) ">
-            <Pencil size={10} />
+          <button 
+            className="p-2 rounded-lg cursor-pointer bg-blue-100 text-blue-600"
+            onClick={() => navigate(`${PathRoutes.ORDERS_DETAILS}/${row._id}`)}
+            title="View Details"
+          >
+            <Eye size={14} />
           </button>
         </div>
       ),
@@ -488,14 +445,16 @@ const Dashboard = () => {
             </div>
           </div>
 
-         <CommonDataTable
-  columns={columns}
-  data={paginatedData}
-  currentPage={currentPage}
-  totalPages={totalPages}
-  onPageChange={setCurrentPage}
-/>
-    </div>
+          <div className="overflow-x-auto w-full mt-4">
+            <CommonDataTable
+              columns={columns}
+              data={orders}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

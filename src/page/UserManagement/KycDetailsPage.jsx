@@ -97,7 +97,7 @@ const KycDetailsPage = () => {
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
                 <div className="flex items-center gap-4">
-                    <button onClick={() => navigate(-1)} className="p-2.5 bg-white border border-[var(--bs-border)] hover:bg-gray-50 rounded-xl text-[var(--text-second)] transition shadow-sm">
+                    <button onClick={() => navigate(-1)} className="p-2.5 bg-[var(--bg-main)] border border-[var(--bs-border)] hover:bg-[var(--bg-box)] rounded-xl text-[var(--text-second)] cursor-pointer transition shadow-sm">
                         <FiArrowLeft size={20} />
                     </button>
                     <div>
@@ -130,11 +130,11 @@ const KycDetailsPage = () => {
                         <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-r from-blue-500/10 to-purple-500/10"></div>
 
                         <div className="relative pt-8 flex flex-col items-center mb-6 text-center">
-                            <div className="w-24 h-24 rounded-full border-4 border-white shadow-md overflow-hidden mb-4 bg-gray-100 flex items-center justify-center">
+                            <div className="w-24 h-24 rounded-full border-4 border-[var(--bg-main)] shadow-md overflow-hidden mb-4 bg-[var(--bg-main)] flex items-center justify-center">
                                 {user?.picture ? (
                                     <img src={user.picture} alt="User" className="w-full h-full object-cover" />
                                 ) : (
-                                    <FiUser size={40} className="text-gray-400" />
+                                    <FiUser size={40} className="text-[var(--text-second)]" />
                                 )}
                             </div>
                             <h4 className="text-xl font-bold text-[var(--text-main)]">{user?.username || "Unknown User"}</h4>
@@ -150,7 +150,7 @@ const KycDetailsPage = () => {
                                 <span className="text-[var(--text-second)] flex items-center gap-2"><FiCalendar size={14} /> Joined</span>
                                 <span className="font-medium text-[var(--text-main)]">{user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}</span>
                             </div>
-                            <div className="flex justify-between items-center text-sm bg-gray-50 p-3 rounded-xl">
+                            <div className="flex justify-between items-center text-sm bg-[var(--bg-main)] p-3 rounded-xl border border-[var(--bs-border)]">
                                 <span className="text-[var(--text-second)] flex items-center gap-2"><FiShield size={14} /> KYC Status</span>
                                 <span className={`font-bold flex items-center gap-1.5 ${user?.kyc ? 'text-green-600' : 'text-orange-500'}`}>
                                     <span className={`w-2 h-2 rounded-full ${user?.kyc ? 'bg-green-500' : 'bg-orange-500'}`}></span>
@@ -173,7 +173,7 @@ const KycDetailsPage = () => {
                             <button
                                 onClick={() => setIsRejectOpen(true)}
                                 disabled={actionLoading}
-                                className="w-full py-3.5 bg-white border-2 border-red-100 text-red-500 hover:bg-red-50 hover:border-red-200 rounded-xl font-bold transition flex justify-center items-center gap-2"
+                                className="w-full py-3.5 bg-[var(--bg-main)] border border-red-100 text-red-500 hover:bg-red-50 hover:border-red-200 rounded-xl font-bold transition flex justify-center items-center gap-2 cursor-pointer"
                             >
                                 <FiXCircle size={18} /> Reject Request
                             </button>
@@ -183,7 +183,7 @@ const KycDetailsPage = () => {
                     {status === 'REJECTED' && (
                         <div className="bg-red-50 rounded-3xl p-6 border border-red-100 shadow-sm">
                             <h3 className="text-red-800 font-bold mb-2 flex items-center gap-2"><FiXCircle /> Rejection Reason</h3>
-                            <p className="text-red-700 text-sm leading-relaxed bg-white/50 p-3 rounded-lg border border-red-100">{reason || "No reason provided."}</p>
+                            <p className="text-red-700 text-sm leading-relaxed bg-[var(--bg-main)]/50 p-3 rounded-lg border border-red-100">{reason || "No reason provided."}</p>
                         </div>
                     )}
                 </div>
@@ -205,7 +205,7 @@ const KycDetailsPage = () => {
                                         </div>
                                         <div className="text-right">
                                             <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-second)] block mb-1">Number</span>
-                                            <p className="font-mono text-sm bg-white px-2 py-1 rounded border border-[var(--bs-border)] text-[var(--text-main)]">{doc.number}</p>
+                                            <p className="font-mono text-sm bg-[var(--bg-box)] px-2 py-1 rounded border border-[var(--bs-border)] text-[var(--text-main)]">{doc.number}</p>
                                         </div>
                                     </div>
 
@@ -214,7 +214,7 @@ const KycDetailsPage = () => {
                                             <p className="text-xs text-[var(--text-second)] mb-2 font-medium">Front Side</p>
                                             <div
                                                 onClick={() => setPreviewImage(doc.front)}
-                                                className="block w-full aspect-video bg-gray-100 rounded-xl overflow-hidden relative group border border-[var(--bs-border)] cursor-pointer"
+                                                className="block w-full aspect-video bg-[var(--bg-box)] rounded-xl overflow-hidden relative group border border-[var(--bs-border)] cursor-pointer"
                                             >
                                                 <img src={doc.front} alt="Front" className="w-full h-full object-cover" />
                                                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition backdrop-blur-sm">
@@ -229,7 +229,7 @@ const KycDetailsPage = () => {
                                                 <p className="text-xs text-[var(--text-second)] mb-2 font-medium">Back Side</p>
                                                 <div
                                                     onClick={() => setPreviewImage(doc.back)}
-                                                    className="block w-full aspect-video bg-gray-100 rounded-xl overflow-hidden relative group border border-[var(--bs-border)] cursor-pointer"
+                                                    className="block w-full aspect-video bg-[var(--bg-box)] rounded-xl overflow-hidden relative group border border-[var(--bs-border)] cursor-pointer"
                                                 >
                                                     <img src={doc.back} alt="Back" className="w-full h-full object-cover" />
                                                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition backdrop-blur-sm">
@@ -250,11 +250,11 @@ const KycDetailsPage = () => {
 
             {/* Reject Modal */}
             <Modal isOpen={isRejectOpen}>
-                <div className="bg-white p-6 rounded-2xl w-full max-w-md">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">Reject Verification</h3>
-                    <p className="text-gray-500 text-sm mb-4">Please provide a reason for rejection. This will be visible to the user.</p>
+                <div className="bg-[var(--bg-main)] p-6 rounded-2xl w-full max-w-md">
+                    <h3 className="text-xl font-bold text-[var(--text-main)] mb-2">Reject Verification</h3>
+                    <p className="text-[var(--text-second)] text-sm mb-4">Please provide a reason for rejection. This will be visible to the user.</p>
                     <textarea
-                        className="w-full border border-gray-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none mb-4 resize-none"
+                        className="w-full border border-[var(--bs-border)] bg-[var(--bg-box)] text-[var(--text-main)] rounded-xl p-3 text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none mb-4 resize-none"
                         rows={4}
                         placeholder="e.g. ID proof is blurry, Name mismatch..."
                         value={rejectReason}
@@ -263,7 +263,7 @@ const KycDetailsPage = () => {
                     <div className="flex gap-3">
                         <button
                             onClick={() => setIsRejectOpen(false)}
-                            className="flex-1 px-4 py-2.5 rounded-lg border border-[var(--bs-border)] text-[var(--text-second)] bg-[var(--bg-box)] hover:bg-gray-50 transition font-medium"
+                            className="flex-1 px-4 py-2.5 rounded-lg border border-[var(--bs-border)] text-[var(--text-second)] bg-[var(--bg-box)] hover:bg-[var(--bg-main)] transition font-medium cursor-pointer"
                         >
                             Cancel
                         </button>

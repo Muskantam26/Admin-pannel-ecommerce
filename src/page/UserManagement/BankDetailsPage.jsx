@@ -85,7 +85,7 @@ const BankDetailsPage = () => {
         }
     };
 
-    if (loading) return <div className="p-20 text-center text-(--text-second)">Loading Details...</div>;
+    if (loading) return <PageLoader/>;
     if (!bankData) return <div className="p-20 text-center text-red-500 font-bold">Bank Details Not Found.</div>;
 
     const { userId: user, bankName, accountNumber, ifscCode, accountHolderName, branchName, upiId, status, isDefault, createdAt, updatedAt } = bankData;
@@ -95,14 +95,14 @@ const BankDetailsPage = () => {
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
                 <div className="flex items-center gap-4">
-                    <button onClick={() => navigate(-1)} className="p-2.5 bg-white border border-(--bs-border) hover:bg-gray-50 rounded-xl text-(--text-second) transition shadow-sm cursor-pointer">
+                    <button onClick={() => navigate(-1)} className="p-2.5 bg-(--bg-box) border border-(--bs-border) hover:bg-[var(--bg-main)] rounded-xl text-(--text-second) transition shadow-sm cursor-pointer">
                         <FiArrowLeft size={20} />
                     </button>
                     <div>
                         <h1 className="text-2xl font-bold text-(--text-main)">Bank Verification Details</h1>
                         <p className="text-sm text-(--text-second) flex items-center gap-2 mt-1">
                             <span className="font-mono bg-(--bg-box) px-1.5 py-0.5 rounded border border-(--bs-border) text-xs">#{id.slice(-6)}</span>
-                            <span className="w-1 h-1 rounded-full bg-gray-300"></span>
+                            <span className="w-1 h-1 rounded-full bg-[var(--bs-border)]"></span>
                             <span>Submitted: {new Date(createdAt).toLocaleDateString()}</span>
                         </p>
                     </div>
@@ -128,11 +128,11 @@ const BankDetailsPage = () => {
                         <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-r from-blue-500/10 to-purple-500/10"></div>
 
                         <div className="relative pt-8 flex flex-col items-center mb-6 text-center">
-                            <div className="w-24 h-24 rounded-full border-4 border-white shadow-md overflow-hidden mb-4 bg-gray-100 flex items-center justify-center">
+                            <div className="w-24 h-24 rounded-full border-4 border-[var(--bg-box)] shadow-md overflow-hidden mb-4 bg-(--bg-main) flex items-center justify-center">
                                 {user?.picture ? (
                                     <img src={user.picture} alt="User" className="w-full h-full object-cover" />
                                 ) : (
-                                    <FiUser size={40} className="text-gray-400" />
+                                    <FiUser size={40} className="text-[var(--icon-color)]" />
                                 )}
                             </div>
                             <h4 className="text-xl font-bold text-(--text-main)">{user?.username || "Unknown User"}</h4>
@@ -148,7 +148,7 @@ const BankDetailsPage = () => {
                                 <span className="text-(--text-second) flex items-center gap-2"><FiCalendar size={14} /> Joined</span>
                                 <span className="font-medium text-(--text-main)">{user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}</span>
                             </div>
-                            <div className="flex justify-between items-center text-sm bg-gray-50 p-3 rounded-xl">
+                            <div className="flex justify-between items-center text-sm bg-[var(--bg-main)] p-3 rounded-xl border border-[var(--bs-border)]">
                                 <span className="text-(--text-second) flex items-center gap-2"><FiShield size={14} /> KYC Status</span>
                                 <span className={`font-bold flex items-center gap-1.5 ${user?.kyc ? 'text-green-600' : 'text-orange-500'}`}>
                                     <span className={`w-2 h-2 rounded-full ${user?.kyc ? 'bg-green-500' : 'bg-orange-500'}`}></span>
@@ -171,7 +171,7 @@ const BankDetailsPage = () => {
                             <button
                                 onClick={() => setIsRejectOpen(true)}
                                 disabled={actionLoading}
-                                className="w-full py-3.5 bg-white border-2 border-red-100 text-red-500 hover:bg-red-50 hover:border-red-200 rounded-xl font-bold transition flex justify-center items-center gap-2 cursor-pointer"
+                                className="w-full py-3.5 bg-(--bg-main) border-2 border-red-100 text-red-500 hover:bg-red-50 hover:border-red-200 rounded-xl font-bold transition flex justify-center items-center gap-2 cursor-pointer"
                             >
                                 <FiXCircle size={18} /> Reject Account
                             </button>
@@ -184,10 +184,10 @@ const BankDetailsPage = () => {
                     <div className="bg-(--bg-box) rounded-3xl p-8 shadow-sm border border-(--bs-border) h-full">
                         <div className="flex justify-between items-center mb-6 border-b border-(--bs-border) pb-4">
                             <h3 className="text-lg font-bold text-(--text-main) flex items-center gap-2">
-                                <Building2 className="text-(--bs-primary)" /> Bank Account Information
+                                <Building2 className="text-[var(--bs-primary)]" /> Bank Account Information
                             </h3>
                             {isDefault && (
-                                <span className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-bold border border-blue-100 uppercase tracking-wide">
+                                <span className="bg-[var(--bg-main)] text-[var(--bs-primary)] px-3 py-1 rounded-full text-xs font-bold border border-[var(--bs-border)] uppercase tracking-wide">
                                     Primary Account
                                 </span>
                             )}
@@ -201,7 +201,7 @@ const BankDetailsPage = () => {
 
                             <div className="space-y-1">
                                 <label className="text-xs uppercase tracking-wider font-bold text-(--text-second)">Account Number</label>
-                                <p className="text-lg font-mono font-medium text-(--text-main) tracking-wide bg-gray-50 p-2 rounded border border-gray-100 w-fit">{accountNumber}</p>
+                                <p className="text-lg font-mono font-medium text-(--text-main) tracking-wide bg-(--bg-main) p-2 rounded border border-(--bs-border) w-fit">{accountNumber}</p>
                             </div>
 
                             <div className="space-y-1">
@@ -222,18 +222,18 @@ const BankDetailsPage = () => {
                             <div className="space-y-1">
                                 <label className="text-xs uppercase tracking-wider font-bold text-(--text-second)">UPI ID</label>
                                 <div className="flex items-center gap-2">
-                                    <FiCreditCard className="text-gray-400" />
+                                    <FiCreditCard className="text-[var(--icon-color)]" />
                                     <p className="text-base text-(--text-main)">{upiId || "N/A"}</p>
                                 </div>
                             </div>
                         </div>
 
                         <div className="mt-8 pt-6 border-t border-(--bs-border) grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-                            <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
+                            <div className="flex justify-between items-center bg-[var(--bg-main)] border border-[var(--bs-border)] p-3 rounded-lg">
                                 <span className="text-(--text-second)">Last Updated</span>
                                 <span className="font-mono text-(--text-main)">{new Date(updatedAt).toLocaleString()}</span>
                             </div>
-                            <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
+                            <div className="flex justify-between items-center bg-[var(--bg-main)] border border-[var(--bs-border)] p-3 rounded-lg">
                                 <span className="text-(--text-second)">Created At</span>
                                 <span className="font-mono text-(--text-main)">{new Date(createdAt).toLocaleString()}</span>
                             </div>
@@ -245,11 +245,11 @@ const BankDetailsPage = () => {
 
             {/* Reject Modal */}
             <Modal isOpen={isRejectOpen}>
-                <div className="bg-white p-6 rounded-2xl w-full max-w-md">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">Reject Verification</h3>
-                    <p className="text-gray-500 text-sm mb-4">Please provide a reason for rejection. This will be visible to the user.</p>
+                <div className="bg-[var(--bg-box)] p-6 rounded-2xl w-full max-w-md">
+                    <h3 className="text-xl font-bold text-[var(--text-main)] mb-2">Reject Verification</h3>
+                    <p className="text-(--text-second) text-sm mb-4">Please provide a reason for rejection. This will be visible to the user.</p>
                     <textarea
-                        className="w-full border border-gray-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none mb-4 resize-none"
+                        className="w-full border border-(--bs-border) rounded-xl p-3 text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none mb-4 resize-none bg-[var(--bg-main)] text-[var(--text-main)]"
                         rows={4}
                         placeholder="e.g. Account name mismatch, Invalid IFSC..."
                         value={rejectReason}
@@ -258,7 +258,7 @@ const BankDetailsPage = () => {
                     <div className="flex gap-3">
                         <button
                             onClick={() => setIsRejectOpen(false)}
-                            className="flex-1 px-4 py-2.5 rounded-lg border border-[var(--bs-border)] text-[var(--text-second)] bg-[var(--bg-box)] hover:bg-gray-50 transition font-medium cursor-pointer"
+                            className="flex-1 px-4 py-2.5 rounded-lg border border-[var(--bs-border)] text-[var(--text-second)] bg-[var(--bg-main)] hover:bg-[var(--bg-box)] transition font-medium cursor-pointer"
                         >
                             Cancel
                         </button>

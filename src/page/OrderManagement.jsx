@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Heading, MainHeading } from '../Component/Heading'
 import { ShoppingBag, DollarSign, Wallet, Eye, AlertCircle } from "lucide-react";
 import UserCards from '../Component/UserCards';
+import { MdOutlinePendingActions } from "react-icons/md";
 
 import { CgProfile } from 'react-icons/cg';
 import CommonDataTable from '../Component/CommonDataTable';
@@ -135,11 +136,11 @@ const OrderManagement = () => {
       cell: (row) => (
         <div className="flex gap-2">
           <button
-            className="p-2 rounded-lg bg-(--icon-btn) text-(--icon-btn-text) cursor-pointer"
+            className="p-2 rounded-lg cursor-pointer bg-blue-100 text-blue-600"
             onClick={() => navigate(`${PathRoutes.ORDERS_DETAILS}/${row._id}`)} // Assuming detail route takes ID
             title="View Details"
           >
-            <Eye size={16} />
+            <Eye size={14} />
           </button>
         </div>
       ),
@@ -162,12 +163,12 @@ const OrderManagement = () => {
     return (
       <div className="relative group min-w-[120px]">
         <select
-          className={`w-full appearance-none px-3 py-1.5 rounded-full text-xs font-bold border transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-1 ${colorMap[currentStatus] || 'bg-gray-100 text-gray-700 border-gray-200'}`}
+          className={`w-full appearance-none px-3 py-1.5 rounded-full text-xs font-bold border transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-1 ${colorMap[currentStatus] || 'bg-[var(--bg-main)] text-[var(--text-main)] border-[var(--bs-border)]'}`}
           value={currentStatus}
           onChange={(e) => onStatusChange(orderId, e.target.value)}
         >
           {ORDER_STATUS_OPTIONS.map(status => (
-            <option key={status} value={status} className="bg-white text-gray-900">{status}</option>
+            <option key={status} value={status} className="bg-[var(--bg-box)] text-[var(--text-main)]">{status}</option>
           ))}
         </select>
         <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity">
@@ -186,10 +187,11 @@ const OrderManagement = () => {
       />
 
 
-      <div className=' justify-between  bg-(--bg-box)  rounded-2xl p-5 mt-5 shadow-2xl'>
-        <div className='flex-col'>  <Heading
-          title={"Order Overview"} /></div>
-        <div className='grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 mt-5 gap-10 items-center p-5'>
+      <div className='justify-between bg-(--bg-box) rounded-2xl p-4 md:p-5 mt-5 shadow-2xl'>
+        <div className='flex-col'>
+          <Heading title={"Order Overview"} />
+        </div>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mt-5 gap-4 md:gap-10 items-center'>
           <UserCards
             icon={<ShoppingBag size={25} />}
             totalorders={"Total Order"}
@@ -208,7 +210,7 @@ const OrderManagement = () => {
 
           {/* Placeholders for specific stats - can be fetched from separate stats API later */}
           <UserCards
-            icon={<DollarSign size={25} />}
+            icon={<MdOutlinePendingActions size={25} />}
             totalorders={"Pending Orders"}
             iconBg='bg-(--bs-icon-third)'
             amount={orders.filter(o => o.orderStatus === 'PENDING').length}
@@ -227,7 +229,7 @@ const OrderManagement = () => {
 
 
       <div className='bg-(--bg-box) rounded-2xl p-5 mt-5 shadow-2xl'>
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center mb-5">
           <Heading title={"Order Chat"} />
           <select className=" text-xs">
             <option>This Week</option>
@@ -236,13 +238,13 @@ const OrderManagement = () => {
           </select>
         </div>
 
-        <p className="text-sm text-gray-400 mb-4">Content</p>
+      
 
         <OrderChart data={chartData} />
       </div>
 
 
-      <div className='bg-(--bg-box)  rounded-2xl p-5 mt-5 shadow-2xl'>
+      <div className='bg-(--bg-box) rounded-2xl p-4 md:p-5 mt-5 shadow-2xl overflow-hidden'>
         <Heading
           title={"Order Status"} />
 
@@ -256,11 +258,11 @@ const OrderManagement = () => {
         />
       </div>
 
-      <div className='bg-(--bg-box)  rounded-2xl p-5 mt-5 shadow-2x'>
+      <div className='bg-(--bg-box) rounded-2xl p-4 md:p-5 mt-5 shadow-2x'>
         <Heading
           title={"Notification & Alert"} />
 
-        <div className='grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 mt-5'>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-7 mt-5'>
           <AlertCard
             icon={<AlertCircle />}
             category="Operations"

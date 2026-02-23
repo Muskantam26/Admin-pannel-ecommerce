@@ -134,7 +134,7 @@ return (
 `}
   rows={4}
   maxLength={1000}
-  className="w-full border border-(--input-border) rounded-md p-2 text-xs text-(--text-second)"
+  className="w-full border border-(--bs-border) rounded-md p-2 text-xs text-(--text-second) bg-[var(--bg-main)]"
 />
  <Heading
             title={"Product Key Feature  (Words Limit 500)"}
@@ -145,7 +145,7 @@ return (
 `}
   rows={4}
   maxLength={500}
-  className="w-full border border-(--input-border) rounded-md p-2 text-xs text-(--text-second)"
+  className="w-full border border-(--bs-border) rounded-md p-2 text-xs text-(--text-second) bg-[var(--bg-main)]"
 />
  <Heading
             title={"Menufecturer Details  (Words Limit 500)"}
@@ -156,7 +156,7 @@ return (
 `}
   rows={4}
   maxLength={500}
-  className="w-full border border-(--input-border) rounded-md p-2 text-xs text-(--text-second)"
+  className="w-full border border-(--bs-border) rounded-md p-2 text-xs text-(--text-second) bg-[var(--bg-main)]"
 />
 
 

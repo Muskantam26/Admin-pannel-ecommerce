@@ -81,7 +81,7 @@ const CartPage = () => {
             cell: (row) => {
                 const totalItems = row.items?.reduce((acc, item) => acc + item.quantity, 0) || 0;
                 return (
-                    <span className="bg-blue-50 text-blue-600 py-1 px-3 rounded-full text-xs font-bold">
+                    <span className="bg-[var(--bs-btn-mod)] text-(--bs-btn-forth) py-1 px-3 rounded-full text-xs font-bold">
                         {totalItems} Items
                     </span>
                 );
@@ -100,10 +100,10 @@ const CartPage = () => {
             cell: (row) => (
                 <Link
                     to={PathRoutes.CART_DETAILS.replace(":id", row.userId?._id)}
-                    className="inline-flex items-center justify-center p-2 rounded-lg bg-(--btn-hover) text-(--text-hover) hover:opacity-90 transition-all"
+                    className="inline-flex items-center justify-center p-2 rounded-lg cursor-pointer bg-blue-100 text-blue-600 transition-all"
                     title="View Details"
                 >
-                    <FiEye size={18} />
+                    <FiEye size={14} />
                 </Link>
             ),
             center: true,
@@ -138,15 +138,17 @@ const CartPage = () => {
 
             {/* Table */}
             <div className="bg-(--bg-box) rounded-2xl shadow-sm border border-(--bs-border) overflow-hidden p-4">
-                <CommonDataTable
-                    columns={columns}
-                    data={paginatedData}
-                    currentPage={currentPage}
-                    totalPages={Math.ceil(filteredCarts.length / rowsPerPage)}
-                    onPageChange={(page) => setCurrentPage(page)}
-                    rowsPerPage={rowsPerPage}
-                    selectable={false}
-                />
+                <div className="overflow-x-auto w-full">
+                    <CommonDataTable
+                        columns={columns}
+                        data={paginatedData}
+                        currentPage={currentPage}
+                        totalPages={Math.ceil(filteredCarts.length / rowsPerPage)}
+                        onPageChange={(page) => setCurrentPage(page)}
+                        rowsPerPage={rowsPerPage}
+                        selectable={false}
+                    />
+                </div>
             </div>
         </div>
     );

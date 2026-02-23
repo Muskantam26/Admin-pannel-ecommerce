@@ -89,7 +89,7 @@ const CartDetailsPage = () => {
                         <div className="bg-(--bg-box) rounded-3xl shadow-sm border border-(--bs-border) overflow-hidden group">
                             <div className="h-24 bg-gradient-to-r from-(--bs-primary) to-blue-600 relative">
                                 <div className="absolute -bottom-10 left-6">
-                                    <div className="w-20 h-20 rounded-2xl bg-white p-1 shadow-lg border-4 border-white">
+                                    <div className="w-20 h-20 rounded-2xl bg-[var(--bg-main)] p-1 shadow-lg border-4 border-[var(--bg-main)]">
                                         <div className="w-full h-full rounded-xl bg-blue-50 flex items-center justify-center text-(--bs-primary) text-2xl font-black">
                                             {getInitials(cart.userId?.fullName)}
                                         </div>
@@ -104,7 +104,7 @@ const CartDetailsPage = () => {
 
                                 <div className="space-y-4">
                                     <div className="flex items-center gap-3 p-3 rounded-2xl bg-(--bg-main) border border-(--bs-border) group-hover:border-(--bs-primary) transition-colors">
-                                        <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-(--bs-primary) shadow-sm">
+                                        <div className="w-8 h-8 rounded-lg bg-[var(--bg-box)] flex items-center justify-center text-(--bs-primary) shadow-sm">
                                             <FiMail size={16} />
                                         </div>
                                         <div className="flex-1 min-w-0">
@@ -114,7 +114,7 @@ const CartDetailsPage = () => {
                                     </div>
 
                                     <div className="flex items-center gap-3 p-3 rounded-2xl bg-(--bg-main) border border-(--bs-border) group-hover:border-(--bs-primary) transition-colors">
-                                        <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-green-500 shadow-sm">
+                                        <div className="w-8 h-8 rounded-lg bg-[var(--bg-box)] flex items-center justify-center text-green-500 shadow-sm">
                                             <FiPhone size={16} />
                                         </div>
                                         <div className="flex-1">
@@ -124,7 +124,7 @@ const CartDetailsPage = () => {
                                     </div>
 
                                     <div className="flex items-center gap-3 p-3 rounded-2xl bg-(--bg-main) border border-(--bs-border) group-hover:border-(--bs-primary) transition-colors">
-                                        <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-orange-500 shadow-sm">
+                                        <div className="w-8 h-8 rounded-lg bg-[var(--bg-box)] flex items-center justify-center text-orange-500 shadow-sm">
                                             <FiHash size={16} />
                                         </div>
                                         <div className="flex-1">
@@ -169,9 +169,9 @@ const CartDetailsPage = () => {
                     {/* Main Content: Items List */}
                     <div className="lg:col-span-8">
                         <div className="bg-(--bg-box) rounded-3xl shadow-sm border border-(--bs-border) overflow-hidden">
-                            <div className="p-6 md:p-8 border-b border-(--bs-border) bg-gray-50/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div className="p-6 md:p-8 border-b border-(--bs-border) bg-[var(--bg-main)] flex flex-col md:flex-row md:items-center justify-between gap-4">
                                 <h2 className="text-xl font-bold text-(--text-main) flex items-center gap-3">
-                                    <div className="p-2 bg-white rounded-xl shadow-sm">
+                                    <div className="p-2 bg-[var(--bg-box)] rounded-xl shadow-sm">
                                         <FiPackage className="text-(--bs-primary)" />
                                     </div>
                                     Cart Items <span className="text-sm font-normal text-(--text-third) ml-2">({totalItems} items)</span>
@@ -181,10 +181,10 @@ const CartDetailsPage = () => {
                             <div className="divide-y divide-(--bs-border)">
                                 {cart.items?.length > 0 ? (
                                     cart.items.map((item, index) => (
-                                        <div key={index} className="p-6 md:p-8 hover:bg-gray-50/50 transition-all group">
+                                        <div key={index} className="p-6 md:p-8 hover:bg-[var(--bg-main)] transition-all group">
                                             <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
                                                 {/* Product Image */}
-                                                <div className="w-32 h-32 md:w-28 md:h-28 shrink-0 rounded-2xl overflow-hidden border border-(--bs-border) bg-white p-2 shadow-sm group-hover:shadow-md transition-all">
+                                                <div className="w-32 h-32 md:w-28 md:h-28 shrink-0 rounded-2xl overflow-hidden border border-(--bs-border) bg-[var(--bg-main)] p-2 shadow-sm group-hover:shadow-md transition-all">
                                                     <img
                                                         src={item.productId?.image || "https://via.placeholder.com/150"}
                                                         alt={item.productId?.name}
@@ -205,7 +205,7 @@ const CartDetailsPage = () => {
                                                         {item.variants?.map((v, i) => (
                                                             <div key={i} className="flex items-center gap-1.5 bg-(--bg-main) px-3 py-1 rounded-full border border-(--bs-border) text-xs font-semibold text-(--text-second)">
                                                                 {v.variantType === 'Color' && (
-                                                                    <span className="w-2.5 h-2.5 rounded-full border border-gray-200" style={{ backgroundColor: v.value.toLowerCase() }}></span>
+                                                                    <span className="w-2.5 h-2.5 rounded-full border border-[var(--bs-border)]" style={{ backgroundColor: v.value.toLowerCase() }}></span>
                                                                 )}
                                                                 {v.variantType}: {v.value}
                                                             </div>
@@ -224,7 +224,7 @@ const CartDetailsPage = () => {
                                                     </div>
                                                     <div className="text-center">
                                                         <p className="text-[10px] uppercase font-bold text-(--text-third) tracking-wider mb-1">Qty</p>
-                                                        <p className="font-black text-(--text-main) bg-white border border-(--bs-border) w-10 h-10 flex items-center justify-center rounded-xl mx-auto shadow-sm group-hover:border-(--bs-primary) group-hover:text-(--bs-primary) transition-all">
+                                                        <p className="font-black text-(--text-main) bg-[var(--bg-main)] border border-(--bs-border) w-10 h-10 flex items-center justify-center rounded-xl mx-auto shadow-sm group-hover:border-(--bs-primary) group-hover:text-(--bs-primary) transition-all">
                                                             {item.quantity}
                                                         </p>
                                                     </div>
@@ -238,7 +238,7 @@ const CartDetailsPage = () => {
                                     ))
                                 ) : (
                                     <div className="p-20 text-center">
-                                        <div className="w-20 h-20 bg-gray-50 rounded-3xl flex items-center justify-center mx-auto mb-6 text-gray-300">
+                                        <div className="w-20 h-20 bg-[var(--bg-main)] rounded-3xl flex items-center justify-center mx-auto mb-6 text-[var(--icon-color)]">
                                             <FiShoppingBag size={40} />
                                         </div>
                                         <h3 className="text-xl font-bold text-(--text-main) mb-2">Cart is empty</h3>
@@ -255,9 +255,9 @@ const CartDetailsPage = () => {
 
                             {/* Footer for the items list */}
                             {cart.items?.length > 0 && (
-                                <div className="p-8 bg-gray-50/50 flex flex-col md:flex-row justify-between items-center gap-6">
+                                <div className="p-8 bg-[var(--bg-main)] flex flex-col md:flex-row justify-between items-center gap-6">
                                     <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-2xl bg-white shadow-sm border border-(--bs-border) flex items-center justify-center text-(--bs-primary)">
+                                        <div className="w-12 h-12 rounded-2xl bg-[var(--bg-box)] shadow-sm border border-(--bs-border) flex items-center justify-center text-(--bs-primary)">
                                             <FiInfo />
                                         </div>
                                         <div>

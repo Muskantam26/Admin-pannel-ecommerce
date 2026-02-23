@@ -331,16 +331,16 @@ const AddProduct = () => {
 
 
   return (
-    <div className="pb-20 relative min-h-screen bg-gray-50/50">
+    <div className="pb-20 relative min-h-screen bg-(--bg-main)">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div className="flex items-center gap-3">
-          <button onClick={() => navigate('/product-management')} className="p-2 hover:bg-gray-100 rounded-lg transition-colors text-gray-600">
+          <button onClick={() => navigate('/product-management')} className="p-2 hover:bg-[var(--bg-box)] rounded-lg transition-colors text-(--text-second)">
             <FiArrowLeft size={20} />
           </button>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{isEditMode ? "Edit Product" : "Add Product"}</h1>
-            <p className="text-gray-500 text-sm mt-0.5">Manage your product information, pricing, and media.</p>
+            <h1 className="text-2xl font-bold text-(--text-main)">{isEditMode ? "Edit Product" : "Add Product"}</h1>
+            <p className="text-(--text-second) text-sm mt-0.5">Manage your product information, pricing, and media.</p>
           </div>
         </div>
         <div className="flex gap-3 w-full md:w-auto">
@@ -354,7 +354,7 @@ const AddProduct = () => {
           )}
           <button
             onClick={() => handleSubmit('DRAFT')}
-            className="flex-1 md:flex-none px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium"
+            className="flex-1 md:flex-none px-4 py-2.5 border border-(--bs-border) text-(--text-second) rounded-lg hover:bg-[var(--bg-main)] transition font-medium cursor-pointer"
           >
             Save Draft
           </button>
@@ -374,9 +374,9 @@ const AddProduct = () => {
         <div className="lg:col-span-2 space-y-8">
 
           {/* Basic Info */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+          <div className="bg-[var(--bg-box)] p-6 rounded-2xl shadow-sm border border-[var(--bs-border)]">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-bold text-gray-900">Basic Information</h2>
+              <h2 className="text-lg font-bold text-[var(--text-main)]">Basic Information</h2>
               <span className="text-xs font-medium px-2.5 py-1 bg-blue-50 text-blue-700 rounded-full">Required</span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -399,13 +399,13 @@ const AddProduct = () => {
                 />
               </div>
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                <label className="block text-sm font-medium text-[var(--text-second)] mb-2">Description</label>
                 <textarea
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
                   rows={5}
-                  className="w-full border border-gray-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all resize-y"
+                  className="w-full border border-[var(--bs-border)] rounded-xl p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all resize-y bg-[var(--bg-main)] text-[var(--text-main)]"
                   placeholder="Detailed product description..."
                 />
               </div>
@@ -413,14 +413,14 @@ const AddProduct = () => {
           </div>
 
           {/* Pricing */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-            <h2 className="text-lg font-bold text-gray-900 mb-6">Pricing</h2>
+          <div className="bg-[var(--bg-box)] p-6 rounded-2xl shadow-sm border border-[var(--bs-border)]">
+            <h2 className="text-lg font-bold text-[var(--text-main)] mb-6">Pricing</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <InputField label="Base Price (MRP)" name="price" type="number" value={formData.price} onChange={handleChange} prefix="₹" />
               <InputField label="Discount" name="discount" type="number" value={formData.discount} onChange={handleChange} suffix="%" />
 
-              <div className="md:col-span-2 pt-4 border-t border-gray-100">
-                <label className="text-sm text-gray-500 font-medium mb-3 block">Business Points</label>
+              <div className="md:col-span-2 pt-4 border-t border-[var(--bs-border)]">
+                <label className="text-sm text-(--text-second) font-medium mb-3 block">Business Points</label>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <InputField label="PV" name="pv" type="number" value={formData.pv} onChange={handleChange} placeholder="0" />
                   <InputField label="DP" name="dp" type="number" value={formData.dp} onChange={handleChange} placeholder="0" />
@@ -431,24 +431,24 @@ const AddProduct = () => {
           </div>
 
           {/* Specification */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-            <h2 className="text-lg font-bold text-gray-900 mb-6">Specifications</h2>
+          <div className="bg-[var(--bg-box)] p-6 rounded-2xl shadow-sm border border-[var(--bs-border)]">
+            <h2 className="text-lg font-bold text-[var(--text-main)] mb-6">Specifications</h2>
             <div className="space-y-4">
               <div className="flex gap-3">
-                <input placeholder="Label (e.g., Material)" value={specInput.label} onChange={e => setSpecInput({ ...specInput, label: e.target.value })} className="flex-1 border-gray-300 border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
-                <input placeholder="Value (e.g., Cotton)" value={specInput.value} onChange={e => setSpecInput({ ...specInput, value: e.target.value })} className="flex-[2] border-gray-300 border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
-                <button onClick={addSpec} className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition text-sm font-medium">Add</button>
+                <input placeholder="Label (e.g., Material)" value={specInput.label} onChange={e => setSpecInput({ ...specInput, label: e.target.value })} className="flex-1 border-[var(--bs-border)] border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-[var(--bg-main)] text-[var(--text-main)]" />
+                <input placeholder="Value (e.g., Cotton)" value={specInput.value} onChange={e => setSpecInput({ ...specInput, value: e.target.value })} className="flex-[2] border-[var(--bs-border)] border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-[var(--bg-main)] text-[var(--text-main)]" />
+                <button onClick={addSpec} className="px-4 py-2 bg-[var(--bs-btn)] text-white rounded-lg hover:bg-[var(--bg-btn-hover)] transition text-sm font-medium">Add</button>
               </div>
 
               {formData.specifications.length > 0 && (
-                <div className="bg-gray-50 rounded-xl border border-gray-100 divide-y divide-gray-100 overflow-hidden">
+                <div className="bg-[var(--bg-main)] rounded-xl border border-[var(--bs-border)] divide-y divide-[var(--bs-border)] overflow-hidden">
                   {formData.specifications.map((item, idx) => (
-                    <div key={idx} className="flex justify-between items-center p-3 text-sm hover:bg-white transition-colors">
+                    <div key={idx} className="flex justify-between items-center p-3 text-sm hover:bg-[var(--bg-box)] transition-colors">
                       <div className="flex gap-2">
-                        <span className="font-semibold text-gray-700 min-w-[100px]">{item.label}</span>
-                        <span className="text-gray-600">{item.value}</span>
+                        <span className="font-semibold text-[var(--text-main)] min-w-[100px]">{item.label}</span>
+                        <span className="text-(--text-second)">{item.value}</span>
                       </div>
-                      <button onClick={() => removeSpec(idx)} className="text-gray-400 hover:text-red-500 p-1 rounded-full hover:bg-red-50 transition"><RxCrossCircled size={18} /></button>
+                      <button onClick={() => removeSpec(idx)} className="text-[var(--icon-color)] hover:text-red-500 p-1 rounded-full hover:bg-red-50 transition"><RxCrossCircled size={18} /></button>
                     </div>
                   ))}
                 </div>
@@ -457,20 +457,20 @@ const AddProduct = () => {
           </div>
 
           {/* Features */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-            <h2 className="text-lg font-bold text-gray-900 mb-6">Key Features</h2>
+          <div className="bg-[var(--bg-box)] p-6 rounded-2xl shadow-sm border border-[var(--bs-border)]">
+            <h2 className="text-lg font-bold text-[var(--text-main)] mb-6">Key Features</h2>
             <div className="space-y-4">
               <div className="flex gap-3">
-                <input placeholder="Feature description..." value={featureInput} onChange={e => setFeatureInput(e.target.value)} className="flex-1 border-gray-300 border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
-                <button onClick={addFeature} className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition text-sm font-medium">Add</button>
+                <input placeholder="Feature description..." value={featureInput} onChange={e => setFeatureInput(e.target.value)} className="flex-1 border-[var(--bs-border)] border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-[var(--bg-main)] text-[var(--text-main)]" />
+                <button onClick={addFeature} className="px-4 py-2 bg-[var(--bs-btn)] text-white rounded-lg hover:bg-[var(--btn-hover)] transition text-sm font-medium">Add</button>
               </div>
 
               {formData.keyFeatures.length > 0 && (
                 <ul className="space-y-2">
                   {formData.keyFeatures.map((item, idx) => (
-                    <li key={idx} className="flex justify-between items-center bg-gray-50 px-4 py-3 rounded-lg border border-gray-200/50">
-                      <span className="text-sm text-gray-700 flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>{item}</span>
-                      <button onClick={() => removeFeature(idx)} className="text-gray-400 hover:text-red-500"><RxCrossCircled size={18} /></button>
+                    <li key={idx} className="flex justify-between items-center bg-[var(--bg-main)] px-4 py-3 rounded-lg border border-[var(--bs-border)]">
+                      <span className="text-sm text-[var(--text-main)] flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>{item}</span>
+                      <button onClick={() => removeFeature(idx)} className="text-[var(--icon-color)] hover:text-red-500"><RxCrossCircled size={18} /></button>
                     </li>
                   ))}
                 </ul>
@@ -483,8 +483,8 @@ const AddProduct = () => {
         <div className="space-y-8">
 
           {/* Media */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-            <h2 className="text-lg font-bold text-gray-900 mb-6">Product Images</h2>
+          <div className="bg-[var(--bg-box)] p-6 rounded-2xl shadow-sm border border-[var(--bs-border)]">
+            <h2 className="text-lg font-bold text-[var(--text-main)] mb-6">Product Images</h2>
             <MultiImageUpload
               images={images}
               setImages={setImages}
@@ -493,8 +493,8 @@ const AddProduct = () => {
           </div>
 
           {/* Organization */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-            <h2 className="text-lg font-bold text-gray-900 mb-6">Organization</h2>
+          <div className="bg-[var(--bg-box)] p-6 rounded-2xl shadow-sm border border-[var(--bs-border)]">
+            <h2 className="text-lg font-bold text-[var(--text-main)] mb-6">Organization</h2>
             <div className="space-y-5">
               <CustomSelect
                 label="Category"
@@ -519,8 +519,8 @@ const AddProduct = () => {
           </div>
 
           {/* Inventory */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-            <h2 className="text-lg font-bold text-gray-900 mb-6">Inventory</h2>
+          <div className="bg-[var(--bg-box)] p-6 rounded-2xl shadow-sm border border-[var(--bs-border)]">
+            <h2 className="text-lg font-bold text-[var(--text-main)] mb-6">Inventory</h2>
             <div className="space-y-4">
               <InputField label="Stock Quantity" name="stock" type="number" value={formData.stock} onChange={handleChange} />
               <CustomSelect
@@ -538,26 +538,26 @@ const AddProduct = () => {
           </div>
 
           {/* Variants */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-            <h2 className="text-lg font-bold text-gray-900 mb-6">Variants</h2>
+          <div className="bg-[var(--bg-box)] p-6 rounded-2xl shadow-sm border border-[var(--bs-border)]">
+            <h2 className="text-lg font-bold text-[var(--text-main)] mb-6">Variants</h2>
 
             {/* Colors */}
             <div className="mb-6">
-              <label className="text-sm font-medium text-gray-700 mb-2 block">Colors</label>
+              <label className="text-sm font-medium text-[var(--text-second)] mb-2 block">Colors</label>
               <div className="flex gap-2 mb-3">
                 <div className="relative flex-1">
-                  <div className="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border border-gray-200 shadow-sm" style={{ backgroundColor: colorInput.hex }}></div>
-                  <input placeholder="Color Name" value={colorInput.name} onChange={e => setColorInput({ ...colorInput, name: e.target.value })} className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg text-sm outline-none focus:border-blue-500" />
+                  <div className="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border border-[var(--bs-border)] shadow-sm" style={{ backgroundColor: colorInput.hex }}></div>
+                  <input placeholder="Color Name" value={colorInput.name} onChange={e => setColorInput({ ...colorInput, name: e.target.value })} className="w-full pl-8 pr-3 py-2 border border-[var(--bs-border)] bg-[var(--bg-main)] text-[var(--text-main)] rounded-lg text-sm outline-none focus:border-blue-500" />
                 </div>
                 <input type="color" value={colorInput.hex} onChange={e => setColorInput({ ...colorInput, hex: e.target.value })} className="h-[38px] w-[40px] cursor-pointer rounded-lg border-0 p-0 overflow-hidden" />
-                <button onClick={addColor} className="px-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition"><FiPlus /></button>
+                <button onClick={addColor} className="px-3 bg-[var(--bs-btn)] text-white rounded-lg hover:bg-[var(--btn-hover)] transition cursor-pointer"><FiPlus /></button>
               </div>
               <div className="flex flex-wrap gap-2">
                 {formData.colors.map((c, i) => (
-                  <span key={i} className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full text-xs border border-gray-200 shadow-sm">
-                    <span className="w-3 h-3 rounded-full border border-gray-100" style={{ backgroundColor: c.hex }}></span>
+                  <span key={i} className="flex items-center gap-2 bg-[var(--bg-box)] text-[var(--text-main)] px-3 py-1.5 rounded-full text-xs border border-[var(--bs-border)] shadow-sm">
+                    <span className="w-3 h-3 rounded-full border border-[var(--bs-border)]" style={{ backgroundColor: c.hex }}></span>
                     {c.name}
-                    <button onClick={() => removeColor(i)} className="text-gray-400 hover:text-red-500"><RxCrossCircled /></button>
+                    <button onClick={() => removeColor(i)} className="text-[var(--icon-color)] hover:text-red-500"><RxCrossCircled /></button>
                   </span>
                 ))}
               </div>
@@ -565,15 +565,15 @@ const AddProduct = () => {
 
             {/* Sizes */}
             <div className="mb-6">
-              <label className="text-sm font-medium text-gray-700 mb-2 block">Sizes</label>
+              <label className="text-sm font-medium text-[var(--text-second)] mb-2 block">Sizes</label>
               <div className="flex gap-2 mb-3">
-                <input placeholder="Add Size (e.g. XL)" value={sizeInput} onChange={e => setSizeInput(e.target.value)} className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500" />
-                <button onClick={addSize} className="px-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition"><FiPlus /></button>
+                <input placeholder="Add Size (e.g. XL)" value={sizeInput} onChange={e => setSizeInput(e.target.value)} className="flex-1 border border-[var(--bs-border)] bg-[var(--bg-main)] text-[var(--text-main)] rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500" />
+                <button onClick={addSize} className="px-3 bg-[var(--bs-btn)] text-white rounded-lg hover:bg-[var(--btn-hover)] transition cursor-pointer"><FiPlus /></button>
               </div>
               <div className="flex flex-wrap gap-2">
                 {formData.sizes.map((s, i) => (
-                  <span key={i} className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-full text-xs font-medium text-gray-700 border border-gray-200">
-                    {s} <button onClick={() => removeSize(i)} className="text-gray-400 hover:text-red-500"><RxCrossCircled /></button>
+                  <span key={i} className="flex items-center gap-2 bg-[var(--bg-main)] px-3 py-1.5 rounded-full text-xs font-medium text-[var(--text-main)] border border-[var(--bs-border)]">
+                    {s} <button onClick={() => removeSize(i)} className="text-[var(--icon-color)] hover:text-red-500 cursor-pointer"><RxCrossCircled /></button>
                   </span>
                 ))}
               </div>
@@ -581,7 +581,7 @@ const AddProduct = () => {
 
             {/* Custom Variants */}
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-2 block">Custom Variants (Optional)</label>
+              <label className="text-sm font-medium text-[var(--text-second)] mb-2 block">Custom Variants (Optional)</label>
 
               {/* Add New Variant Type Input */}
               <div className="flex gap-2 mb-4">
@@ -589,18 +589,18 @@ const AddProduct = () => {
                   placeholder="Add New Variant Type (e.g. Volume, Material)"
                   value={newVariantType}
                   onChange={e => setNewVariantType(e.target.value)}
-                  className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500"
+                  className="flex-1 border border-[var(--bs-border)] bg-[var(--bg-main)] text-[var(--text-main)] rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500"
                 />
-                <button onClick={addVariantType} className="px-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-1 text-sm"><FiPlus /> Add Type</button>
+                <button onClick={addVariantType} className="px-3 bg-(--bs-btn-forth) text-white rounded-lg hover:opacity-90 transition flex items-center gap-1 text-sm cursor-pointer"><FiPlus /> Add Type</button>
               </div>
 
               {/* List of Variant Types */}
               <div className="space-y-4">
                 {formData.customVariants.map((variant, vIdx) => (
-                  <div key={vIdx} className="border border-gray-200 rounded-lg p-3 bg-gray-50">
+                  <div key={vIdx} className="border border-[var(--bs-border)] rounded-lg p-3 bg-[var(--bg-main)]">
                     <div className="flex justify-between items-center mb-2">
-                      <h4 className="text-sm font-bold text-gray-800">{variant.variantType}</h4>
-                      <button onClick={() => removeVariantType(vIdx)} className="text-red-500 hover:text-red-700 text-xs font-medium">Remove Group</button>
+                      <h4 className="text-sm font-bold text-[var(--text-main)]">{variant.variantType}</h4>
+                      <button onClick={() => removeVariantType(vIdx)} className="text-red-500 hover:text-red-700 text-xs font-medium cursor-pointer">Remove Group</button>
                     </div>
 
                     {/* Add Option to this Type */}
@@ -609,16 +609,16 @@ const AddProduct = () => {
                         placeholder={`Add ${variant.variantType} Option (e.g. 100ml)`}
                         value={variantOptionInputs[vIdx] || ""}
                         onChange={e => setVariantOptionInputs(prev => ({ ...prev, [vIdx]: e.target.value }))}
-                        className="flex-1 border border-gray-300 rounded-lg px-2 py-1.5 text-xs outline-none focus:border-blue-500"
+                        className="flex-1 border border-[var(--bs-border)] bg-[var(--bg-box)] text-[var(--text-main)] rounded-lg px-2 py-1.5 text-xs outline-none focus:border-blue-500"
                       />
-                      <button onClick={() => addVariantOption(vIdx)} className="px-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition text-xs"><FiPlus /></button>
+                      <button onClick={() => addVariantOption(vIdx)} className="px-2 bg-[var(--bs-btn)] text-white rounded-lg hover:bg-[var(--btn-hover)] transition text-xs cursor-pointer"><FiPlus /></button>
                     </div>
 
                     {/* Options List */}
                     <div className="flex flex-wrap gap-2">
                       {variant.options.map((opt, oIdx) => (
-                        <span key={oIdx} className="flex items-center gap-1 bg-white px-2 py-1 rounded border border-gray-200 text-xs text-gray-600 shadow-sm">
-                          {opt} <button onClick={() => removeVariantOption(vIdx, oIdx)} className="text-gray-400 hover:text-red-500"><RxCrossCircled /></button>
+                        <span key={oIdx} className="flex items-center gap-1 bg-[var(--bg-box)] px-2 py-1 rounded border border-[var(--bs-border)] text-xs text-[var(--text-main)] shadow-sm">
+                          {opt} <button onClick={() => removeVariantOption(vIdx, oIdx)} className="text-[var(--icon-color)] hover:text-red-500"><RxCrossCircled /></button>
                         </span>
                       ))}
                     </div>
@@ -629,40 +629,40 @@ const AddProduct = () => {
           </div>
 
           {/* SEO */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-            <h2 className="text-lg font-bold text-gray-900 mb-6">SEO Settings</h2>
+          <div className="bg-[var(--bg-box)] p-6 rounded-2xl shadow-sm border border-[var(--bs-border)]">
+            <h2 className="text-lg font-bold text-[var(--text-main)] mb-6">SEO Settings</h2>
             <div className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-2 block">Keywords</label>
+                <label className="text-sm font-medium text-[var(--text-second)] mb-2 block">Keywords</label>
                 <div className="flex gap-2 mb-2">
-                  <input value={keywordInput} onChange={e => setKeywordInput(e.target.value)} className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500" placeholder="Add keyword" />
-                  <button onClick={addKeyword} className="px-3 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition font-medium text-sm">Add</button>
+                  <input value={keywordInput} onChange={e => setKeywordInput(e.target.value)} className="flex-1 border border-[var(--bs-border)] bg-[var(--bg-main)] text-[var(--text-main)] rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500" placeholder="Add keyword" />
+                  <button onClick={addKeyword} className="px-3 bg-[var(--bs-btn-mod)] text-(--bs-btn-forth) rounded-lg hover:opacity-80 transition font-medium text-sm cursor-pointer">Add</button>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {formData.metaKeywords.map((k, i) => (
-                    <span key={i} className="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md text-xs border border-blue-100 flex items-center gap-1.5">
-                      {k} <button onClick={() => removeKeyword(i)} className="hover:text-blue-900"><RxCrossCircled /></button>
+                    <span key={i} className="bg-[var(--bs-btn-mod)] text-(--bs-btn-forth) px-2.5 py-1 rounded-md text-xs border border-transparent flex items-center gap-1.5">
+                      {k} <button onClick={() => removeKeyword(i)} className="hover:text-[var(--text-main)] cursor-pointer"><RxCrossCircled /></button>
                     </span>
                   ))}
                 </div>
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-2 block">Meta Description</label>
+                <label className="text-sm font-medium text-[var(--text-second)] mb-2 block">Meta Description</label>
                 <textarea
                   name="metaDescription"
                   value={formData.metaDescription}
                   onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                  className="w-full border border-[var(--bs-border)] bg-[var(--bg-main)] text-[var(--text-main)] rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all resize-y"
                   rows={3}
                 />
               </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 p-4 bg-gray-100 rounded-xl">
-            <input type="checkbox" id="featured" name="featured" checked={formData.featured} onChange={handleChange} className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500 border-gray-300" />
-            <label htmlFor="featured" className="text-sm font-medium text-gray-800 cursor-pointer select-none">Mark this product as Featured</label>
+          <div className="flex items-center gap-3 p-4 bg-[var(--bg-main)] rounded-xl">
+            <input type="checkbox" id="featured" name="featured" checked={formData.featured} onChange={handleChange} className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500 border-[var(--bs-border)] cursor-pointer" />
+            <label htmlFor="featured" className="text-sm font-medium text-[var(--text-main)] cursor-pointer select-none">Mark this product as Featured</label>
           </div>
 
         </div>

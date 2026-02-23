@@ -113,7 +113,7 @@ const SiteManager = () => {
           {actions.view && (
             <button
               onClick={() => actions.view(row)}
-              className="bg-(--bs-action) text-(--bs-action-icon) p-1 rounded-md cursor-pointer"
+              className="p-2 rounded-lg cursor-pointer bg-blue-100 text-blue-600"
             >
               <FiEye size={14} />
             </button>
@@ -121,7 +121,7 @@ const SiteManager = () => {
           {actions.edit && (
             <button
               onClick={() => actions.edit(row)}
-              className="bg-(--bs-action) text-(--bs-action-icon) p-1 rounded-md cursor-pointer"
+              className="p-2 rounded-lg cursor-pointer bg-indigo-100 text-indigo-600"
             >
               <FiEdit size={14} />
             </button>
@@ -129,7 +129,7 @@ const SiteManager = () => {
           {actions.delete && (
             <button
               onClick={() => actions.delete(row)}
-              className="bg-(--bs-action) text-(--bs-action-icon) p-1 rounded-md cursor-pointer"
+              className="p-2 rounded-lg cursor-pointer bg-red-100 text-red-600"
             >
               <FiTrash size={14} />
             </button>
@@ -160,7 +160,7 @@ const SiteManager = () => {
           />
         </div>
 
-        <div className="p-4 ">
+        <div className="p-4 overflow-x-auto w-full">
           <CommonDataTable
             columns={columns}
             data={paginatedData}

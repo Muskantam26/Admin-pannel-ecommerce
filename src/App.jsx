@@ -22,8 +22,8 @@ function App() {
     faviconLink.rel = "icon";
     faviconLink.href = MainContent.appFavicon;
     document.head.appendChild(faviconLink);
+     document.title = MainContent.appName;
   }, []);
-
 
 
 

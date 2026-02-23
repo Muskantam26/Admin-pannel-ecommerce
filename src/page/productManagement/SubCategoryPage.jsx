@@ -73,7 +73,7 @@ const SubCategoryPage = () => {
     };
 
     const handleAdd = () => {
-        navigate('/category/create');
+        navigate('/category/create', { state: { mode: "subcategory" } });
     };
 
     // Filter categories to show ONLY subcategories (where parentId exists)
@@ -138,17 +138,17 @@ const SubCategoryPage = () => {
                 <div className="flex gap-2">
                     <button
                         onClick={() => handleEdit(row._id)}
-                        className="text-blue-500 cursor-pointer hover:text-blue-700 p-2"
+                        className="p-2 rounded-lg cursor-pointer bg-indigo-100 text-indigo-600"
                         title="Edit"
                     >
-                        <FaEdit size={16} />
+                        <FaEdit size={14} />
                     </button>
                     <button
                         onClick={() => handleDelete(row._id)}
-                        className="text-red-500 cursor-pointer hover:text-red-700 p-2"
+                        className="p-2 rounded-lg cursor-pointer bg-red-100 text-red-600"
                         title="Delete"
                     >
-                        <FaTrash size={16} />
+                        <FaTrash size={14} />
                     </button>
                 </div>
             ),
@@ -161,7 +161,7 @@ const SubCategoryPage = () => {
             
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5">
                 <MainHeading
-                    title={"Sub Category Management"}
+                    title={"Sub Category"}
                     subtitle={"Manage your product sub-categories here"}
                 />
                 <Button
@@ -183,14 +183,16 @@ const SubCategoryPage = () => {
                     />
                 </div>
                 
-                <CommonDataTable
-                    columns={columns}
-                    data={paginatedData}
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={setCurrentPage}
-                    rowsPerPage={rowsPerPage}
-                />
+                <div className="overflow-x-auto w-full">
+                    <CommonDataTable
+                        columns={columns}
+                        data={paginatedData}
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                        rowsPerPage={rowsPerPage}
+                    />
+                </div>
             </div>
 
             <ConfirmationModal

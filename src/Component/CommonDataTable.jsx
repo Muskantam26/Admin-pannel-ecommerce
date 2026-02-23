@@ -9,7 +9,7 @@ const CommonDataTable = ({
   currentPage,
   totalPages,
   onPageChange,
-  rowsPerPage = 6,
+  rowsPerPage,
   selectable = true,
 }) => {
 

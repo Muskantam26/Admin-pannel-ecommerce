@@ -131,7 +131,7 @@ const ViewOrdersDetails = () => {
                 <div className="flex flex-wrap items-center gap-3">
                     <button
                         onClick={() => window.open(`/invoice/${id}`, '_blank')}
-                        className="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-black transition-all shadow-md active:scale-95"
+                        className="flex items-center gap-2 bg-[var(--bs-btn)] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[var(--btn-hover)] transition-all shadow-md active:scale-95 cursor-pointer"
                     >
                         <FiFileText size={16} />
                         Invoice
@@ -145,20 +145,20 @@ const ViewOrdersDetails = () => {
             </div>
 
             {/* Order Header Card */}
-            <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-                <div className="bg-linear-to-r from-gray-900 via-gray-800 to-gray-900 p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="bg-[var(--bg-box)] rounded-2xl shadow-xl overflow-hidden border border-[var(--bs-border)]">
+                <div className="bg-[var(--bg-main)] p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div className="flex items-center gap-4">
-                        <div className="p-3 bg-white/10 rounded-xl backdrop-blur-sm">
-                            <FiPackage className="text-white text-2xl" />
+                        <div className="p-3 bg-[var(--bs-btn)] rounded-xl backdrop-blur-sm">
+                            <FiPackage className="text-[var(--text-white)] text-2xl" />
                         </div>
                         <div>
-                            <h2 className="text-white text-xl font-bold">Order #{order.orderId || order._id.slice(-6).toUpperCase()}</h2>
-                            <p className="text-gray-400 text-sm">Placed on {new Date(order.createdAt).toLocaleString()}</p>
+                            <h2 className="text-[var(--text-main)] text-xl font-bold">Order #{order.orderId || order._id.slice(-6).toUpperCase()}</h2>
+                            <p className="text-(--text-second) text-sm">Placed on {new Date(order.createdAt).toLocaleString()}</p>
                         </div>
                     </div>
-                    <div className="flex items-center gap-6 text-white">
-                        <div className="text-right">
-                            <p className="text-gray-400 text-xs uppercase tracking-wider font-bold">Total Amount</p>
+                    <div className="flex items-center gap-6 text-[var(--text-main)] mt-4 md:mt-0 w-full md:w-auto md:justify-end border-t border-[var(--bs-border)] pt-4 md:border-0 md:pt-0">
+                        <div className="text-left md:text-right w-full">
+                            <p className="text-(--text-second) text-xs uppercase tracking-wider font-bold">Total Amount</p>
                             <p className="text-2xl font-black text-indigo-400">₹{order.totalPrice}</p>
                         </div>
                     </div>
@@ -169,7 +169,7 @@ const ViewOrdersDetails = () => {
                         {/* Column 1: Customer Info */}
                         <div className="space-y-6">
                             <div>
-                                <h3 className="flex items-center gap-2 text-sm font-bold text-gray-900 mb-4 border-b pb-2">
+                                <h3 className="flex items-center gap-2 text-sm font-bold text-[var(--text-main)] mb-4 border-b pb-2">
                                     <FiUser className="text-indigo-600" />
                                     Customer Information
                                 </h3>
@@ -196,7 +196,7 @@ const ViewOrdersDetails = () => {
                         {/* Column 2: Payment info */}
                         <div className="space-y-6">
                             <div>
-                                <h3 className="flex items-center gap-2 text-sm font-bold text-gray-900 mb-4 border-b pb-2">
+                                <h3 className="flex items-center gap-2 text-sm font-bold text-[var(--text-main)] mb-4 border-b pb-2">
                                     <FiCreditCard className="text-indigo-600" />
                                     Payment Details
                                 </h3>
@@ -224,15 +224,15 @@ const ViewOrdersDetails = () => {
                         {/* Column 3: Shipping Address */}
                         <div className="space-y-6">
                             <div>
-                                <h3 className="flex items-center gap-2 text-sm font-bold text-gray-900 mb-4 border-b pb-2">
+                                <h3 className="flex items-center gap-2 text-sm font-bold text-[var(--text-main)] mb-4 border-b pb-2">
                                     <FiMapPin className="text-indigo-600" />
                                     Shipping Address
                                 </h3>
-                                <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 flex gap-3">
-                                    <FiMapPin className="text-gray-400 mt-1 shrink-0" />
+                                <div className="p-4 bg-[var(--bg-main)] rounded-xl border border-[var(--bs-border)] flex gap-3">
+                                    <FiMapPin className="text-[var(--icon-color)] mt-1 shrink-0" />
                                     <div>
-                                        <p className="font-bold text-sm text-gray-900">{order.shippingAddress?.name}</p>
-                                        <p className="text-sm text-gray-600 leading-relaxed">
+                                        <p className="font-bold text-sm text-[var(--text-main)]">{order.shippingAddress?.name}</p>
+                                        <p className="text-sm text-(--text-second) leading-relaxed">
                                             {order.shippingAddress?.address},<br />
                                             {order.shippingAddress?.city}, {order.shippingAddress?.state} - {order.shippingAddress?.zip}
                                         </p>
@@ -245,7 +245,7 @@ const ViewOrdersDetails = () => {
                 </div>
             </div>
 
-            <div className='bg-white rounded-2xl p-6 md:p-8 shadow-xl border border-gray-100 overflow-hidden'>
+            <div className='bg-[var(--bg-box)] rounded-2xl p-6 md:p-8 shadow-xl border border-[var(--bs-border)] overflow-hidden'>
                 <div className="flex items-center gap-3 mb-6">
                     <div className="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
                         <FiPackage size={20} />
@@ -253,7 +253,7 @@ const ViewOrdersDetails = () => {
                     <Heading title={"Order Items"} />
                 </div>
 
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto w-full">
                     <CommonDataTable
                         columns={columns}
                         data={order.items || []}
@@ -263,7 +263,7 @@ const ViewOrdersDetails = () => {
             </div>
 
 
-            <div className='bg-white rounded-2xl p-6 md:p-8 shadow-xl border border-gray-100'>
+            <div className='bg-[var(--bg-box)] rounded-2xl p-6 md:p-8 shadow-xl border border-[var(--bs-border)]'>
                 <div className="flex items-center gap-3 mb-8">
                     <div className="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
                         <FiTruck size={20} />
@@ -318,10 +318,10 @@ const ViewOrdersDetails = () => {
 const DataRow = ({ label, value, icon, badge }) => (
     <div className="flex items-center justify-between group">
         <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-colors">
+            <div className="w-8 h-8 rounded-lg bg-[var(--bg-main)] flex items-center justify-center text-[var(--icon-color)] group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-colors">
                 {React.cloneElement(icon, { size: 14 })}
             </div>
-            <span className="text-xs font-bold text-gray-500 uppercase tracking-tight">{label}</span>
+            <span className="text-xs font-bold text-[var(--text-second)] uppercase tracking-tight">{label}</span>
         </div>
         {badge ? (
             <span className={`px-2 py-0.5 rounded text-[10px] font-black tracking-wider uppercase ${
@@ -330,7 +330,7 @@ const DataRow = ({ label, value, icon, badge }) => (
                 {value}
             </span>
         ) : (
-            <span className="text-sm font-bold text-gray-900">{value}</span>
+            <span className="text-sm font-bold text-[var(--text-main)]">{value}</span>
         )}
     </div>
 );
@@ -369,12 +369,12 @@ const InteractiveStatusBadge = ({ currentStatus, onStatusChange }) => {
     return (
         <div className="relative group min-w-[140px]">
             <select
-                className={`w-full appearance-none px-4 py-2 rounded-full text-xs font-bold border shadow-sm transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 ${colorMap[currentStatus] || 'bg-gray-100 text-gray-700 border-gray-200'}`}
+                className={`w-full appearance-none px-4 py-2 rounded-full text-xs font-bold border shadow-sm transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 ${colorMap[currentStatus] || 'bg-[var(--bg-main)] text-[var(--text-main)] border-[var(--bs-border)]'}`}
                 value={currentStatus}
                 onChange={(e) => onStatusChange(e.target.value)}
             >
                 {ORDER_STATUS_OPTIONS.map(status => (
-                    <option key={status} value={status} className="bg-white text-gray-900">{status}</option>
+                    <option key={status} value={status} className="bg-[var(--bg-box)] text-[var(--text-main)]">{status}</option>
                 ))}
             </select>
             <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity">

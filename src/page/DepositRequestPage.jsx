@@ -154,27 +154,27 @@ const DepositPage = () => {
             name: "Actions",
             cell: (row) => (
                 row.status === "Pending" ? (
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 justify-center">
                         <button
                             onClick={() => handleAction(row, "Confirm")}
-                            className="text-green-500 hover:text-green-700 p-1 bg-green-50 rounded-full"
+                            className="p-2 rounded-lg cursor-pointer bg-green-100 text-green-600"
                             title="Confirm"
                         >
-                            <CheckCircle size={18} />
+                            <CheckCircle size={14} />
                         </button>
                         <button
                             onClick={() => handleAction(row, "Cancel")}
-                            className="text-red-500 hover:text-red-700 p-1 bg-red-50 rounded-full"
+                            className="p-2 rounded-lg cursor-pointer bg-red-100 text-red-600"
                             title="Cancel"
                         >
-                            <XCircle size={18} />
+                            <XCircle size={14} />
                         </button>
                     </div>
                 ) : (
                     <span className="text-gray-400 text-xs">-</span>
                 )
             ),
-            width: "100px",
+            width: "120px",
             center: true
         },
     ];
@@ -192,7 +192,7 @@ const DepositPage = () => {
                 </button>
             </div>
             <div className="card w-full bg-white rounded-xl shadow-sm p-4 h-full flex flex-col">
-                <div className="flex-1 overflow-hidden">
+                <div className="flex-1 overflow-x-auto">
                     {loading && <Loader />}
                     <CommonDataTable
                         columns={columns}
@@ -214,7 +214,7 @@ const DepositPage = () => {
                             <p className="text-gray-600 mb-6 text-sm">
                                 Are you sure you want to approve the deposit of <b>₹{selectedTx?.investment}</b> for {selectedTx?.user?.username}?
                             </p>
-                            <div className="flex justify-end gap-3">
+                            <div className="flex justify-end gap-3 flex-wrap">
                                 <button
                                     onClick={() => setShowConfirmModal(false)}
                                     className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 text-sm font-medium"
@@ -247,7 +247,7 @@ const DepositPage = () => {
                                 value={rejectReason}
                                 onChange={(e) => setRejectReason(e.target.value)}
                             ></textarea>
-                            <div className="flex justify-end gap-3 mt-4">
+                            <div className="flex justify-end gap-3 mt-4 flex-wrap">
                                 <button
                                     onClick={() => setShowCancelModal(false)}
                                     className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 text-sm font-medium"
