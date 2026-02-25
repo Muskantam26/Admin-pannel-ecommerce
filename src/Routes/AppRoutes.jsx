@@ -46,6 +46,7 @@ import AdminDetailsPage from "../page/AdminManagement/AdminDetailsPage";
 import InvoicePage from "../page/ordermanagement/InvoicePage";
 import { useSelector } from "react-redux";
 import WithdrawalRequestPage from "../page/WithdrawalRequestPage";
+import ReviewPage from "../page/ReviewPage";
 
 const AppRoutes = () => {
   const isLogin = useSelector((state) => state.auth);
@@ -66,6 +67,7 @@ const AppRoutes = () => {
               path={PathRoutes.ORDER_MANAGEMENT}
               element={<OrderManagement />}
             />
+         <Route path={PathRoutes.REVIEWS} element={<ReviewPage/>}/>
             <Route
               path={`${PathRoutes.ORDERS_DETAILS}/:id`}
               element={<ViewOrdersDetails />}

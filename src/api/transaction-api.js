@@ -10,6 +10,16 @@ export const getAllDepositsApi = async (payload) => {
     }
 };
 
+
+export const getAllTransations = async (payload) => {
+    try {
+        const response = await Axios.get("/admin/get-all-transactions", { params: payload });
+        return response.data;
+    } catch (error) {
+        return error.response?.data || { success: false, message: "Server Error" };
+    }
+};
+
 // Process Deposit (Confirm or Cancel)
 export const processDepositApi = async (data) => {
     try {
