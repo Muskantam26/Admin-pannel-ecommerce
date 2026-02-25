@@ -96,7 +96,7 @@ export const SIDEBAR_ITEMS = [
     allowedPermissions: ["MANAGE_ORDERS"],
     subItems: [
       {
-        id: PathRoutes.ORDER_MANAGEMENT,
+        id: PathRoutes.ORDER_MANAGEMENT,  
         label: "All Orders",
         icon: FaUserGroup,
         allowedPermissions: ["VIEW_ORDERS"],
@@ -117,6 +117,11 @@ export const SIDEBAR_ITEMS = [
       },
     ],
   },
+  {
+    id:PathRoutes.BANNER,
+    icon:FaLayerGroup,
+    label:"Banner",
+},
   {
     id: PathRoutes.PRODUCT_MANAGEMENT,
     icon: FaBoxOpen,

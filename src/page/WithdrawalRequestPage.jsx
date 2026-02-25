@@ -1,51 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CommonDataTable from "../Component/CommonDataTable";
 import { toast } from "react-toastify";
-import { CheckCircle, XCircle, RefreshCw } from "lucide-react";
+import { CheckCircle, XCircle, RefreshCw, Eye } from "lucide-react";
 import { MainHeading } from "../Component/Heading";
 import DateTime from "../Component/DateTime";
-
-const dummyData = [
-  {
-    _id: "WD-1",
-    id: "WD-12345",
-    createdAt: new Date().toISOString(),
-    user: { username: "john_doe", id: "U-001" },
-    investment: 5000,
-    transactionId: "TXN987654321",
-    details: {
-      paymentMode: "Bank Transfer",
-      account: "1234567890",
-      ifsc: "HDFC000123",
-    },
-    status: "Pending",
-  },
-  {
-    _id: "WD-2",
-    id: "WD-12346",
-    createdAt: new Date(Date.now() - 86400000).toISOString(),
-    user: { username: "jane_smith", id: "U-002" },
-    investment: 2500,
-    transactionId: "TXN987654322",
-    details: { paymentMode: "Crypto", address: "0x123...abc" },
-    status: "Confirmed",
-  },
-  {
-    _id: "WD-3",
-    id: "WD-12347",
-    createdAt: new Date(Date.now() - 172800000).toISOString(),
-    user: { username: "mike_ross", id: "U-003" },
-    investment: 10000,
-    transactionId: "TXN987654323",
-    details: { paymentMode: "UPI", upiId: "mike@upi" },
-    status: "Cancelled",
-  },
-];
+import { getAllTransations } from "../api/transaction-api";
+import PageLoader from "../Component/PageLoader";
 
 const WithdrawalRequestPage = () => {
-  const [data, setData] = useState(dummyData);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
+
+  useEffect(() => {
+    fetchTransactions();
+  }, []);
+
+  const fetchTransactions = async () => {
+    setLoading(true);
+    try {
+      const res = await getAllTransations({});
+
+      if (res?.success) {
+        setData(res?.data?.history || []);
+        console.log("API Response", res.data.history);
+      } else {
+        toast.error(res?.message || "Failed to fetch transactions.");
+      }
+      // eslint-disable-next-line no-unused-vars
+    } catch (err) {
+      toast.error("Internal Server Error while fetching.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Modal States
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -89,106 +78,84 @@ const WithdrawalRequestPage = () => {
   );
 
   const columns = [
-        {
-            name: "ID",
-            selector: (row) => row.id || "N/A",
-            sortable: true,
-        },
-        {
-            name: "Date",
-            selector: (row) => new Date(row.createdAt).toLocaleDateString(),
-            cell: (row) => <DateTime date={row.createdAt} />,
-            sortable: true,
-            width: "120px"
-        },
+    {
+      name: "ID",
+      selector: (row) => row.id || "N/A",
+      sortable: true,
+    },
+    {
+      name: "Date",
+      selector: (row) => new Date(row.createdAt).toLocaleDateString(),
+      cell: (row) => <DateTime date={row.createdAt} />,
+      sortable: true,
+      // width: "200px",
+    },
 
-        {
-            name: "User",
-            // eslint-disable-next-line no-constant-binary-expression
-            selector: (row) => `${row.user?.username} (${row.user?.id})` || "N/A",
-            sortable: true,
-        },
-        {
-            name: "Amount",
-            selector: (row) => `₹${row.investment}`,
-            sortable: true,
-            width: "100px"
-        },
-        {
-            name: "Tx ID",
-            selector: (row) => row.transactionId || "N/A",
-            sortable: true,
-            width: "200px"
-        },
-        {
-            name: "Mode",
-            selector: (row) => row.details?.paymentMode || "Manual",
-            sortable: true,
-            width: "100px"
-        },
-        {
-            name: "Purchase By",
-            selector: (row) => row.purchaseBy || "Manual",
-            sortable: true,
-            width: "100px"
-        },
-        {
-            name: "Screenshot",
-            imageSelector: (row) => row.file || null,
-            cell: (row) => (
-                row.file ? (
-                    <button  className="text-blue-500 hover:text-blue-700">
-                        <Eye size={18} />
-                    </button>
-                ) : <span className="text-gray-400">-</span>
-            ),
-            center: true,
-            width: "80px"
-        },
-        {
-            name: "Status",
-            selector: (row) => row.status,
-            cell: (row) => {
-                let color = "bg-yellow-100 text-[var(--bs-warn)]";
-                if (row.status === "Confirmed") color = "bg-green-100 text-[var(--bg-green)]";
-                if (row.status === "Cancelled") color = "bg-[var(--bs-del)] text-[var(--bs-red)]";
-                return (
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${color}`}>
-                        {row.status}
-                    </span>
-                );
-            },
-            sortable: true,
-            width: "120px"
-        },
-        {
-            name: "Actions",
-            cell: (row) => (
-                row.status === "Pending" ? (
-                    <div className="flex gap-2 justify-center">
-                        <button
-                            onClick={() => handleAction(row, "Confirm")}
-                            className="p-2 rounded-lg cursor-pointer bg-[var(--icon-btn)] text-[var(--icon-btn-text)]"
-                            title="Confirm"
-                        >
-                            <CheckCircle size={14} />
-                        </button>
-                        <button
-                            onClick={() => handleAction(row, "Cancel")}
-                            className="p-2 rounded-lg cursor-pointer bg-[var(--icon-btn-second)] text-[var(--icon-text-second)]"
-                            title="Cancel"
-                        >
-                            <XCircle size={14} />
-                        </button>
-                    </div>
-                ) : (
-                    <span className="text-gray-400 text-xs">-</span>
-                )
-            ),
-            width: "120px",
-            center: true
-        },
-    ];
+    {
+      name: "User",
+      // eslint-disable-next-line no-constant-binary-expression
+      selector: (row) => `${row.user?.username} (${row.user?.id})` || "N/A",
+      sortable: true,
+    },
+    {
+      name: "Amount",
+      selector: (row) => `₹${row.investment}`,
+      sortable: true,
+      // width: "100px",
+    },
+    // {
+    //   name: "Tx ID",
+    //   selector: (row) => row.transactionId || "N/A",
+    //   sortable: true,
+    //   width: "200px",
+    // },
+    {
+      name: "Status",
+      selector: (row) => row.status,
+      cell: (row) => {
+        let color = "bg-yellow-100 text-[var(--bs-warn)]";
+        if (row.status === "Confirmed")
+          color = "bg-green-100 text-[var(--bg-green)]";
+        if (row.status === "Cancelled")
+          color = "bg-[var(--bs-del)] text-[var(--bs-red)]";
+        return (
+          <span
+            className={`px-2 py-1 rounded-full text-xs font-medium ${color}`}
+          >
+            {row.status}
+          </span>
+        );
+      },
+      sortable: true,
+      width: "120px",
+    },
+    {
+      name: "Actions",
+      cell: (row) =>
+        row.status === "Pending" ? (
+          <div className="flex gap-2 justify-center">
+            <button
+              onClick={() => handleAction(row, "Confirm")}
+              className="p-2 rounded-lg cursor-pointer bg-[var(--icon-btn)] text-[var(--icon-btn-text)]"
+              title="Confirm"
+            >
+              <CheckCircle size={14} />
+            </button>
+            <button
+              onClick={() => handleAction(row, "Cancel")}
+              className="p-2 rounded-lg cursor-pointer bg-[var(--icon-btn-second)] text-[var(--icon-text-second)]"
+              title="Cancel"
+            >
+              <XCircle size={14} />
+            </button>
+          </div>
+        ) : (
+          <span className="text-gray-400 text-xs">-</span>
+        ),
+      width: "120px",
+      center: true,
+    },
+  ];
 
   return (
     <>
@@ -198,15 +165,16 @@ const WithdrawalRequestPage = () => {
           subtitle={"Manage all user withdrawal requests"}
         />
         <button
-          onClick={() => setData(dummyData)}
+          onClick={fetchTransactions}
           className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition text-gray-600 self-end sm:self-auto"
           title="Refresh Data"
         >
-          <RefreshCw size={18} />
+          <RefreshCw size={18} className={loading ? "animate-spin" : ""} />
         </button>
       </div>
       <div className="card w-full bg-white rounded-xl shadow-sm p-4 h-full flex flex-col">
         <div className="flex-1 overflow-x-auto">
+          {loading && <PageLoader />}
           <CommonDataTable
             columns={columns}
             data={paginatedData}
@@ -281,8 +249,6 @@ const WithdrawalRequestPage = () => {
             </div>
           </div>
         )}
-
-      
       </div>
     </>
   );

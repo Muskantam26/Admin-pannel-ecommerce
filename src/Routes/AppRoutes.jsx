@@ -47,6 +47,7 @@ import InvoicePage from "../page/ordermanagement/InvoicePage";
 import { useSelector } from "react-redux";
 import WithdrawalRequestPage from "../page/WithdrawalRequestPage";
 import ReviewPage from "../page/ReviewPage";
+import Banner from "../page/Banner";
 
 const AppRoutes = () => {
   const isLogin = useSelector((state) => state.auth);
@@ -168,6 +169,7 @@ const AppRoutes = () => {
               path={PathRoutes.ADDRESS_DETAILS}
               element={<AddressDetailsPage />}
             />
+            <Route path={PathRoutes.BANNER} element={<Banner/>}/>
 
             {/* Admin Management */}
             <Route path={PathRoutes.ADMIN_MANAGEMENT} element={<AdminPage />} />

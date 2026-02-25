@@ -52,6 +52,6 @@ export const PathRoutes = {
   CART_DETAILS: "/cart-details/:id",
   PRODUCT_VIEW_ID: "/product/view/:id",
   INVOICE: "/invoice/:id",
-
   REVIEWS: "/reviews",
+  BANNER:"/banner",
 };
