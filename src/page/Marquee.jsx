@@ -45,6 +45,7 @@ const Marquee = () => {
                 toast.success(res.message);
                 fetchMarquees();
             }
+        // eslint-disable-next-line no-unused-vars
         } catch (error) {
             toast.error("Failed to update visibility");
         }
@@ -58,6 +59,7 @@ const Marquee = () => {
                 setIsModalOpen(false);
                 fetchMarquees();
             }
+        // eslint-disable-next-line no-unused-vars
         } catch (error) {
             toast.error("Failed to delete marquee");
         }
@@ -68,12 +70,13 @@ const Marquee = () => {
             name: "ID",
             selector: (row) => row.id,
             sortable: true,
-            width: "150px"
+            width: "200px"
         },
         {
             name: "Marquee Text",
             selector: (row) => row.content,
             sortable: true,
+            
             cell: (row) => (
                 <div className="max-w-xs truncate font-medium text-(--text-main)" title={row.content}>
                     {row.content}
@@ -84,7 +87,7 @@ const Marquee = () => {
             name: "Order",
             selector: (row) => row.order,
             sortable: true,
-            width: "100px"
+            width: "200px"
         },
         {
             name: "Status",
@@ -102,7 +105,7 @@ const Marquee = () => {
                     {row.isVisible ? "VISIBLE" : "HIDDEN"}
                 </button>
             ),
-            width: "120px"
+            width: "200px"
         },
         {
             name: "Actions",
@@ -120,7 +123,7 @@ const Marquee = () => {
                     </button>
                 </div>
             ),
-            width: "100px"
+            width: "200px"
         }
     ];
 

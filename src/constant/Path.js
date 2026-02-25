@@ -54,7 +54,9 @@ export const PathRoutes = {
   INVOICE: "/invoice/:id",
   REVIEWS: "/reviews",
   BANNER: "/banner",
+  // eslint-disable-next-line no-dupe-keys
   ADD_BANNER: "/add-banner",
+  // eslint-disable-next-line no-dupe-keys
   EDIT_BANNER: "/edit-banner/:id",
   MARQUEE: "/marquee",
   ADD_MARQUEE: "/add-marquee",

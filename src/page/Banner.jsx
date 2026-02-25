@@ -44,6 +44,7 @@ const Banner = () => {
         toast.success(res.message);
         fetchBanners();
       }
+    // eslint-disable-next-line no-unused-vars
     } catch (error) {
       toast.error("Failed to update visibility");
     }
@@ -57,6 +58,7 @@ const Banner = () => {
         setIsDeleteModalOpen(false);
         fetchBanners();
       }
+    // eslint-disable-next-line no-unused-vars
     } catch (error) {
       toast.error("Failed to delete banner");
     }
@@ -72,7 +74,7 @@ const Banner = () => {
       name: "ID",
       selector: (row) => row.id,
       sortable: true,
-      width: "150px"
+      width: "250px"
     },
     {
       name: "Banner Image",
@@ -88,32 +90,14 @@ const Banner = () => {
           </div>
         </div>
       ),
-      width: "150px"
+      width: "200px"
     },
-    {
-      name: "Target Link",
-      selector: (row) => row.link,
-      sortable: true,
-      cell: (row) => (
-        row.link ? (
-          <a
-            href={row.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-blue-500 hover:underline max-w-[200px] truncate"
-          >
-            {row.link} <FiExternalLink size={12} />
-          </a>
-        ) : (
-          <span className="text-gray-400 italic">No link</span>
-        )
-      )
-    },
+   
     {
       name: "Order",
       selector: (row) => row.order,
       sortable: true,
-      width: "100px"
+      width: "250px"
     },
     {
       name: "Status",
@@ -131,7 +115,7 @@ const Banner = () => {
           {row.isVisible ? "VISIBLE" : "HIDDEN"}
         </button>
       ),
-      width: "120px"
+      width: "250px"
     },
     {
       name: "Actions",
@@ -149,7 +133,7 @@ const Banner = () => {
           </button>
         </div>
       ),
-      width: "100px"
+      width: "200px"
     }
   ];
 

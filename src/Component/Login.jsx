@@ -33,7 +33,7 @@ const Login = () => {
 
   const handleSubmit = async () => {
     if (!validate()) return;
-   
+
     dispatch(showLoader());
     try {
       // loginUser({
@@ -53,10 +53,10 @@ const Login = () => {
           email: response?.data?.email,
         }),
       );
-      toast.success("Welcome Back Admin!")
+      toast.success("Welcome Back Admin!");
       navigate("/dashboard");
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Something went wrong!")
+      toast.error(error?.response?.data?.message || "Something went wrong!");
     } finally {
       dispatch(hideLoader());
     }
@@ -99,10 +99,10 @@ const Login = () => {
               </div>
 
               <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-                Welcome Back.
+                Admin Portal
               </h1>
               <p className="text-gray-500 mt-2 text-sm">
-                Log in to your dashboard.
+                Log in to securely manage your platform.
               </p>
             </div>
 
@@ -163,21 +163,22 @@ const Login = () => {
             <div className="max-w-2xl relative z-10">
               <div className="flex items-center gap-2 text-indigo-600 mb-4">
                 <span className="h-px w-10 bg-indigo-600"></span>
-                <span className="text-xs font-bold uppercase tracking-widest">
-                  Market Leader
+                <span className="text-xs font-bold uppercase tracking-widest text-indigo-600">
+                  System Administration
                 </span>
               </div>
 
               <h2 className="text-6xl font-bold text-(--text-main) leading-tight mb-6 drop-shadow-sm">
-                Build the Future <br />
+                Manage the Platform <br />
                 <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-600 to-purple-600">
-                  Without Limits.
+                  With Full Control.
                 </span>
               </h2>
 
               <p className="text-(--text-second) text-lg max-w-lg leading-relaxed font-medium">
-                Join the world's most powerful platform for developers. Scale
-                your business with enterprise-grade security and reliability.
+                Access the centralized control panel to oversee users, approve
+                payout requests, manage subscription packages, and organize
+                application content seamlessly.
               </p>
             </div>
           </div>

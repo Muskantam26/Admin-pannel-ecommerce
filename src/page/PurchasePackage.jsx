@@ -24,7 +24,7 @@ const PurchasePackage = () => {
 
       if (res?.success) {
         setData(res?.data?.history || []);
-        console.log("API Response",res.data.history);
+        // console.log("API Response", res.data.history);
       } else {
         toast.error(res?.message || "Failed to fetch transactions.");
       }
@@ -48,56 +48,48 @@ const PurchasePackage = () => {
       name: "S.No",
       selector: (row, index) => (currentPage - 1) * rowsPerPage + index + 1,
       sortable: false,
-     
     },
-    
+
     {
       name: "User Name",
-      selector: (row) =>`${row.user?.username}${row.user.id}` || "N/A",
+      selector: (row) => `${row.user?.username}${row.user.id}` || "N/A",
       sortable: true,
-      width:"200px"
-    
+      width: "200px",
     },
     {
       name: "Package Name",
-      selector: (row) =>
-        row.package ? row.package.name : "N/A",
+      selector: (row) => (row.package ? row.package.name : "N/A"),
       sortable: true,
-      width:"150px"
-    
+      width: "150px",
     },
     {
-      name:"Description",
-      selector:(row)=> row.description || "N/A",
-       sortable: true,
-       width:"500px"
+      name: "Description",
+      selector: (row) => row.description || "N/A",
+      sortable: true,
+      width: "500px",
     },
     {
       name: "PV",
       selector: (row) => row.pv || 0,
       sortable: true,
-     
     },
     {
       name: "Investment",
       selector: (row) => `₹${row.investment || 0}`,
       sortable: true,
-      width:"150px"
-     
+      width: "150px",
     },
-     {
+    {
       name: "Purchased By",
-      selector: (row) =>row.purchaseBy,
+      selector: (row) => row.purchaseBy,
       sortable: true,
-      width:"150px"
-     
+      width: "150px",
     },
     {
       name: "Created At",
-      selector: (row) =>row.createdAt || "N/A",
+      selector: (row) => row.createdAt || "N/A",
       sortable: true,
-      width:"250px"
-   
+      width: "250px",
     },
   ];
 
