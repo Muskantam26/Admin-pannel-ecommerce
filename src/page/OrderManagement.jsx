@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { hideLoader, showLoader } from '../redux/slice/loadingSlice';
 import DateTime from '../Component/DateTime';
+import PageLoader from '../Component/PageLoader';
 
 const ORDER_STATUS_OPTIONS = [
   'PENDING',
@@ -61,6 +62,7 @@ const OrderManagement = () => {
       console.error("Error fetching orders:", error);
       toast.error("Failed to fetch orders");
     } finally {
+      setLoading(false);
 
     }
   };
@@ -121,7 +123,7 @@ const OrderManagement = () => {
     {
       name: "Payment Status",
       cell: (row) => (
-        <span className={`px-2 py-1 rounded text-xs font-semibold ${row.paymentStatus === 'PAID' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+        <span className={`px-2 py-1 rounded-full text-xs font-medium ${row.paymentStatus === 'PAID' ? 'bg-green-100 text-(--bg-green)' : 'bg-(--bs-del) text-(--bs-red)'}`}>
           {row.paymentStatus}
         </span>
       ),
@@ -136,7 +138,7 @@ const OrderManagement = () => {
       cell: (row) => (
         <div className="flex gap-2">
           <button
-            className="p-2 rounded-lg cursor-pointer bg-blue-100 text-blue-600"
+            className="p-2 rounded-lg cursor-pointer bg-(--icon-btn) text-(--icon-btn-text)"
             onClick={() => navigate(`${PathRoutes.ORDERS_DETAILS}/${row._id}`)} // Assuming detail route takes ID
             title="View Details"
           >
@@ -150,14 +152,14 @@ const OrderManagement = () => {
 
   const InteractiveStatusBadge = ({ orderId, currentStatus, onStatusChange }) => {
     const colorMap = {
-      PENDING: "bg-yellow-100 text-yellow-700 border-yellow-200",
-      PLACED: "bg-indigo-100 text-indigo-700 border-indigo-200",
-      PROCESSING: "bg-orange-100 text-orange-700 border-orange-200",
-      CONFIRMED: "bg-blue-100 text-blue-700 border-blue-200",
-      SHIPPED: "bg-purple-100 text-purple-700 border-purple-200",
-      DELIVERED: "bg-green-100 text-green-700 border-green-200",
-      CANCELLED: "bg-red-100 text-red-700 border-red-200",
-      RETURNED: "bg-gray-100 text-gray-700 border-gray-200",
+      PENDING: "bg-yellow-100 text-[var(--bs-warn)] border-yellow-200",
+      PLACED: "bg-indigo-100 text-(--icon-text-second) border-indigo-200",
+      PROCESSING: "bg-orange-100 text-[var(--bs-line)] border-orange-200",
+      CONFIRMED: "bg-[var(--icon-btn)] text-[var(--icon-btn-text)] border-blue-200",
+      SHIPPED: "bg-purple-100 text-(--icon-text-second) border-purple-200",
+      DELIVERED: "bg-green-100 text-(--bg-green) border-green-200",
+      CANCELLED: "bg-(--bs-del) text-(--bs-red) border-[var(--bs-del)]",
+      RETURNED: "bg-gray-100 text-[var(--bs-gray)] border-gray-200",
     };
 
     return (
@@ -245,6 +247,7 @@ const OrderManagement = () => {
 
 
       <div className='bg-(--bg-box) rounded-2xl p-4 md:p-5 mt-5 shadow-2xl overflow-hidden'>
+        {loading && <PageLoader/>}
         <Heading
           title={"Order Status"} />
 

@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import ConfirmationModal from '../Component/Model/ConfirmationModal';
 import { getAllUsersApi, toggleUserBlockApi, toggleUserWithdrawalApi, loginAsUserApi } from "../api/user-api";
 import { toast } from "react-toastify";
+import PageLoader from '../Component/PageLoader';
 
 
 const UserManagement = () => {
@@ -29,9 +30,6 @@ const UserManagement = () => {
   const [modalConfig, setModalConfig] = useState({ isOpen: false, type: '', data: null });
   const rowsPerPage = 10;
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -43,6 +41,11 @@ const UserManagement = () => {
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchUsers()
+  }, []);
 
   const handleAction = (type, data) => {
     setModalConfig({ isOpen: true, type, data });
@@ -314,7 +317,7 @@ const UserManagement = () => {
           </div>
         </div>
         {loading ? (
-          <div className="p-10 text-center">Loading users...</div>
+          <PageLoader/>
         ) : (
           <div className="overflow-x-auto w-full">
             <CommonDataTable

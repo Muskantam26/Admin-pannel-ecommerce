@@ -15,6 +15,7 @@ import {
     FiChevronRight
 } from 'react-icons/fi';
 import { getCartByUserIdApi } from '../../api/cart-api';
+import { Heading, MainHeading } from '../../Component/Heading';
 
 const CartDetailsPage = () => {
     const { id } = useParams();
@@ -35,6 +36,7 @@ const CartDetailsPage = () => {
 
     useEffect(() => {
         if (id) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             getCartDetails();
         }
     }, [id]);
@@ -69,11 +71,12 @@ const CartDetailsPage = () => {
                         >
                             <FiArrowLeft size={20} />
                         </button>
-                        <div>
-                            <h1 className="text-2xl md:text-3xl font-extrabold text-(--text-main) flex items-center gap-3">
-                                <FiShoppingBag className="text-(--bs-primary)" /> Cart Details
-                            </h1>
-                            <p className="text-(--text-third) text-sm mt-1">Viewing items currently in {cart.userId?.fullName || 'User'}'s cart</p>
+                        <div className="flex items-center gap-3">
+                            <FiShoppingBag className="text-(--bs-primary) text-3xl" />
+                            <MainHeading 
+                                title="Cart Details"
+                                subtitle={`Viewing items currently in ${cart.userId?.fullName || 'User'}'s cart`}
+                            />
                         </div>
                     </div>
                 </div>
@@ -98,8 +101,7 @@ const CartDetailsPage = () => {
                             </div>
                             <div className="pt-12 p-6">
                                 <div className="mb-6">
-                                    <h2 className="text-xl font-bold text-(--text-main)">{cart.userId?.fullName || "N/A"}</h2>
-                                    <p className="text-(--text-third) text-sm font-medium">@{cart.userId?.username || "username"}</p>
+                                    <Heading title={cart.userId?.fullName || "N/A"} subtitle={`@${cart.userId?.username || "username"}`} titleSize="text-xl" subtitleSize="text-sm font-medium" />
                                 </div>
 
                                 <div className="space-y-4">
@@ -143,9 +145,10 @@ const CartDetailsPage = () => {
                         {/* Order Summary Card */}
                         <div className="bg-(--bg-box) rounded-3xl shadow-lg border border-(--bs-border) p-8 relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-32 h-32 bg-(--bs-primary) opacity-[0.03] rounded-bl-full"></div>
-                            <h2 className="text-xl font-bold text-(--text-main) mb-6 flex items-center gap-2">
-                                <FiInfo className="text-(--bs-primary)" /> Cart Summary
-                            </h2>
+                            <div className="flex items-center gap-2 mb-6">
+                                <FiInfo className="text-(--bs-primary)" />
+                                <Heading title="Cart Summary" />
+                            </div>
                             <div className="space-y-4">
                                 <div className="flex justify-between items-center pb-4 border-b border-(--bs-border) border-dashed">
                                     <span className="text-(--text-second) font-medium">Unique Products</span>
@@ -170,12 +173,15 @@ const CartDetailsPage = () => {
                     <div className="lg:col-span-8">
                         <div className="bg-(--bg-box) rounded-3xl shadow-sm border border-(--bs-border) overflow-hidden">
                             <div className="p-6 md:p-8 border-b border-(--bs-border) bg-[var(--bg-main)] flex flex-col md:flex-row md:items-center justify-between gap-4">
-                                <h2 className="text-xl font-bold text-(--text-main) flex items-center gap-3">
+                                <div className="flex items-center gap-3">
                                     <div className="p-2 bg-[var(--bg-box)] rounded-xl shadow-sm">
                                         <FiPackage className="text-(--bs-primary)" />
                                     </div>
-                                    Cart Items <span className="text-sm font-normal text-(--text-third) ml-2">({totalItems} items)</span>
-                                </h2>
+                                    <Heading 
+                                        title={<>Cart Items <span className="text-sm font-normal text-(--text-third) ml-2">({totalItems} items)</span></>}
+                                        titleSize="text-xl"
+                                    />
+                                </div>
                             </div>
 
                             <div className="divide-y divide-(--bs-border)">
@@ -241,7 +247,7 @@ const CartDetailsPage = () => {
                                         <div className="w-20 h-20 bg-[var(--bg-main)] rounded-3xl flex items-center justify-center mx-auto mb-6 text-[var(--icon-color)]">
                                             <FiShoppingBag size={40} />
                                         </div>
-                                        <h3 className="text-xl font-bold text-(--text-main) mb-2">Cart is empty</h3>
+                                        <div className="mb-2"><Heading title="Cart is empty" align="center" /></div>
                                         <p className="text-(--text-third) max-w-sm mx-auto">This user doesn't have any items in their cart at the moment.</p>
                                         <button
                                             onClick={() => navigate('/all-carts')}

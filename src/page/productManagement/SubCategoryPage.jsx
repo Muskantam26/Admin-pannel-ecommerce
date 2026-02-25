@@ -9,6 +9,7 @@ import CommonDataTable from "../../Component/CommonDataTable";
 import { getAllCategoryApi, deleteCategoryApi } from "../../api/category-api";
 import ConfirmationModal from "../../Component/Model/ConfirmationModal";
 import ImagePreviewModal from "../../Component/Model/ImagePreviewModal";
+import PageLoader from "../../Component/PageLoader";
 
 const SubCategoryPage = () => {
     const [categories, setCategories] = useState([]);
@@ -138,14 +139,14 @@ const SubCategoryPage = () => {
                 <div className="flex gap-2">
                     <button
                         onClick={() => handleEdit(row._id)}
-                        className="p-2 rounded-lg cursor-pointer bg-indigo-100 text-indigo-600"
+                        className="p-2 rounded-lg cursor-pointer bg-(--icon-btn-second) text-(--icon-text-second)"
                         title="Edit"
                     >
                         <FaEdit size={14} />
                     </button>
                     <button
                         onClick={() => handleDelete(row._id)}
-                        className="p-2 rounded-lg cursor-pointer bg-red-100 text-red-600"
+                        className="p-2 rounded-lg cursor-pointer bg-(--bs-del) text-(--bs-red)"
                         title="Delete"
                     >
                         <FaTrash size={14} />
@@ -184,6 +185,7 @@ const SubCategoryPage = () => {
                 </div>
                 
                 <div className="overflow-x-auto w-full">
+                    {loading && <PageLoader/>}
                     <CommonDataTable
                         columns={columns}
                         data={paginatedData}

@@ -6,6 +6,7 @@ import Loader from "../Component/PageLoader";
 import { CheckCircle, XCircle, Eye, RefreshCw } from "lucide-react";
 import { MainHeading } from "../Component/Heading";
 import DateTime from "../Component/DateTime";
+import PageLoader from "../Component/PageLoader";
 
 const DepositPage = () => {
     const [data, setData] = useState([]);
@@ -21,6 +22,7 @@ const DepositPage = () => {
     const [previewImage, setPreviewImage] = useState(null);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/immutability
         fetchDeposits();
     }, []);
 
@@ -94,6 +96,7 @@ const DepositPage = () => {
 
         {
             name: "User",
+            // eslint-disable-next-line no-constant-binary-expression
             selector: (row) => `${row.user?.username} (${row.user?.id})` || "N/A",
             sortable: true,
         },
@@ -138,11 +141,11 @@ const DepositPage = () => {
             name: "Status",
             selector: (row) => row.status,
             cell: (row) => {
-                let color = "bg-yellow-100 text-yellow-700";
-                if (row.status === "Confirmed") color = "bg-green-100 text-green-700";
-                if (row.status === "Cancelled") color = "bg-red-100 text-red-700";
+                let color = "bg-yellow-100 text-[var(--bs-warn)]";
+                if (row.status === "Confirmed") color = "bg-green-100 text-[var(--bg-green)]";
+                if (row.status === "Cancelled") color = "bg-[var(--bs-del)] text-[var(--bs-red)]";
                 return (
-                    <span className={`px-2 py-1 rounded-full text-xs font-semibold ${color}`}>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${color}`}>
                         {row.status}
                     </span>
                 );
@@ -157,14 +160,14 @@ const DepositPage = () => {
                     <div className="flex gap-2 justify-center">
                         <button
                             onClick={() => handleAction(row, "Confirm")}
-                            className="p-2 rounded-lg cursor-pointer bg-green-100 text-green-600"
+                            className="p-2 rounded-lg cursor-pointer bg-[var(--icon-btn)] text-[var(--icon-btn-text)]"
                             title="Confirm"
                         >
                             <CheckCircle size={14} />
                         </button>
                         <button
                             onClick={() => handleAction(row, "Cancel")}
-                            className="p-2 rounded-lg cursor-pointer bg-red-100 text-red-600"
+                            className="p-2 rounded-lg cursor-pointer bg-[var(--icon-btn-second)] text-[var(--icon-text-second)]"
                             title="Cancel"
                         >
                             <XCircle size={14} />
@@ -193,7 +196,7 @@ const DepositPage = () => {
             </div>
             <div className="card w-full bg-white rounded-xl shadow-sm p-4 h-full flex flex-col">
                 <div className="flex-1 overflow-x-auto">
-                    {loading && <Loader />}
+                    {loading && <PageLoader />}
                     <CommonDataTable
                         columns={columns}
                         data={paginatedData}

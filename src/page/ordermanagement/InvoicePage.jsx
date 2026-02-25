@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { FiPrinter, FiDownload } from 'react-icons/fi';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import CommonDataTable from '../../Component/CommonDataTable';
 
 const InvoicePage = () => {
     const { id } = useParams();
@@ -56,6 +57,62 @@ const InvoicePage = () => {
 
     if (loading) return <PageLoader />;
     if (!order) return <div className="p-10 text-center text-red-500">Invoice not found</div>;
+
+    const invoiceColumns = [
+        {
+            name: "Image",
+            selector: (row) => row.image,
+            imageSelector: (row) => row.image, // required for CommonDataTable excel export
+            cell: (row) => (
+                <div className="w-12 h-12 rounded-lg bg-gray-100 border border-gray-200 overflow-hidden">
+                    <img
+                        src={row.image}
+                        alt={row.name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                            e.target.src = 'https://via.placeholder.com/50?text=IMG'
+                        }}
+                    />
+                </div>
+            ),
+            width: "80px"
+        },
+        {
+            name: "Item Details",
+            cell: (row) => (
+                <div>
+                    <p className="font-bold text-[var(--text-main)] text-sm mb-1 print:text-gray-900">{row.name}</p>
+                    {row.variants && row.variants.length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                            {row.variants.map((v, i) => (
+                                <span key={i} className="inline-block px-2 py-0.5 bg-gray-100 text-gray-600 text-[10px] rounded font-medium border border-gray-200">
+                                    {v.variantType}: {v.variantValue}
+                                </span>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )
+        },
+        {
+            name: "Qty",
+            selector: (row) => row.quantity,
+            center: true,
+            width: "100px"
+        },
+        {
+            name: "Price",
+            selector: (row) => `₹${row.price.toLocaleString()}`,
+            right: true,
+            width: "120px"
+        },
+        {
+            name: "Total",
+            selector: (row) => `₹${(row.price * row.quantity).toLocaleString()}`,
+            right: true,
+            width: "120px"
+        },
+    ];
 
     return (
         <div className="min-h-screen bg-gray-100 p-4 md:p-8 print:bg-white print:p-0 font-sans">
@@ -149,50 +206,15 @@ const InvoicePage = () => {
 
                     {/* Table */}
                     <div className="mb-10 overflow-hidden rounded-xl border border-gray-200 shadow-sm print:shadow-none print:border-gray-300">
-                        <table className="w-full border-collapse">
-                            <thead>
-                                <tr className="bg-gray-100 border-b border-gray-200 print:bg-gray-100">
-                                    <th className="py-4 px-6 text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-20">Image</th>
-                                    <th className="py-4 px-6 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Item Details</th>
-                                    <th className="py-4 px-6 text-center text-xs font-bold text-gray-600 uppercase tracking-wider w-24">Qty</th>
-                                    <th className="py-4 px-6 text-right text-xs font-bold text-gray-600 uppercase tracking-wider w-32">Price</th>
-                                    <th className="py-4 px-6 text-right text-xs font-bold text-gray-600 uppercase tracking-wider w-32">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-100">
-                                {order.items.map((item, index) => (
-                                    <tr key={index} className="hover:bg-gray-50 transition-colors print:hover:bg-transparent">
-                                        <td className="py-4 px-6">
-                                            <div className="w-12 h-12 rounded-lg bg-gray-100 border border-gray-200 overflow-hidden">
-                                                <img
-                                                    src={item.image}
-                                                    alt={item.name}
-                                                    className="w-full h-full object-cover"
-                                                    onError={(e) => {
-                                                        e.target.src = 'https://via.placeholder.com/50?text=IMG'
-                                                    }}
-                                                />
-                                            </div>
-                                        </td>
-                                        <td className="py-4 px-6">
-                                            <p className="font-bold text-gray-900 text-sm mb-1">{item.name}</p>
-                                            {item.variants && item.variants.length > 0 && (
-                                                <div className="flex flex-wrap gap-1">
-                                                    {item.variants.map((v, i) => (
-                                                        <span key={i} className="inline-block px-2 py-0.5 bg-gray-100 text-gray-600 text-[10px] rounded font-medium border border-gray-200">
-                                                            {v.variantType}: {v.variantValue}
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </td>
-                                        <td className="py-4 px-6 text-center text-sm font-medium text-gray-700">{item.quantity}</td>
-                                        <td className="py-4 px-6 text-right text-sm text-gray-600">₹{item.price.toLocaleString()}</td>
-                                        <td className="py-4 px-6 text-right text-sm font-bold text-gray-900">₹{(item.price * item.quantity).toLocaleString()}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                        <CommonDataTable 
+                            columns={invoiceColumns}
+                            data={order.items || []}
+                            selectable={false}
+                            rowsPerPage={order.items?.length || 0}
+                            currentPage={1}
+                            totalPages={1}
+                            onPageChange={() => {}}
+                        />
                     </div>
 
                     {/* Summary */}

@@ -123,10 +123,10 @@ const ViewOrdersDetails = () => {
     return (
         <div className="p-2 md:p-6 lg:p-8 space-y-6">
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                <div>
-                    <MainHeading title={"Order Management"} />
-                    <p className="text-gray-500 text-sm mt-1">Manage and track order details efficiently</p>
-                </div>
+                <MainHeading 
+                    title="Order Management"
+                    subtitle="Manage and track order details efficiently"
+                />
                 
                 <div className="flex flex-wrap items-center gap-3">
                     <button
@@ -151,10 +151,12 @@ const ViewOrdersDetails = () => {
                         <div className="p-3 bg-[var(--bs-btn)] rounded-xl backdrop-blur-sm">
                             <FiPackage className="text-[var(--text-white)] text-2xl" />
                         </div>
-                        <div>
-                            <h2 className="text-[var(--text-main)] text-xl font-bold">Order #{order.orderId || order._id.slice(-6).toUpperCase()}</h2>
-                            <p className="text-(--text-second) text-sm">Placed on {new Date(order.createdAt).toLocaleString()}</p>
-                        </div>
+                        <Heading 
+                            title={`Order #${order.orderId || order._id.slice(-6).toUpperCase()}`}
+                            subtitle={`Placed on ${new Date(order.createdAt).toLocaleString()}`}
+                            titleSize="text-xl"
+                            subtitleSize="text-sm"
+                        />
                     </div>
                     <div className="flex items-center gap-6 text-[var(--text-main)] mt-4 md:mt-0 w-full md:w-auto md:justify-end border-t border-[var(--bs-border)] pt-4 md:border-0 md:pt-0">
                         <div className="text-left md:text-right w-full">
@@ -356,14 +358,14 @@ const QuickActionBtn = ({ title, color, onClick, icon }) => {
 
 const InteractiveStatusBadge = ({ currentStatus, onStatusChange }) => {
     const colorMap = {
-        PENDING: "bg-yellow-100 text-yellow-700 border-yellow-200 ring-yellow-500",
-        PLACED: "bg-indigo-100 text-indigo-700 border-indigo-200 ring-indigo-500",
-        PROCESSING: "bg-orange-100 text-orange-700 border-orange-200 ring-orange-500",
-        CONFIRMED: "bg-blue-100 text-blue-700 border-blue-200 ring-blue-500",
-        SHIPPED: "bg-purple-100 text-purple-700 border-purple-200 ring-purple-500",
-        DELIVERED: "bg-green-100 text-green-700 border-green-200 ring-green-500",
-        CANCELLED: "bg-red-100 text-red-700 border-red-200 ring-red-500",
-        RETURNED: "bg-gray-100 text-gray-700 border-gray-200 ring-gray-500",
+        PENDING: "bg-yellow-100 text-[var(--bs-warn)] border-yellow-200 ring-yellow-500",
+        PLACED: "bg-indigo-100 text-(--icon-text-second) border-indigo-200 ring-indigo-500",
+        PROCESSING: "bg-orange-100 text-(--bs-line) border-orange-200 ring-orange-500",
+        CONFIRMED: "bg-[var(--icon-btn)] text-[var(--icon-btn-text)] border-blue-200 ring-blue-500",
+        SHIPPED: "bg-purple-100 text-(--icon-text-second) border-purple-200 ring-purple-500",
+        DELIVERED: "bg-green-100 text-(--bg-green) border-green-200 ring-green-500",
+        CANCELLED: "bg-(--bs-del) text-(--bs-red) border-[var(--bs-del)] ring-red-500",
+        RETURNED: "bg-gray-100 text-[var(--bs-gray)] border-gray-200 ring-gray-500",
     };
 
     return (

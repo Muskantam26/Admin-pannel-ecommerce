@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Heading } from '../Component/Heading';
+import { Heading, MainHeading } from '../Component/Heading';
 import { useNavigate } from 'react-router-dom';
 import { FiArrowLeft, FiCheckCircle, FiUploadCloud, FiTrash2, FiUser, FiCreditCard, FiSearch, FiX, FiDollarSign } from 'react-icons/fi';
 import { uploadFile, convertToBase64 } from '../utils/fileUpload';
@@ -130,10 +130,10 @@ const DepositPage = () => {
                     <button onClick={() => navigate('/deposit-requests')} className="p-2 hover:bg-gray-100 rounded-lg transition-colors text-[var(--text-second)]">
                         <FiArrowLeft size={22} />
                     </button>
-                    <div>
-                        <h1 className="text-2xl font-bold text-[var(--text-main)]">Add Manual Deposit</h1>
-                        <p className="text-[var(--text-second)] text-sm mt-0.5">Credit funds to user wallet manually.</p>
-                    </div>
+                    <MainHeading 
+                        title="Add Manual Deposit"
+                        subtitle="Credit funds to user wallet manually."
+                    />
                 </div>
             </div>
 

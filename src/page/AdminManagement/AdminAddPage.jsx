@@ -10,6 +10,7 @@ import Button from '../../Component/Btn';
 import OtpModal from '../../Component/Model/OtpModal';
 
 import { PERMISSIONS_TREE, ROLES } from '../../constant/SidebarData';
+import { Heading, MainHeading } from '../../Component/Heading';
 
 const AdminAddPage = () => {
     const navigate = useNavigate();
@@ -52,6 +53,7 @@ const AdminAddPage = () => {
                 });
                 setIsEmailVerified(true); // Assume existing admin email is verified
             }
+        // eslint-disable-next-line no-unused-vars
         } catch (error) {
             toast.error("Failed to fetch admin details");
             navigate(PathRoutes.ADMIN_MANAGEMENT);
@@ -159,14 +161,10 @@ const AdminAddPage = () => {
                         >
                             <FiArrowLeft size={20} />
                         </button>
-                        <div>
-                            <h1 className="text-2xl font-bold text-(--text-main)">
-                                {adminId ? 'Edit Administrator' : 'Create New Administrator'}
-                            </h1>
-                            <p className="text-sm text-(--text-second) mt-1">
-                                {adminId ? 'Update admin details and permissions' : 'Add a new admin to manage the platform'}
-                            </p>
-                        </div>
+                        <MainHeading 
+                            title={adminId ? 'Edit Administrator' : 'Create New Administrator'}
+                            subtitle={adminId ? 'Update admin details and permissions' : 'Add a new admin to manage the platform'}
+                        />
                     </div>
                     <Button
                         onClick={handleSubmit}
@@ -187,10 +185,10 @@ const AdminAddPage = () => {
                         <div className="col-span-12 lg:col-span-8 space-y-8">
                             {/* Basic Details Card */}
                             <div className="bg-(--bg-box) rounded-2xl border border-(--bs-border) p-8 shadow-sm">
-                                <h2 className="text-lg font-bold text-(--text-main) mb-6 flex items-center gap-2">
+                                <div className="flex items-center gap-2 mb-6">
                                     <span className="p-2 rounded-lg bg-blue-50 text-blue-600"><FiUser /></span>
-                                    Personal Information
-                                </h2>
+                                    <Heading title="Personal Information" />
+                                </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {/* Username */}
@@ -248,10 +246,10 @@ const AdminAddPage = () => {
 
                             {/* Security Card */}
                             <div className="bg-(--bg-box) rounded-2xl border border-(--bs-border) p-8 shadow-sm">
-                                <h2 className="text-lg font-bold text-(--text-main) mb-6 flex items-center gap-2">
+                                <div className="flex items-center gap-2 mb-6">
                                     <span className="p-2 rounded-lg bg-red-50 text-red-600"><FiLock /></span>
-                                    Security
-                                </h2>
+                                    <Heading title="Security" />
+                                </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div className="space-y-2">
                                         <InputField
@@ -275,10 +273,10 @@ const AdminAddPage = () => {
                         <div className="col-span-12 lg:col-span-4 space-y-8">
                             {/* Role Selection */}
                             <div className="bg-(--bg-box) rounded-2xl border border-(--bs-border) p-8 shadow-sm">
-                                <h2 className="text-lg font-bold text-(--text-main) mb-6 flex items-center gap-2">
+                                <div className="flex items-center gap-2 mb-6">
                                     <span className="p-2 rounded-lg bg-orange-50 text-orange-600"><FiShield /></span>
-                                    Role Assignment
-                                </h2>
+                                    <Heading title="Role Assignment" />
+                                </div>
                                 <div className="space-y-3">
                                     <label className="text-sm font-semibold text-(--text-second)">Select Role</label>
                                     <div className="space-y-3">
@@ -314,10 +312,10 @@ const AdminAddPage = () => {
                         </div>
                     </div>
                     <div className="bg-(--bg-box) rounded-2xl border border-(--bs-border) p-8 shadow-sm w-full mt-4">
-                        <h2 className="text-lg font-bold text-(--text-main) mb-6 flex items-center gap-2">
+                        <div className="flex items-center gap-2 mb-6">
                             <span className="p-2 rounded-lg bg-purple-50 text-purple-600"><FiCheckCircle /></span>
-                            Access Permissions
-                        </h2>
+                            <Heading title="Access Permissions" />
+                        </div>
                         <div className="gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                             {PERMISSIONS_TREE.map((group) => (
                                 <div key={group.value} className="border border-gray-200 rounded-xl p-4 bg-gray-50/50">

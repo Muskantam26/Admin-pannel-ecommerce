@@ -34,6 +34,7 @@ const Packages = () => {
             } else {
                 toast.error(res.message);
             }
+        // eslint-disable-next-line no-unused-vars
         } catch (error) {
              toast.error("Failed to fetch packages");
         } finally {
@@ -74,6 +75,7 @@ const Packages = () => {
             } else {
                 toast.error(res.message);
             }
+        // eslint-disable-next-line no-unused-vars
         } catch (error) {
             toast.error("Error deleting package");
         } finally {
@@ -169,6 +171,7 @@ const Packages = () => {
                                             <p className="text-[10px] uppercase tracking-wider opacity-70">Point Value</p>
                                             <p className="font-bold text-sm">{pkg.pv}</p>
                                         </div>
+                                        
                                     </div>
 
                                     {/* Benefits List */}

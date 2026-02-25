@@ -29,6 +29,7 @@ const CartPage = () => {
     };
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         getAllCarts();
     }, []);
 
@@ -38,6 +39,7 @@ const CartPage = () => {
             cart.userId?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             cart.userId?.mobile?.toLowerCase().includes(searchTerm.toLowerCase())
         );
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setFilteredCarts(results);
         setCurrentPage(1);
     }, [searchTerm, carts]);
@@ -100,7 +102,7 @@ const CartPage = () => {
             cell: (row) => (
                 <Link
                     to={PathRoutes.CART_DETAILS.replace(":id", row.userId?._id)}
-                    className="inline-flex items-center justify-center p-2 rounded-lg cursor-pointer bg-blue-100 text-blue-600 transition-all"
+                    className="inline-flex items-center justify-center p-2 rounded-lg cursor-pointer bg-(--icon-btn) text-(--icon-btn-text) transition-all"
                     title="View Details"
                 >
                     <FiEye size={14} />

@@ -89,6 +89,9 @@ const CategoryForm = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
+        if(name === "name"){
+            setFormData((prev) => ({ ...prev, slug: value.toLowerCase().replace(/\s+/g, "-") }));
+        }
     };
 
     const handleUploadComplete = (url) => {
@@ -143,6 +146,9 @@ const CategoryForm = () => {
         : mode === "subcategory" ? "Add Sub Category" : "Add Category";
     const subTitle = mode === "subcategory" ? "Manage your sub-category details and media." : "Manage your category details and media.";
     const backPath = mode === "subcategory" ? "/sub-category" : "/add-category";
+    const nameLabel = mode === "subcategory" ? "Sub Category Name" : "Category Name";
+const slugLabel = mode === "subcategory" ? "Sub Category Slug" : "Category Slug";
+const imagelabel= mode ==="subcategory" ? "sub category image":"category image";
 
     return (
         <div className="pb-20 relative min-h-screen bg-(--bg-main) mt-5 md:mt-2">
@@ -188,27 +194,7 @@ const CategoryForm = () => {
                             <h2 className="text-lg font-bold text-[var(--text-main)]">Basic Information</h2>
                             <span className="text-xs font-medium px-2.5 py-1 bg-blue-50 text-blue-700 rounded-full">Required</span>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="md:col-span-1">
-                                <InputField
-                                    label="Category Name"
-                                    name="name"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    placeholder="Enter category name"
-                                />
-                            </div>
-                            <div className="md:col-span-1">
-                                <InputField
-                                    label="Slug (Auto-generated)"
-                                    name="slug"
-                                    value={formData.slug}
-                                    onChange={handleChange}
-                                    placeholder="category-slug"
-                                />
-                            </div>
-
-                            {mode === "subcategory" && (
+                          {mode === "subcategory" && (
                                 <div className="md:col-span-2">
                                     <CustomSelect
                                         label="Parent Category"
@@ -223,6 +209,43 @@ const CategoryForm = () => {
                                     />
                                 </div>
                             )}
+
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-5">
+                            <div className="md:col-span-1">
+                                <InputField
+                                     label={nameLabel}
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    placeholder="Enter category name"
+                                />
+                            </div>
+                            <div className="md:col-span-1">
+                                <InputField
+                                    label={`${slugLabel} (Auto-generated)`}
+                                    name="slug"
+                                    value={formData.slug}
+                                    onChange={handleChange}
+                                    placeholder="category-slug"
+                                />
+                            </div>
+
+                            {/* {mode === "subcategory" && (
+                                <div className="md:col-span-2">
+                                    <CustomSelect
+                                        label="Parent Category"
+                                        name="parentId"
+                                        value={formData.parentId}
+                                        onChange={handleChange}
+                                        options={categories
+                                            .filter(cat => cat._id !== id)
+                                            .map(cat => ({ label: cat.name, value: cat._id }))}
+                                        placeholder="Select Parent Category..."
+                                     
+                                    />
+                                </div>
+                            )} */}
 
                             <div className="md:col-span-2">
                                 <label className="block text-sm font-medium text-[var(--text-second)] mb-2">Description</label>
@@ -243,9 +266,9 @@ const CategoryForm = () => {
                 <div className="space-y-8">
                     {/* Media */}
                     <div className="bg-[var(--bg-box)] p-6 rounded-2xl shadow-sm border border-[var(--bs-border)]">
-                        <h2 className="text-lg font-bold text-[var(--text-main)] mb-6">Category Image</h2>
+                        <h2 className="text-lg font-bold text-[var(--text-main)] mb-6">{imagelabel}</h2>
                         <ImageUpload
-                            label="Upload Image"
+                            label={imagelabel}
                             onUploadComplete={handleUploadComplete}
                             previewUrl={imagePreview}
                             onRemove={removeImage}

@@ -93,10 +93,10 @@ const AdminPage = () => {
             selector: (row) => row.role,
             cell: (row) => (
                 <span className={`px-2 py-1 rounded-full text-xs font-medium 
-                    ${row.role === 'SUPER-ADMIN' ? 'bg-purple-100 text-purple-700' :
-                        row.role === 'ADMIN' ? 'bg-blue-100 text-blue-700' :
-                            row.role === 'MANAGER' ? 'bg-green-100 text-green-700' :
-                                'bg-gray-100 text-gray-700'}`}>
+                    ${row.role === 'SUPER-ADMIN' ? 'bg-(--icon-btn-second) text-(--icon-text-second)' :
+                        row.role === 'ADMIN' ? 'bg-(--icon-btn) text-(--icon-btn-text)' :
+                            row.role === 'MANAGER' ? 'bg-green-100 text-(--bg-green)' :
+                                'bg-gray-100 text-[var(--bs-gray)]'}`}>
                     {row.role}
                 </span>
             ),
@@ -118,21 +118,21 @@ const AdminPage = () => {
                 <div className="flex justify-end gap-2 my-2">
                     <button
                         onClick={() => navigate(`${PathRoutes.ADMIN_DETAILS}/${row._id || row.id}`)}
-                        className="p-2 rounded-lg cursor-pointer bg-blue-100 text-blue-600 transition-colors"
+                        className="p-2 rounded-lg cursor-pointer bg-(--icon-btn) text-(--icon-btn-text) transition-colors"
                         title="View Details"
                     >
                         <FiEye size={14} />
                     </button>
                     <button
                         onClick={() => navigate(`${PathRoutes.ADD_ADMIN}?id=${row._id || row.id}`)}
-                        className="p-2 rounded-lg cursor-pointer bg-indigo-100 text-indigo-600 transition-colors"
+                        className="p-2 rounded-lg cursor-pointer bg-(--icon-btn-second) text-(--icon-text-second) transition-colors"
                         title="Edit"
                     >
                         <FiEdit size={14} />
                     </button>
                     <button
                         onClick={() => handleDelete(row._id || row.id)}
-                        className="p-2 rounded-lg cursor-pointer bg-red-100 text-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="p-2 rounded-lg cursor-pointer bg-(--bs-del) text-(--bs-red) transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         title="Delete"
                         disabled={row.role === 'SUPER-ADMIN'}
                     >

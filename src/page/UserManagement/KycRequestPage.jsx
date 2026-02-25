@@ -64,6 +64,7 @@ const KycRequestPage = () => {
             } else {
                 toast.error(res.message);
             }
+        // eslint-disable-next-line no-unused-vars
         } catch (error) {
             toast.error("Action Failed");
         }
@@ -110,25 +111,17 @@ const KycRequestPage = () => {
             name: "Status",
             selector: (row) => row.status,
             cell: (row) => {
-                let statusColor = "bg-[var(--bg-box)] text-[var(--text-second)] border border-[var(--bs-border)]";
-                let Icon = Clock;
-
+                let statusColor = "bg-yellow-100 text-yellow-600";
                 if (row.status === 'APPROVED') {
-                    statusColor = "bg-[var(--bg-main)] text-green-700 border border-green-200";
-                    Icon = CheckCircle;
+                    statusColor = "bg-green-100 text-green-600";
                 } else if (row.status === 'REJECTED') {
-                    statusColor = "bg-[var(--bg-main)] text-red-700 border border-red-200";
-                    Icon = XCircle;
-                } else if (row.status === 'PENDING') {
-                    statusColor = "bg-[var(--bg-main)] text-amber-700 border border-amber-200";
-                    Icon = Clock;
+                    statusColor = "bg-red-100 text-red-600";
                 }
 
                 return (
-                    <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide w-fit border ${statusColor}`}>
-                        <Icon size={12} strokeWidth={2.5} />
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColor}`}>
                         {row.status}
-                    </div>
+                    </span>
                 );
             },
             width: "140px"

@@ -134,14 +134,14 @@ const CategoryPage = () => {
                 <div className="flex gap-2">
                     <button
                         onClick={() => handleEdit(row._id)}
-                        className="p-2 rounded-lg cursor-pointer bg-indigo-100 text-indigo-600"
+                        className="p-2 rounded-lg cursor-pointer bg-(--icon-btn-second) text-(--icon-text-second)"
                         title="Edit"
                     >
                         <FiEdit  size={14} />
                     </button>
                     <button
                         onClick={() => handleDelete(row._id)}
-                        className="p-2 rounded-lg cursor-pointer bg-red-100 text-red-600"
+                        className="p-2 rounded-lg cursor-pointer bg-(--bs-del) text-(--bs-red)"
                         title="Delete"
                     >
                         <FiTrash size={14} />

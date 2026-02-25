@@ -4,7 +4,6 @@ import Dashboard from "../page/Dashboard";
 import Layout from "../Component/Layout";
 import SiteManager from "../page/SiteManager";
 
-
 import OrderManagement from "../page/OrderManagement";
 import ProductManagement from "../page/ProductManagement";
 import ViewProduct from "../page/productManagement/ViewProduct";
@@ -32,6 +31,7 @@ import DepositPage from "../page/DepositPage";
 import Login from "../Component/Login";
 import Rewards from "../page/Rewards";
 import Packages from "../page/Packages";
+import PurchasePackage from "../page/PurchasePackage";
 import Notification from "../page/Notification";
 import Message from "../page/Message";
 import AddBanner from "../page/AddBanner";
@@ -45,7 +45,7 @@ import AdminAddPage from "../page/AdminManagement/AdminAddPage";
 import AdminDetailsPage from "../page/AdminManagement/AdminDetailsPage";
 import InvoicePage from "../page/ordermanagement/InvoicePage";
 import { useSelector } from "react-redux";
-
+import WithdrawalRequestPage from "../page/WithdrawalRequestPage";
 
 const AppRoutes = () => {
   const isLogin = useSelector((state) => state.auth);
@@ -62,11 +62,20 @@ const AppRoutes = () => {
             <Route path="/product-management" element={<ProductManagement />} />
             <Route path="/product/view/:id" element={<ViewProduct />} />
             {/* <Route path="/product/edit" element={<EditProduct />} /> */}
-            <Route path={PathRoutes.ORDER_MANAGEMENT} element={<OrderManagement />} />
-            <Route path={`${PathRoutes.ORDERS_DETAILS}/:id`} element={<ViewOrdersDetails />} />
+            <Route
+              path={PathRoutes.ORDER_MANAGEMENT}
+              element={<OrderManagement />}
+            />
+            <Route
+              path={`${PathRoutes.ORDERS_DETAILS}/:id`}
+              element={<ViewOrdersDetails />}
+            />
             <Route path={PathRoutes.INVOICE} element={<InvoicePage />} />
             <Route path={PathRoutes.ALL_CARTS} element={<CartPage />} />
-            <Route path={PathRoutes.CART_DETAILS} element={<CartDetailsPage />} />
+            <Route
+              path={PathRoutes.CART_DETAILS}
+              element={<CartDetailsPage />}
+            />
             <Route path={PathRoutes.ADD_MEMBER} element={<AddMember />} />
 
             {/* Product Routes */}
@@ -74,41 +83,97 @@ const AppRoutes = () => {
             <Route path={PathRoutes.PRODUCT_EDIT_ID} element={<AddProduct />} />
 
             <Route path={PathRoutes.ADD_CATEGORY} element={<CategoryPage />} />
-            <Route path={PathRoutes.SUB_CATEGORY} element={<SubCategoryPage />} />
-            <Route path={PathRoutes.CATEGORY_CREATE} element={<CategoryForm />} />
-            <Route path={PathRoutes.CATEGORY_EDIT_ID} element={<CategoryForm />} />
-            <Route path={PathRoutes.COMPANY_SETTINGS} element={<CompanyPage />} />
+            <Route
+              path={PathRoutes.SUB_CATEGORY}
+              element={<SubCategoryPage />}
+            />
+            <Route
+              path={PathRoutes.CATEGORY_CREATE}
+              element={<CategoryForm />}
+            />
+            <Route
+              path={PathRoutes.CATEGORY_EDIT_ID}
+              element={<CategoryForm />}
+            />
+            <Route
+              path={PathRoutes.COMPANY_SETTINGS}
+              element={<CompanyPage />}
+            />
             <Route path={PathRoutes.COMPANY_FORM} element={<CompanyForm />} />
             <Route path={PathRoutes.REWARDS} element={<Rewards />} />
             <Route path={PathRoutes.PACKAGES} element={<Packages />} />
+            <Route
+              path={PathRoutes.PURCHASE_PACKAGE}
+              element={<PurchasePackage />}
+            />
             <Route path={PathRoutes.NOTIFICATION} element={<Notification />} />
             <Route path={PathRoutes.MESSAGE} element={<Message />} />
             <Route path={PathRoutes.ADD_BANNER} element={<AddBanner />} />
             <Route path={PathRoutes.EDIT_BANNER} element={<EditBanner />} />
 
             {/* Deposit Routes */}
-            <Route path={PathRoutes.DEPOSITS} element={<DepositRequestPage />} />
-            <Route path={PathRoutes.DEPOSIT_REQUESTS} element={<DepositRequestPage />} />
+            <Route
+              path={PathRoutes.DEPOSITS}
+              element={<DepositRequestPage />}
+            />
+            <Route
+              path={PathRoutes.DEPOSIT_REQUESTS}
+              element={<DepositRequestPage />}
+            />
             <Route path={PathRoutes.ADD_DEPOSIT} element={<DepositPage />} />
+            <Route
+              path={PathRoutes.WITHDRAWAL_REQUESTS}
+              element={<WithdrawalRequestPage />}
+            />
 
-            <Route path={PathRoutes.USER_MANAGEMENT} element={<UserManagement />} />
-            <Route path={PathRoutes.USER_PROFILE_EDIT} element={<UserProfileEditPage />} />
-            <Route path={PathRoutes.USER_PROFILE_DETAILS} element={<UserProfileDetails />} />
-            <Route path={PathRoutes.KYC_REQUESTS} element={<KycRequestPage />} />
+            <Route
+              path={PathRoutes.USER_MANAGEMENT}
+              element={<UserManagement />}
+            />
+            <Route
+              path={PathRoutes.USER_PROFILE_EDIT}
+              element={<UserProfileEditPage />}
+            />
+            <Route
+              path={PathRoutes.USER_PROFILE_DETAILS}
+              element={<UserProfileDetails />}
+            />
+            <Route
+              path={PathRoutes.KYC_REQUESTS}
+              element={<KycRequestPage />}
+            />
             <Route path={PathRoutes.ADD_KYC} element={<AddKycPage />} />
-            <Route path={`${PathRoutes.KYC_DETAILS}/:id`} element={<KycDetailsPage />} />
-            <Route path={PathRoutes.BANK_REQUESTS} element={<BankRequestPage />} />
-            <Route path={PathRoutes.BANK_DETAILS} element={<BankDetailsPage />} />
+            <Route
+              path={`${PathRoutes.KYC_DETAILS}/:id`}
+              element={<KycDetailsPage />}
+            />
+            <Route
+              path={PathRoutes.BANK_REQUESTS}
+              element={<BankRequestPage />}
+            />
+            <Route
+              path={PathRoutes.BANK_DETAILS}
+              element={<BankDetailsPage />}
+            />
             <Route path={PathRoutes.ADD_BANK} element={<AddBankPage />} />
-            <Route path={PathRoutes.ADDRESS_REQUESTS} element={<AddressRequestPage />} />
+            <Route
+              path={PathRoutes.ADDRESS_REQUESTS}
+              element={<AddressRequestPage />}
+            />
             <Route path={PathRoutes.ADD_ADDRESS} element={<AddAddressPage />} />
             <Route path={PathRoutes.ADD_ADDRESS} element={<AddAddressPage />} />
-            <Route path={PathRoutes.ADDRESS_DETAILS} element={<AddressDetailsPage />} />
+            <Route
+              path={PathRoutes.ADDRESS_DETAILS}
+              element={<AddressDetailsPage />}
+            />
 
             {/* Admin Management */}
             <Route path={PathRoutes.ADMIN_MANAGEMENT} element={<AdminPage />} />
             <Route path={PathRoutes.ADD_ADMIN} element={<AdminAddPage />} />
-            <Route path={`${PathRoutes.ADMIN_DETAILS}/:id`} element={<AdminDetailsPage />} />
+            <Route
+              path={`${PathRoutes.ADMIN_DETAILS}/:id`}
+              element={<AdminDetailsPage />}
+            />
           </Route>{" "}
         </>
       ) : (

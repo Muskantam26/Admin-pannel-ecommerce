@@ -64,6 +64,7 @@ const AddressRequestPage = () => {
             } else {
                 toast.error(res.message);
             }
+        // eslint-disable-next-line no-unused-vars
         } catch (error) {
             toast.error("Action Failed");
         }
@@ -141,22 +142,15 @@ const AddressRequestPage = () => {
             name: "Status",
             selector: (row) => row.status,
             cell: (row) => {
-                let statusColor = "bg-[var(--bg-box)] text-[var(--text-second)] border border-[var(--bs-border)]";
-                let Icon = Clock;
-
+                let statusColor = "bg-yellow-100 text-(--bs-warn)";
                 if (row.status === 'VERIFIED') {
-                    statusColor = "bg-[var(--bg-main)] text-green-700 border border-green-200";
-                    Icon = CheckCircle;
-                } else if (row.status === 'PENDING') {
-                    statusColor = "bg-[var(--bg-main)] text-amber-700 border border-amber-200";
-                    Icon = Clock;
+                    statusColor = "bg-green-100 text-(--bg-green)";
                 }
 
                 return (
-                    <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide w-fit border ${statusColor}`}>
-                        <Icon size={12} strokeWidth={2.5} />
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColor}`}>
                         {row.status}
-                    </div>
+                    </span>
                 );
             },
             width: "140px"
@@ -178,11 +172,29 @@ const AddressRequestPage = () => {
                 <div className="flex gap-2">
                     <button
                         onClick={() => navigate(`/address-details/${row._id}`)}
-                        className="p-2 rounded-lg cursor-pointer bg-blue-100 text-blue-600"
+                        className="p-2 rounded-lg cursor-pointer bg-(--icon-btn) text-(--icon-btn-text)"
                         title="View Details"
                     >
                         <Eye size={14} />
                     </button>
+                    {row.status === 'PENDING' && (
+                        <button
+                            onClick={() => handleAction('approve', row)}
+                            className="p-2 rounded-lg cursor-pointer bg-green-100 text-(--bg-green)"
+                            title="Approve Request"
+                        >
+                            <Check size={14} />
+                        </button>
+                    )}
+                    {row.status === 'PENDING' && (
+                        <button
+                            onClick={() => handleAction('reject', row)}
+                            className="p-2 rounded-lg cursor-pointer bg-(--bs-del) text-(--bs-red)"
+                            title="Reject Request"
+                        >
+                            <X size={14} />
+                        </button>
+                    )}
                 </div>
             ),
             width: "100px"

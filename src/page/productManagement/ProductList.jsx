@@ -63,7 +63,7 @@ const ProductList = () => {
     },
     {
       name: "ID",
-      cell: (row, index) => <span className="text-(--text-second) font-medium">{row?.id}</span>,
+      cell: (row) => <span className="text-(--text-second) font-medium">{row?.id}</span>,
       width: "200px"
     },
     {
@@ -121,14 +121,9 @@ const ProductList = () => {
       name: "Status",
       selector: (row) => row.status || 'DRAFT',
       cell: (row) => (
-        <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-medium w-fit
-            ${row.status === 'ACTIVE'
-            ? 'bg-green-50 text-green-700 border-green-200'
-            : 'bg-yellow-50 text-yellow-700 border-yellow-200'
-          }`}>
-          <span className={`w-1.5 h-1.5 rounded-full ${row.status === 'ACTIVE' ? 'bg-green-600' : 'bg-yellow-600'}`}></span>
+        <span className={`px-2 py-1 rounded-full text-xs font-medium ${row.status === 'ACTIVE' ? 'bg-green-100 text-(--bg-green)' : 'bg-yellow-100 text-[var(--bs-warn)]'}`}>
           {row.status || 'DRAFT'}
-        </div>
+        </span>
       ),
       width: "110px"
     },
@@ -137,7 +132,7 @@ const ProductList = () => {
       cell: (row) => (
         <div className="flex gap-2">
           <button
-            className="p-2 rounded-lg cursor-pointer bg-blue-100 text-blue-600"
+            className="p-2 rounded-lg cursor-pointer bg-(--icon-btn) text-(--icon-btn-text)"
             onClick={() => navigate(`/product/view/${row._id}`)}
             title="View Details"
           >
@@ -145,7 +140,7 @@ const ProductList = () => {
             <Eye size={14} />
           </button>
           <button
-            className="p-2 rounded-lg cursor-pointer bg-indigo-100 text-indigo-600"
+            className="p-2 rounded-lg cursor-pointer bg-(--icon-btn-second) text-(--icon-text-second)"
             onClick={() => navigate(`/product/edit/${row._id}`)}
             title="Edit Product"
           >
@@ -153,7 +148,7 @@ const ProductList = () => {
             <Edit size={14} />
           </button>
           <button
-            className="p-2 rounded-lg cursor-pointer bg-red-100 text-red-600"
+            className="p-2 rounded-lg cursor-pointer bg-(--bs-del) text-(--bs-red)"
             onClick={() => {
               setSelectedProduct(row);
               setIsDeleteOpen(true);

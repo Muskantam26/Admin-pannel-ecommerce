@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import ImageUpload from "../../Component/Inputs/ImageUpload";
 import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../../redux/slice/loadingSlice";
+import { Heading, MainHeading } from "../../Component/Heading";
 
 const CompanyForm = () => {
     const dispatch = useDispatch();
@@ -115,10 +116,10 @@ const CompanyForm = () => {
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 px-4 pt-6">
                 <div className="flex items-center gap-3">
-                    <div>
-                        <h1 className="text-2xl font-bold text-(--text-main)">Company Settings</h1>
-                        <p className="text-(--text-second) text-sm mt-0.5">Manage your company information, configurations, and identity.</p>
-                    </div>
+                    <MainHeading 
+                        title="Company Settings"
+                        subtitle="Manage your company information, configurations, and identity."
+                    />
                 </div>
                 <div className="flex gap-3 w-full md:w-auto">
                     <Button
@@ -137,7 +138,7 @@ const CompanyForm = () => {
                     {/* Basic Info */}
                     <div className="bg-(--bg-box) p-6 rounded-2xl shadow-sm border border-(--bs-border)">
                         <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-lg font-bold text-(--text-main)">Basic Information</h2>
+                            <Heading title="Basic Information" />
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="md:col-span-1">
@@ -151,7 +152,7 @@ const CompanyForm = () => {
 
                     {/* Address */}
                     <div className="bg-(--bg-box) p-6 rounded-2xl shadow-sm border border-(--bs-border)">
-                        <h2 className="text-lg font-bold text-(--text-main) mb-6">Address Location</h2>
+                        <div className="mb-6"><Heading title="Address Location" /></div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="md:col-span-2"><InputField label="Street" name="street" value={formData.address.street} onChange={(e) => handleChange(e, 'address')} /></div>
                             <InputField label="City" name="city" value={formData.address.city} onChange={(e) => handleChange(e, 'address')} />
@@ -163,7 +164,7 @@ const CompanyForm = () => {
 
                     {/* Email Settings */}
                     <div className="bg-(--bg-box) p-6 rounded-2xl shadow-sm border border-(--bs-border)">
-                        <h2 className="text-lg font-bold text-(--text-main) mb-6">Email Settings (SMTP)</h2>
+                        <div className="mb-6"><Heading title="Email Settings (SMTP)" /></div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <InputField label="Email" name="email" value={formData.email.email} onChange={(e) => handleChange(e, 'email')} />
                             <InputField label="Password" name="password" type="password" value={formData.email.password} onChange={(e) => handleChange(e, 'email')} />
@@ -180,7 +181,7 @@ const CompanyForm = () => {
 
                     {/* Bank Details */}
                     <div className="bg-(--bg-box) p-6 rounded-2xl shadow-sm border border-(--bs-border)">
-                        <h2 className="text-lg font-bold text-(--text-main) mb-6">Bank Details</h2>
+                        <div className="mb-6"><Heading title="Bank Details" /></div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <InputField label="Account Name" name="accountName" value={formData.bankDetails.accountName} onChange={(e) => handleChange(e, 'bankDetails')} />
                             <InputField label="Account Number" name="accountNumber" value={formData.bankDetails.accountNumber} onChange={(e) => handleChange(e, 'bankDetails')} />
@@ -198,7 +199,7 @@ const CompanyForm = () => {
 
                     {/* Media */}
                     <div className="bg-(--bg-box) p-6 rounded-2xl shadow-sm border border-(--bs-border)">
-                        <h2 className="text-lg font-bold text-(--text-main) mb-6">Company Assets</h2>
+                        <div className="mb-6"><Heading title="Company Assets" /></div>
                         <div className="space-y-6">
                             <div>
                                 <h3 className="text-sm font-semibold text-(--text-second) mb-3">Company Logo</h3>
@@ -215,7 +216,7 @@ const CompanyForm = () => {
 
                     {/* UPI Details */}
                     <div className="bg-(--bg-box) p-6 rounded-2xl shadow-sm border border-(--bs-border)">
-                        <h2 className="text-lg font-bold text-(--text-main) mb-6">UPI Integration</h2>
+                        <div className="mb-6"><Heading title="UPI Integration" /></div>
                         <div className="space-y-6">
                             <InputField label="UPI ID" name="upiId" value={formData.upiDetails.upiId} onChange={(e) => handleChange(e, 'upiDetails')} />
                             
@@ -234,7 +235,7 @@ const CompanyForm = () => {
 
                     {/* External Integrations */}
                     <div className="bg-(--bg-box) p-6 rounded-2xl shadow-sm border border-(--bs-border)">
-                        <h2 className="text-lg font-bold text-(--text-main) mb-6">External Integrations</h2>
+                        <div className="mb-6"><Heading title="External Integrations" /></div>
                         
                         <div className="space-y-6">
                             <div>

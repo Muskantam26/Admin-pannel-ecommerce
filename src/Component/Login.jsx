@@ -37,11 +37,11 @@ const Login = () => {
     dispatch(showLoader());
     try {
       // loginUser({
-      //     token: "1234567890",
-      //     userId: "1",
-      //     role: "SUPER_ADMIN",
-      //     name: "admin",
-      //     email: "[EMAIL_ADDRESS]",
+      //  token: "1234567890",
+      //    userId: "1",
+      //    role: "SUPER_ADMIN",
+      //    name: "admin",
+      //    email: "[EMAIL_ADDRESS]",
       //   }),
       const response = await adminLoginApi(formData);
       dispatch(

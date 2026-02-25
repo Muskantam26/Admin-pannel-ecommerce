@@ -104,7 +104,7 @@ const Sidebar = ({ open, setOpen }) => {
           {/* Logo Area */}
           <div className="p-5 flex items-center gap-2 justify-center border-b border-dashed border-(--bs-border)">
             <img src={MainContent.appLogo} alt="logo" className="h-12 w-auto object-contain transition-transform hover:scale-105 duration-300" />
-            <p className='font-bold text-2xl text-gray-700'>{MainContent.appFullName}</p>
+            <p className='font-bold text-2xl text-(--text-main)'>{MainContent.appFullName}</p>
           </div>
 
           {/* Scrollable Menu Area */}
@@ -131,7 +131,7 @@ const Sidebar = ({ open, setOpen }) => {
                 >
 
                   {!item.icon ? (
-                    <p className="text-(--text-third) text-[10px] uppercase font-bold tracking-wider mt-4 mb-2 ml-3 opacity-80">
+                    <p className="text-(--text-second) text-[10px] uppercase font-bold tracking-wider mt-4 mb-2 ml-3 opacity-80">
                       {item.label}
                     </p>
                   ) : (
@@ -141,7 +141,7 @@ const Sidebar = ({ open, setOpen }) => {
                           group flex items-center justify-between text-[13px] font-medium p-2.5 mx-1 cursor-pointer rounded-xl transition-all duration-200
                           ${isActive
                             ? 'bg-(--btn-hover) text-(--text-hover)'
-                            : 'text-(--text-second) hover:bg-(--bs-btn-hover) hover:text-(--text-main)'
+                            : 'text-(--text-main) hover:bg-(--bs-btn-hover) hover:text-(--text-main)'
                           }
                         `}
                         onClick={() => {
@@ -156,7 +156,7 @@ const Sidebar = ({ open, setOpen }) => {
 
                       >
                         <div className="flex items-center gap-3">
-                          <Icon className={`text-lg ${isActive ? 'text-(--text-hover)' : 'text-(--text-third) group-hover:text-(--bs-primary)'} transition-colors`} />
+                          <Icon className={`text-lg ${isActive ? 'text-(--text-hover)' : 'text-(--text-icon) group-hover:text-(--bs-primary)'} transition-colors`} />
                           <span>{item.label}</span>
                         </div>
                         {/* Only show chevron if there are subitems */}
@@ -174,21 +174,21 @@ const Sidebar = ({ open, setOpen }) => {
                             `}
                       >
                         {hasSubItems && item.subItems.map((subItem, subIndex) => {
-                          if (!hasAccess(subItem)) return null; // Check nested permission
+                          if (!hasAccess(subItem)) return null;
                           return (
                             <div
                               key={subIndex}
                               className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer text-[12px] transition-colors mb-1
                                         ${location.pathname === subItem.id
                                   ? 'bg-(--btn-hover) text-(--text-hover) font-semibold'
-                                  : 'text-(--text-second) hover:text-(--text-main) hover:bg-(--bs-btn-hover)'}
+                                  : 'text-(--text-main) hover:text-(--text-main) hover:bg-(--bs-btn-hover)'}
                                     `}
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleNavigation(subItem.id);
                               }}
                             >
-                              <span className={`w-1.5 h-1.5 rounded-full ${location.pathname === subItem.id ? 'bg-(--text-hover)' : 'bg-gray-300'}`}></span>
+                              <span className={`w-1.5 h-1.5 rounded-full ${location.pathname === subItem.id ? 'bg-(--text-hover)' : 'bg-(--text-main)'}`}></span>
                               <span>{subItem.label}</span>
                             </div>
                           )

@@ -1,10 +1,12 @@
-/* eslint-disable react/prop-types */
+// /* eslint-disable react/prop-types */
 import { RxCrossCircled } from "react-icons/rx";
 import { useState, useEffect } from "react";
 import { InputField } from "../Component/InputBox";
 import Button from "../Component/Btn";
 import CustomSelect from "../Component/Inputs/CustomSelect";
 import { FiPlus, FiArrowLeft, FiCheck } from "react-icons/fi";
+import { Heading, MainHeading } from "../Component/Heading";
+import PageLoader from "../Component/PageLoader";
 
 const AddNewPackage = ({ onClose, onSaveClick, initialData }) => {
 
@@ -15,11 +17,16 @@ const AddNewPackage = ({ onClose, onSaveClick, initialData }) => {
     cto: "",
     pv: "",
     theme: "light",
-    benefits: []
+    benefits: [],
+    referralPercent:""
   });
+  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
+     
     if (initialData) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setFormData({
         name: initialData.name || "",
         price: initialData.price || "",
@@ -27,7 +34,8 @@ const AddNewPackage = ({ onClose, onSaveClick, initialData }) => {
         cto: initialData.cto || "",
         pv: initialData.pv || "",
         theme: initialData.theme || "light",
-        benefits: initialData.benefits || []
+        benefits: initialData.benefits || [],
+        referralPercent:initialData.referralPercent || 0
       });
     }
   }, [initialData]);
@@ -55,22 +63,25 @@ const AddNewPackage = ({ onClose, onSaveClick, initialData }) => {
   /* ---------------- SAVE ---------------- */
 
   const handleSave = () => {
+      setLoading(true);
     console.log("NEW PACKAGE:", formData);
     onSaveClick(formData);
+    setLoading(false);
   };
 
   return (
     <div className="pb-10 relative bg-(--bg-main) animate-fade-in-up">
+     {loading && <PageLoader/>}
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div className="flex items-center gap-3">
           <button onClick={onClose} className="p-2 hover:bg-[var(--bg-box)] rounded-lg transition-colors text-(--text-second) border border-transparent hover:border-[var(--bs-border)] cursor-pointer">
             <FiArrowLeft size={20} />
           </button>
-          <div>
-            <h1 className="text-2xl font-bold text-(--text-main)">{initialData ? "Edit Package" : "Add New Package"}</h1>
-            <p className="text-(--text-second) text-sm mt-0.5">Manage package details, pricing, and benefits.</p>
-          </div>
+          <MainHeading
+            title={initialData ? "Edit Package" : "Add New Package"}
+            subtitle="Manage package details, pricing, and benefits."
+          />
         </div>
       
       </div>
@@ -82,7 +93,7 @@ const AddNewPackage = ({ onClose, onSaveClick, initialData }) => {
           {/* Basic Info */}
           <div className="bg-[var(--bg-box)] p-6 rounded-2xl shadow-sm border border-[var(--bs-border)]">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-bold text-[var(--text-main)]">Basic Information</h2>
+              <Heading title="Basic Information" />
               <span className="text-xs font-medium px-2.5 py-1 bg-[var(--bs-primary)]/10 text-[var(--bs-primary)] rounded-full border border-[var(--bs-primary)]/20">Required</span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -99,7 +110,7 @@ const AddNewPackage = ({ onClose, onSaveClick, initialData }) => {
 
           {/* Pricing & Limits */}
           <div className="bg-[var(--bg-box)] p-6 rounded-2xl shadow-sm border border-[var(--bs-border)]">
-            <h2 className="text-lg font-bold text-[var(--text-main)] mb-6">Pricing & Limits</h2>
+            <div className="mb-6"><Heading title="Pricing & Limits" /></div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <InputField
                 label="Price (₹)"
@@ -131,6 +142,14 @@ const AddNewPackage = ({ onClose, onSaveClick, initialData }) => {
                     value={formData.cto}
                     onChange={e => setFormData({ ...formData, cto: e.target.value })}
                   />
+
+                  <InputField
+                  label="Referral Percentage"
+                  type="number"
+                  placeholder=" e.g.5 "
+                  value={formData.referralPercent}
+                  onChange={e=>setFormData({...formData, referralPercent: e.target.value})}
+                  />
                 </div>
               </div>
             </div>
@@ -143,7 +162,7 @@ const AddNewPackage = ({ onClose, onSaveClick, initialData }) => {
 
           {/* Theme / Appearance */}
           <div className="bg-[var(--bg-box)] p-6 rounded-2xl shadow-sm border border-[var(--bs-border)]">
-            <h2 className="text-lg font-bold text-[var(--text-main)] mb-6">Appearance</h2>
+            <div className="mb-6"><Heading title="Appearance" /></div>
             <div className="space-y-4">
               <CustomSelect
                 label="Card Theme"
@@ -161,7 +180,7 @@ const AddNewPackage = ({ onClose, onSaveClick, initialData }) => {
 
           {/* Benefits */}
           <div className="bg-[var(--bg-box)] p-6 rounded-2xl shadow-sm border border-[var(--bs-border)]">
-            <h2 className="text-lg font-bold text-[var(--text-main)] mb-6">Package Benefits</h2>
+            <div className="mb-6"><Heading title="Package Benefits" /></div>
             <div className="space-y-4">
               <div className="flex gap-2 mb-4 items-start">
                 <div className="flex-1">
@@ -174,7 +193,7 @@ const AddNewPackage = ({ onClose, onSaveClick, initialData }) => {
                 <button onClick={addBenefit} className="px-3 py-2.5 bg-[var(--bs-btn)] text-white rounded-lg hover:bg-[var(--btn-hover)] transition cursor-pointer text-sm font-medium"><FiPlus /></button>
               </div>
 
-              <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+              <div className="space-y-2 max-h-[300px] overeferralPercentlow-y-auto pr-2 custom-scrollbar">
                 {formData.benefits.map((b, i) => (
                   <div key={i} className="flex justify-between items-center bg-[var(--bg-main)] p-3 rounded-lg border border-[var(--bs-border)] shadow-sm">
                     <span className="text-sm text-[var(--text-main)] flex items-center gap-2">

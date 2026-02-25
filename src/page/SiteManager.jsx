@@ -113,7 +113,7 @@ const SiteManager = () => {
           {actions.view && (
             <button
               onClick={() => actions.view(row)}
-              className="p-2 rounded-lg cursor-pointer bg-blue-100 text-blue-600"
+              className="p-2 rounded-lg cursor-pointer bg-(--icon-btn) text-(--icon-btn-text)"
             >
               <FiEye size={14} />
             </button>
@@ -121,7 +121,7 @@ const SiteManager = () => {
           {actions.edit && (
             <button
               onClick={() => actions.edit(row)}
-              className="p-2 rounded-lg cursor-pointer bg-indigo-100 text-indigo-600"
+              className="p-2 rounded-lg cursor-pointer bg-(--icon-btn-second) text-(--icon-text-second)"
             >
               <FiEdit size={14} />
             </button>
@@ -129,7 +129,7 @@ const SiteManager = () => {
           {actions.delete && (
             <button
               onClick={() => actions.delete(row)}
-              className="p-2 rounded-lg cursor-pointer bg-red-100 text-red-600"
+              className="p-2 rounded-lg cursor-pointer bg-(--bs-del) text-(--bs-red)"
             >
               <FiTrash size={14} />
             </button>
