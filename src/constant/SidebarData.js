@@ -220,7 +220,7 @@ export const SIDEBAR_ITEMS = [
       },
       {
         id: PathRoutes.WITHDRAWAL_REQUESTS,
-        label: "Withdrawal Requests",
+        label: "Payout",
         icon: FaBoxOpen,
         allowedPermissions: ["VIEW_WITHDRAWAL_REQUESTS"],
       },

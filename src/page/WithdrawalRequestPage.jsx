@@ -1,179 +1,174 @@
 import React, { useState, useEffect } from "react";
 import CommonDataTable from "../Component/CommonDataTable";
 import { toast } from "react-toastify";
-import { CheckCircle, XCircle, RefreshCw, Eye } from "lucide-react";
+import { CheckCircle, XCircle, RefreshCw, ExternalLink } from "lucide-react";
 import { MainHeading } from "../Component/Heading";
 import DateTime from "../Component/DateTime";
 import { getAllTransations } from "../api/transaction-api";
 import PageLoader from "../Component/PageLoader";
 
-const WithdrawalRequestPage = () => {
+const PayoutPage = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
 
+  // Modal States
+  const [showApproveModal, setShowApproveModal] = useState(false);
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [selectedPayout, setSelectedPayout] = useState(null);
+  const [rejectReason, setRejectReason] = useState("");
+
   useEffect(() => {
-    fetchTransactions();
+    fetchPayouts();
   }, []);
 
-  const fetchTransactions = async () => {
+  const fetchPayouts = async () => {
     setLoading(true);
     try {
       const res = await getAllTransations({});
-
       if (res?.success) {
+        // Filtering or mapping logic can be added here if specific payout types exist
         setData(res?.data?.history || []);
-        console.log("API Response", res.data.history);
       } else {
-        toast.error(res?.message || "Failed to fetch transactions.");
+        toast.error(res?.message || "Failed to fetch payout records.");
       }
-      // eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
-      toast.error("Internal Server Error while fetching.");
+      toast.error("Internal Server Error while fetching payouts.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Modal States
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [showCancelModal, setShowCancelModal] = useState(false);
-  const [selectedTx, setSelectedTx] = useState(null);
-  const [rejectReason, setRejectReason] = useState("");
-
-  const handleAction = (tx, action) => {
-    setSelectedTx(tx);
-    if (action === "Confirm") {
-      setShowConfirmModal(true);
-    } else if (action === "Cancel") {
+  const handleAction = (payout, action) => {
+    setSelectedPayout(payout);
+    if (action === "Approve") {
+      setShowApproveModal(true);
+    } else if (action === "Reject") {
       setRejectReason("");
-      setShowCancelModal(true);
+      setShowRejectModal(true);
     }
   };
 
-  const submitProcess = (status) => {
-    if (!selectedTx) return;
+  const submitPayoutStatus = (status) => {
+    if (!selectedPayout) return;
 
-    if (status === "Cancelled" && !rejectReason.trim()) {
-      return toast.warning("Please enter a reason for cancellation.");
+    if (status === "Rejected" && !rejectReason.trim()) {
+      return toast.warning("Please provide a reason for rejection.");
     }
 
+    // Update local state (Optimistic UI)
+    // Note: In a real app, you would call an API like updatePayoutStatus(id, status, reason)
     setData((prevData) =>
       prevData.map((item) =>
-        item._id === selectedTx._id ? { ...item, status } : item,
-      ),
+        item._id === selectedPayout._id ? { ...item, status } : item
+      )
     );
 
-    toast.success(`Withdrawal request ${status.toLowerCase()}`);
-    setShowConfirmModal(false);
-    setShowCancelModal(false);
+    toast.success(`Payout ${status} successfully`);
+    setShowApproveModal(false);
+    setShowRejectModal(false);
+    setSelectedPayout(null);
   };
 
   // Pagination Logic
   const totalPages = Math.ceil(data.length / rowsPerPage);
   const paginatedData = data.slice(
     (currentPage - 1) * rowsPerPage,
-    currentPage * rowsPerPage,
+    currentPage * rowsPerPage
   );
 
   const columns = [
     {
-      name: "ID",
+      name: "Payout ID",
       selector: (row) => row.id || "N/A",
       sortable: true,
+      width: "200px",
     },
     {
-      name: "Date",
-      selector: (row) => new Date(row.createdAt).toLocaleDateString(),
+      name: "Requested Date",
       cell: (row) => <DateTime date={row.createdAt} />,
       sortable: true,
-      // width: "200px",
     },
-
     {
-      name: "User",
-      // eslint-disable-next-line no-constant-binary-expression
-      selector: (row) => `${row.user?.username} (${row.user?.id})` || "N/A",
+      name: "Recipient",
+      selector: (row) => row.user?.username || "Unknown",
+      cell: (row) => (
+        <div className="flex flex-col">
+          <span className="font-medium text-gray-900">{row.user?.username}</span>
+          <span className="text-[10px] text-gray-500">ID: {row.user?.id}</span>
+        </div>
+      ),
       sortable: true,
     },
     {
       name: "Amount",
-      selector: (row) => `₹${row.investment}`,
+      selector: (row) => row.investment,
+      cell: (row) => <span className="font-bold text-gray-800">₹{row.investment}</span>,
       sortable: true,
-      // width: "100px",
     },
-    // {
-    //   name: "Tx ID",
-    //   selector: (row) => row.transactionId || "N/A",
-    //   sortable: true,
-    //   width: "200px",
-    // },
     {
       name: "Status",
       selector: (row) => row.status,
       cell: (row) => {
-        let color = "bg-yellow-100 text-[var(--bs-warn)]";
-        if (row.status === "Confirmed")
-          color = "bg-green-100 text-[var(--bg-green)]";
-        if (row.status === "Cancelled")
-          color = "bg-[var(--bs-del)] text-[var(--bs-red)]";
+        let style = "bg-yellow-100 text-yellow-700";
+        if (row.status === "Confirmed" || row.status === "Approved") style = "bg-green-100 text-green-700";
+        if (row.status === "Cancelled" || row.status === "Rejected") style = "bg-red-100 text-red-700";
+        
         return (
-          <span
-            className={`px-2 py-1 rounded-full text-xs font-medium ${color}`}
-          >
+          <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-semibold uppercase tracking-wider ${style}`}>
             {row.status}
           </span>
         );
       },
       sortable: true,
-      width: "120px",
     },
     {
-      name: "Actions",
+      name: "Action",
       cell: (row) =>
         row.status === "Pending" ? (
-          <div className="flex gap-2 justify-center">
+          <div className="flex gap-2">
             <button
-              onClick={() => handleAction(row, "Confirm")}
-              className="p-2 rounded-lg cursor-pointer bg-[var(--icon-btn)] text-[var(--icon-btn-text)]"
-              title="Confirm"
+              onClick={() => handleAction(row, "Approve")}
+              className="p-1.5 rounded-md bg-green-50 text-green-600 hover:bg-green-600 hover:text-white transition-colors"
+              title="Approve Payout"
             >
-              <CheckCircle size={14} />
+              <CheckCircle size={16} />
             </button>
             <button
-              onClick={() => handleAction(row, "Cancel")}
-              className="p-2 rounded-lg cursor-pointer bg-[var(--icon-btn-second)] text-[var(--icon-text-second)]"
-              title="Cancel"
+              onClick={() => handleAction(row, "Reject")}
+              className="p-1.5 rounded-md bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-colors"
+              title="Reject Payout"
             >
-              <XCircle size={14} />
+              <XCircle size={16} />
             </button>
           </div>
         ) : (
-          <span className="text-gray-400 text-xs">-</span>
+          <span className="text-gray-400 text-xs italic">Processed</span>
         ),
-      width: "120px",
       center: true,
     },
   ];
 
   return (
-    <>
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5">
+    <div className="p-2 md:p-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <MainHeading
-          title={"Withdrawal Requests"}
-          subtitle={"Manage all user withdrawal requests"}
+          title="Payout"
         />
+        
         <button
-          onClick={fetchTransactions}
-          className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition text-gray-600 self-end sm:self-auto"
-          title="Refresh Data"
+          onClick={fetchPayouts}
+          className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 shadow-sm transition-all"
         >
-          <RefreshCw size={18} className={loading ? "animate-spin" : ""} />
+          <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
+      
         </button>
       </div>
-      <div className="card w-full bg-white rounded-xl shadow-sm p-4 h-full flex flex-col">
-        <div className="flex-1 overflow-x-auto">
+
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col min-h-[60vh]">
+        <div className="p-1">
           {loading && <PageLoader />}
           <CommonDataTable
             columns={columns}
@@ -182,76 +177,75 @@ const WithdrawalRequestPage = () => {
             totalPages={totalPages}
             onPageChange={setCurrentPage}
             rowsPerPage={rowsPerPage}
-            selectable={true}
+            selectable={false}
             showSearch={true}
           />
         </div>
-
-        {/* Confirm Modal */}
-        {showConfirmModal && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl animate-in fade-in zoom-in duration-200">
-              <h3 className="text-lg font-bold mb-2">Confirm Withdrawal?</h3>
-              <p className="text-gray-600 mb-6 text-sm">
-                Are you sure you want to approve the withdrawal of{" "}
-                <b>₹{selectedTx?.investment}</b> for{" "}
-                {selectedTx?.user?.username}?
-              </p>
-              <div className="flex justify-end gap-3 flex-wrap">
-                <button
-                  onClick={() => setShowConfirmModal(false)}
-                  className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 text-sm font-medium"
-                >
-                  No, Go Back
-                </button>
-                <button
-                  onClick={() => submitProcess("Confirmed")}
-                  className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 text-sm font-medium"
-                >
-                  Yes, Approve
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Cancel Modal */}
-        {showCancelModal && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl animate-in fade-in zoom-in duration-200">
-              <h3 className="text-lg font-bold mb-2 text-red-600">
-                Reject Withdrawal
-              </h3>
-              <p className="text-gray-600 mb-4 text-sm">
-                Please provide a reason for rejecting this withdrawal.
-              </p>
-              <textarea
-                className="w-full border border-gray-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-red-200 outline-none resize-none"
-                rows="3"
-                placeholder="Enter reason (e.g., Invalid bank details)..."
-                value={rejectReason}
-                onChange={(e) => setRejectReason(e.target.value)}
-              ></textarea>
-              <div className="flex justify-end gap-3 mt-4 flex-wrap">
-                <button
-                  onClick={() => setShowCancelModal(false)}
-                  className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 text-sm font-medium"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => submitProcess("Cancelled")}
-                  className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 text-sm font-medium"
-                >
-                  Reject
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
-    </>
+
+      {/* Approve Modal */}
+      {showApproveModal && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[999] p-4">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl scale-up-center">
+            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+              <CheckCircle className="text-green-600" size={28} />
+            </div>
+            <h3 className="text-xl font-bold text-gray-900">Approve Payout?</h3>
+            <p className="text-gray-500 mt-2 text-sm">
+              You are about to release <span className="font-bold text-gray-900">₹{selectedPayout?.investment}</span> to {selectedPayout?.user?.username}. This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-3 mt-8">
+              <button
+                onClick={() => setShowApproveModal(false)}
+                className="px-4 py-2 text-sm font-semibold text-gray-600 hover:text-gray-800"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => submitPayoutStatus("Approved")}
+                className="px-6 py-2 bg-green-600 text-white rounded-xl text-sm font-bold hover:bg-green-700 shadow-lg shadow-green-200"
+              >
+                Confirm Payout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reject Modal */}
+      {showRejectModal && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[999] p-4">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl scale-up-center">
+            <h3 className="text-xl font-bold text-red-600">Reject Payout</h3>
+            <p className="text-gray-500 mt-1 text-sm mb-4">
+              Provide a reason for the recipient to see.
+            </p>
+            <textarea
+              className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-red-100 outline-none resize-none transition-all"
+              rows="4"
+              placeholder="e.g. Incorrect bank details, Account verification pending..."
+              value={rejectReason}
+              onChange={(e) => setRejectReason(e.target.value)}
+            />
+            <div className="flex justify-end gap-3 mt-6">
+              <button
+                onClick={() => setShowRejectModal(false)}
+                className="px-4 py-2 text-sm font-semibold text-gray-600 hover:text-gray-800"
+              >
+                Back
+              </button>
+              <button
+                onClick={() => submitPayoutStatus("Rejected")}
+                className="px-6 py-2 bg-red-600 text-white rounded-xl text-sm font-bold hover:bg-red-700 shadow-lg shadow-red-200"
+              >
+                Reject Request
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
-export default WithdrawalRequestPage;
+export default PayoutPage;
