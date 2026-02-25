@@ -53,5 +53,10 @@ export const PathRoutes = {
   PRODUCT_VIEW_ID: "/product/view/:id",
   INVOICE: "/invoice/:id",
   REVIEWS: "/reviews",
-  BANNER:"/banner",
+  BANNER: "/banner",
+  ADD_BANNER: "/add-banner",
+  EDIT_BANNER: "/edit-banner/:id",
+  MARQUEE: "/marquee",
+  ADD_MARQUEE: "/add-marquee",
+  EDIT_MARQUEE: "/edit-marquee/:id",
 };

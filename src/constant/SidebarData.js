@@ -96,7 +96,7 @@ export const SIDEBAR_ITEMS = [
     allowedPermissions: ["MANAGE_ORDERS"],
     subItems: [
       {
-        id: PathRoutes.ORDER_MANAGEMENT,  
+        id: PathRoutes.ORDER_MANAGEMENT,
         label: "All Orders",
         icon: FaUserGroup,
         allowedPermissions: ["VIEW_ORDERS"],
@@ -118,10 +118,26 @@ export const SIDEBAR_ITEMS = [
     ],
   },
   {
-    id:PathRoutes.BANNER,
-    icon:FaLayerGroup,
-    label:"Banner",
-},
+    id: PathRoutes.BANNER,
+    icon: FaLayerGroup,
+    label: "Display Management",
+    allowedRoles: ["SUPER-ADMIN", "ADMIN", "MANAGER"],
+    allowedPermissions: ["MANAGE_DISPLAY"],
+    subItems: [
+      {
+        id: PathRoutes.BANNER,
+        label: "Banners",
+        icon: FaLayerGroup,
+        allowedPermissions: ["VIEW_BANNERS"],
+      },
+      {
+        id: PathRoutes.MARQUEE,
+        label: "Marquee",
+        icon: FaLayerGroup,
+        allowedPermissions: ["VIEW_MARQUEE"],
+      },
+    ],
+  },
   {
     id: PathRoutes.PRODUCT_MANAGEMENT,
     icon: FaBoxOpen,
@@ -292,10 +308,10 @@ export const PERMISSIONS_TREE = SIDEBAR_ITEMS.filter(
     : `MANAGE_${item.label.toUpperCase().replace(/ /g, "_")}`, // Fallback if parent has no permission but children do
   children: item.subItems
     ? item.subItems
-        .filter((sub) => sub.allowedPermissions)
-        .map((sub) => ({
-          label: sub.label,
-          value: sub.allowedPermissions[0],
-        }))
+      .filter((sub) => sub.allowedPermissions)
+      .map((sub) => ({
+        label: sub.label,
+        value: sub.allowedPermissions[0],
+      }))
     : [],
 }));

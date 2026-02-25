@@ -35,7 +35,8 @@ import PurchasePackage from "../page/PurchasePackage";
 import Notification from "../page/Notification";
 import Message from "../page/Message";
 import AddBanner from "../page/AddBanner";
-import EditBanner from "../page/EditBanner";
+import Marquee from "../page/Marquee";
+import AddMarquee from "../page/AddMarquee";
 import UserProfileDetails from "../page/UserProfileDetails";
 import UserProfileEditPage from "../page/UserProfileEditPage";
 import CartPage from "../page/orderManagement/CartPage";
@@ -68,7 +69,7 @@ const AppRoutes = () => {
               path={PathRoutes.ORDER_MANAGEMENT}
               element={<OrderManagement />}
             />
-         <Route path={PathRoutes.REVIEWS} element={<ReviewPage/>}/>
+            <Route path={PathRoutes.REVIEWS} element={<ReviewPage />} />
             <Route
               path={`${PathRoutes.ORDERS_DETAILS}/:id`}
               element={<ViewOrdersDetails />}
@@ -112,7 +113,7 @@ const AppRoutes = () => {
             <Route path={PathRoutes.NOTIFICATION} element={<Notification />} />
             <Route path={PathRoutes.MESSAGE} element={<Message />} />
             <Route path={PathRoutes.ADD_BANNER} element={<AddBanner />} />
-            <Route path={PathRoutes.EDIT_BANNER} element={<EditBanner />} />
+            <Route path={PathRoutes.EDIT_BANNER} element={<AddBanner />} />
 
             {/* Deposit Routes */}
             <Route
@@ -169,7 +170,10 @@ const AppRoutes = () => {
               path={PathRoutes.ADDRESS_DETAILS}
               element={<AddressDetailsPage />}
             />
-            <Route path={PathRoutes.BANNER} element={<Banner/>}/>
+            <Route path={PathRoutes.BANNER} element={<Banner />} />
+            <Route path={PathRoutes.MARQUEE} element={<Marquee />} />
+            <Route path={PathRoutes.ADD_MARQUEE} element={<AddMarquee />} />
+            <Route path={PathRoutes.EDIT_MARQUEE} element={<AddMarquee />} />
 
             {/* Admin Management */}
             <Route path={PathRoutes.ADMIN_MANAGEMENT} element={<AdminPage />} />
