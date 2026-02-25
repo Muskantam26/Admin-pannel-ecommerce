@@ -5,17 +5,18 @@ const Button = ({
   title,
   bg = "bg-(--bs-btn)",
   text = "text-(--text-white)",
+  icon,
   onClick,
   className = "",
   children,
 }) => {
   return (
     <button
-
       onClick={onClick}
       className={`
-        ${bg} ${text} cursor-pointer transition transform hover:scale-105 ${className}`}
+        ${bg} ${text} flex items-center justify-center gap-2 px-5 py-2 md:py-2.5 rounded-xl font-semibold cursor-pointer transition-all duration-300 hover:shadow-lg active:scale-95 ${className}`}
     >
+      {icon}
       {children || title}
     </button>
   );

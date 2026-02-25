@@ -15,11 +15,78 @@ const CommonDataTable = ({
 
 
   const customStyles = {
+    table: {
+      style: {
+        backgroundColor: 'transparent',
+      },
+    },
+    header: {
+      style: {
+        backgroundColor: 'transparent',
+        fontSize: '16px',
+        fontWeight: '700',
+        color: 'var(--text-main)',
+        padding: '20px',
+      },
+    },
+    headRow: {
+      style: {
+        backgroundColor: 'var(--bg-main)',
+        borderBottomWidth: '1px',
+        borderBottomColor: 'var(--bs-border)',
+        minHeight: '45px',
+      },
+    },
     headCells: {
       style: {
-        fontWeight: 'bold',
-        fontSize: '12px',
+        fontWeight: '700',
+        fontSize: '11px',
         color: 'var(--text-main)',
+        textTransform: 'uppercase',
+        letterSpacing: '0.5px',
+        paddingLeft: '16px',
+        paddingRight: '16px',
+      },
+    },
+    rows: {
+      style: {
+        fontSize: '13px',
+        fontWeight: '500',
+        color: 'var(--text-main)',
+        backgroundColor: 'white',
+        minHeight: '52px',
+        '&:not(:last-of-type)': {
+          borderBottomStyle: 'solid',
+          borderBottomWidth: '1px',
+          borderBottomColor: 'var(--bs-border)',
+        },
+        transition: 'all 0.2s ease',
+        '&:hover': {
+          backgroundColor: 'rgba(242, 247, 250, 0.5)',
+          cursor: 'pointer',
+        },
+      },
+    },
+    cells: {
+      style: {
+        paddingLeft: '16px',
+        paddingRight: '16px',
+      },
+    },
+    pagination: {
+      style: {
+        borderTop: 'none',
+      },
+    },
+    noData: {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '40px',
+        backgroundColor: 'white',
+        color: 'var(--text-third)',
+        fontSize: '14px',
       },
     },
   };
@@ -75,72 +142,72 @@ const CommonDataTable = ({
 
     // Add Data
     for (let i = 0; i < data.length; i++) {
-        const rowData = data[i];
-        const rowValues = {};
-        let maxRowHeight = 20; // Default height
+      const rowData = data[i];
+      const rowValues = {};
+      let maxRowHeight = 20; // Default height
 
-        for (const col of exportColumns) {
-            let val = "";
-            let imageAdded = false;
-            
-            // Check for image selector first
-            if (col.imageSelector) {
-                const imageUrl = typeof col.imageSelector === 'function' ? col.imageSelector(rowData) : rowData[col.imageSelector];
-                
-                if (imageUrl) {
-                    try {
-                        const response = await fetch(imageUrl, { mode: 'cors' });
-                        if(response.ok) {
-                            const buffer = await response.arrayBuffer();
-                            
-                            // Detect extension
-                            const ext = imageUrl.split('.').pop().split('?')[0].toLowerCase();
-                            const validExts = ['png', 'jpeg', 'jpg', 'gif'];
-                            const extension = validExts.includes(ext) ? ext : 'png';
+      for (const col of exportColumns) {
+        let val = "";
+        let imageAdded = false;
 
-                            // Convert to Base64
-                            const base64 = btoa(
-                                new Uint8Array(buffer)
-                                    .reduce((data, byte) => data + String.fromCharCode(byte), '')
-                            );
+        // Check for image selector first
+        if (col.imageSelector) {
+          const imageUrl = typeof col.imageSelector === 'function' ? col.imageSelector(rowData) : rowData[col.imageSelector];
 
-                            const imageId = workbook.addImage({
-                                base64: base64,
-                                extension: extension,
-                            });
-                            
-                            // Calculate cell position
-                            const colIndex = exportColumns.indexOf(col);
-                            
-                            worksheet.addImage(imageId, {
-                                tl: { col: colIndex, row: i + 1 }, // top-left (0-indexed col, 0-indexed row relative to sheet?)
-                                ext: { width: 50, height: 50 },
-                                editAs: 'oneCell'
-                            });
-                            maxRowHeight = 50; // Set row height to fit image
-                            imageAdded = true;
-                            val = ""; // Cell value empty as image is there
-                        } else {
-                            val = "Image Load Failed";
-                        }
-                    } catch (err) {
-                        console.error("Error fetching image for excel", err);
-                        val = "Image Error";
-                    }
-                } else {
-                     val = "No Image";
-                }
-            } else if (col.selector) {
-                val = typeof col.selector === "function" ? col.selector(rowData) : rowData[col.selector];
+          if (imageUrl) {
+            try {
+              const response = await fetch(imageUrl, { mode: 'cors' });
+              if (response.ok) {
+                const buffer = await response.arrayBuffer();
+
+                // Detect extension
+                const ext = imageUrl.split('.').pop().split('?')[0].toLowerCase();
+                const validExts = ['png', 'jpeg', 'jpg', 'gif'];
+                const extension = validExts.includes(ext) ? ext : 'png';
+
+                // Convert to Base64
+                const base64 = btoa(
+                  new Uint8Array(buffer)
+                    .reduce((data, byte) => data + String.fromCharCode(byte), '')
+                );
+
+                const imageId = workbook.addImage({
+                  base64: base64,
+                  extension: extension,
+                });
+
+                // Calculate cell position
+                const colIndex = exportColumns.indexOf(col);
+
+                worksheet.addImage(imageId, {
+                  tl: { col: colIndex, row: i + 1 }, // top-left (0-indexed col, 0-indexed row relative to sheet?)
+                  ext: { width: 50, height: 50 },
+                  editAs: 'oneCell'
+                });
+                maxRowHeight = 50; // Set row height to fit image
+                imageAdded = true;
+                val = ""; // Cell value empty as image is there
+              } else {
+                val = "Image Load Failed";
+              }
+            } catch (err) {
+              console.error("Error fetching image for excel", err);
+              val = "Image Error";
             }
-            
-            rowValues[col.name] = imageAdded ? "" : val;
+          } else {
+            val = "No Image";
+          }
+        } else if (col.selector) {
+          val = typeof col.selector === "function" ? col.selector(rowData) : rowData[col.selector];
         }
-        
-        const addedRow = worksheet.addRow(rowValues);
-        addedRow.height = maxRowHeight; 
+
+        rowValues[col.name] = imageAdded ? "" : val;
+      }
+
+      const addedRow = worksheet.addRow(rowValues);
+      addedRow.height = maxRowHeight;
     }
-    
+
     // Style header
     worksheet.getRow(1).font = { bold: true };
 
@@ -162,25 +229,25 @@ const CommonDataTable = ({
 
       {/* Pagination */}
       <div className="flex flex-col md:flex-row justify-between items-center mt-4 gap-4 w-full">
-        
+
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto justify-center md:justify-start">
           <p className="text-xs text-(--text-third) whitespace-nowrap">
             Showing {rowsPerPage} Entries
           </p>
           <div className="flex gap-2 flex-wrap justify-center">
             <button
-                onClick={downloadCSV}
-                className="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-green-700 bg-green-50 border border-green-200 rounded-lg hover:bg-green-100 transition-colors cursor-pointer whitespace-nowrap"
-                title="Download CSV"
+              onClick={downloadCSV}
+              className="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-green-700 bg-green-50 border border-green-200 rounded-lg hover:bg-green-100 transition-colors cursor-pointer whitespace-nowrap"
+              title="Download CSV"
             >
-                <Download size={14} /> CSV
+              <Download size={14} /> CSV
             </button>
             <button
-                onClick={downloadExcel}
-                className="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors cursor-pointer whitespace-nowrap"
-                title="Download Excel"
+              onClick={downloadExcel}
+              className="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors cursor-pointer whitespace-nowrap"
+              title="Download Excel"
             >
-                <FileSpreadsheet size={14} /> Excel
+              <FileSpreadsheet size={14} /> Excel
             </button>
           </div>
         </div>
@@ -196,17 +263,17 @@ const CommonDataTable = ({
 
           <div className="flex gap-2">
             {[...Array(totalPages)].map((_, index) => (
-                <button
+              <button
                 key={index}
                 onClick={() => onPageChange(index + 1)}
-                className={`px-3 py-1 text-xs rounded whitespace-nowrap min-w-[2rem]
+                className={`px-3 py-1 text-xs rounded-md whitespace-nowrap min-w-8 transition-all
                     ${currentPage === index + 1
-                    ? "bg-(--bg-green) text-(--text-white)"
-                    : "bg-(--bg-main)"
-                    }`}
-                >
+                    ? "bg-(--bs-btn) text-white shadow-sm font-bold scale-110 z-10"
+                    : "bg-white text-(--text-main) border border-(--bs-border) hover:bg-(--bg-main)"
+                  }`}
+              >
                 {index + 1}
-                </button>
+              </button>
             ))}
           </div>
 
