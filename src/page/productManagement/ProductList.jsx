@@ -92,7 +92,7 @@ const ProductList = () => {
       selector: (row) => row.category?.name || "Uncategorized",
       cell: (row) => (
         <span className="px-2.5 py-1 rounded-md text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
-          {row.category || "Uncategorized"}
+          {row.category?.name || "Uncategorized"}
         </span>
       ),
       width: "140px"

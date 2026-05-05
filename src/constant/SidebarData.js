@@ -20,7 +20,7 @@ import { RiMailSendLine } from "react-icons/ri";
 import { BiCategory, BiLogOut } from "react-icons/bi";
 import { PathRoutes } from "./Path";
 
-export const ROLES = ["SUPER-ADMIN", "ADMIN", "MANAGER", "STAFF"];
+export const ROLES = ["super-admin", "admin", "MANAGER", "STAFF"];
 
 export const SIDEBAR_ITEMS = [
   {
@@ -36,21 +36,21 @@ export const SIDEBAR_ITEMS = [
     id: PathRoutes.ADMIN_MANAGEMENT,
     icon: TbBrandOffice,
     label: "Admin Management",
-    allowedRoles: ["SUPER-ADMIN", "ADMIN"],
+    allowedRoles: ["super-admin", "admin"],
     allowedPermissions: ["MANAGE_ADMIN"],
     subItems: [
       {
         id: PathRoutes.ADMIN_MANAGEMENT,
         label: "All Admins",
         icon: FaUserGroup,
-        allowedRoles: ["SUPER-ADMIN", "ADMIN"],
+        allowedRoles: ["super-admin", "admin"],
         allowedPermissions: ["VIEW_ADMINS"],
       },
       {
         id: PathRoutes.ADD_ADMIN,
         label: "Add Admin",
         icon: FiPlus,
-        allowedRoles: ["SUPER-ADMIN", "ADMIN"],
+        allowedRoles: ["super-admin", "admin"],
         allowedPermissions: ["CREATE_ADMIN"],
       },
     ],
@@ -59,7 +59,7 @@ export const SIDEBAR_ITEMS = [
     id: PathRoutes.USER_MANAGEMENT,
     icon: TbBrandOffice,
     label: "User Management",
-    allowedRoles: ["SUPER-ADMIN", "ADMIN", "MANAGER"],
+    allowedRoles: ["super-admin", "admin", "MANAGER"],
     allowedPermissions: ["MANAGE_USERS"],
     subItems: [
       {

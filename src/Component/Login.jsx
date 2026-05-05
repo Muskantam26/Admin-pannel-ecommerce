@@ -18,8 +18,8 @@ const Login = () => {
   // const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
-    email: "admin@gmail.com",
-    password: "Test@123",
+    email: "superadmin@gmail.com",
+    password: "Admin@1234",
   });
 
   const handleChange = (e) => {
@@ -31,36 +31,33 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = async () => {
-    if (!validate()) return;
+ const handleSubmit = async () => {
+  if (!validate()) return;
 
-    dispatch(showLoader());
-    try {
-      // loginUser({
-      //  token: "1234567890",
-      //    userId: "1",
-      //    role: "SUPER_ADMIN",
-      //    name: "admin",
-      //    email: "[EMAIL_ADDRESS]",
-      //   }),
-      const response = await adminLoginApi(formData);
-      dispatch(
-        loginUser({
-          token: response?.data?.token,
-          userId: response?.data?.id,
-          role: response?.data?.role,
-          name: response?.data?.name,
-          email: response?.data?.email,
-        }),
-      );
-      toast.success("Welcome Back Admin!");
-      navigate("/dashboard");
-    } catch (error) {
-      toast.error(error?.response?.data?.message || "Something went wrong!");
-    } finally {
-      dispatch(hideLoader());
-    }
-  };
+  dispatch(showLoader());
+
+  try {
+    const response = await adminLoginApi(formData);
+localStorage.setItem("token", response.token);
+    dispatch(
+      loginUser({
+        token: response?.token,
+        userId: response?.user?._id,
+        role: response?.user?.role,
+        name: response?.user?.name,
+        email: response?.user?.email,
+      })
+    );
+
+    toast.success("Welcome Back Admin!");
+    navigate("/dashboard");
+
+  } catch (error) {
+    toast.error(error?.response?.data?.message || "Something went wrong!");
+  } finally {
+    dispatch(hideLoader());
+  }
+};
 
   const validate = () => {
     const newErrors = {};
@@ -154,6 +151,18 @@ const Login = () => {
                 className="w-full py-4 bg-(--btn-hover) hover:bg-indigo-700 text-white font-bold rounded-lg shadow-lg shadow-indigo-600/30 hover:shadow-indigo-600/50 hover:-translate-y-0.5 transition-all duration-300 tracking-wide"
                 onClick={handleSubmit}
               />
+              
+              <div className="mt-6 text-center">
+                <p className="text-sm text-gray-600">
+                  If you don't have an account?{" "}
+                  <button 
+                    onClick={() => navigate('/register')} 
+                    className="text-indigo-600 font-bold hover:text-indigo-800 transition-colors"
+                  >
+                    Register
+                  </button>
+                </p>
+              </div>
             </div>
 
             {/* Footer / Social */}

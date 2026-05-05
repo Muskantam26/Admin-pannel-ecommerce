@@ -277,9 +277,11 @@ const AddProduct = () => {
 
   // --- Submit Handler ---
   const handleSubmit = async (statusOverride = null) => {
-    if (!formData.name || !formData.price) {
-      return toast.error("Name and Price are required");
-    }
+    // Validation
+    if (!formData.name) return toast.error("Product Name is required");
+    if (!formData.price) return toast.error("Price is required");
+    if (!formData.category) return toast.error("Category is required");
+    if (!formData.description) return toast.error("Description is required");
 
     const finalStatus = statusOverride || formData.status;
 
@@ -287,13 +289,19 @@ const AddProduct = () => {
       ...formData,
       status: finalStatus,
       price: Number(formData.price),
-      stock: Number(formData.stock),
-      pv: Number(formData.pv),
-      dp: Number(formData.dp),
-      bp: Number(formData.bp),
+      stock: Number(formData.stock) || 0,
+      pv: Number(formData.pv) || 0,
+      dp: Number(formData.dp) || 0,
+      bp: Number(formData.bp) || 0,
+      
+      // Sanitize ObjectId fields to avoid Mongoose casting errors with empty strings
+      category: formData.category || undefined,
+      subCategory: formData.subCategory || undefined,
+      package: formData.package || undefined,
+
       discount: {
-        type: 'PERCENTAGE', // Hardcoded as per current UI limitation, or add a selector if needed
-        value: Number(formData.discount)
+        type: 'PERCENTAGE',
+        value: Number(formData.discount) || 0
       },
       images: images.map(img => img.src),
       image: images.length > 0 ? images[0].src : ""

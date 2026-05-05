@@ -6,7 +6,7 @@ const initialState = {
   role: null,
   name: null,
   email: null,
-  permissions: [], // Initialize permissions
+  permissions: [], 
   isLoggedIn: false,
   user:null
 };
